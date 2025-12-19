@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# teachbot_rviz.launch.py
+# sim_teachbot_rviz.launch.py
 """
 Launch file for TOS Teachbot with official UR5e visualization.
 
@@ -61,7 +61,8 @@ def generate_launch_description():
             }
         }],
         remappings=[
-            ('/joint_states', '/teachbot/joint_states')
+            ('/joint_states', '/teachbot/joint_states'),
+            ('/robot_description', '/teachbot_description')
         ]
     )
     
@@ -76,7 +77,8 @@ def generate_launch_description():
             'publish_frequency': 250.0,
         }],
         remappings=[
-            ('/joint_states', '/teachbot/joint_states')
+            ('/joint_states', '/teachbot/joint_states'),
+            ('/robot_description', '/teachbot_description')
         ]
     )
     
