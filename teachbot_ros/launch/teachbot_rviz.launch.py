@@ -52,7 +52,7 @@ def generate_launch_description():
         parameters=[LaunchConfiguration('config_file')],
         remappings=[
             # Remap to UR5e joint names
-            ('/teachbot/joint_states', '/joint_states')
+            #('/teachbot/joint_states', '/joint_states')
         ]
     )
     
@@ -65,7 +65,10 @@ def generate_launch_description():
         parameters=[{
             'robot_description': robot_description,
             'publish_frequency': 250.0,
-        }]
+        }],
+        remappings=[
+            ('/joint_states', '/teachbot/joint_states')
+        ]
     )
     
     # RViz node
