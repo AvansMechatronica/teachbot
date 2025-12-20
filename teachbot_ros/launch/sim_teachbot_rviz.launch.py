@@ -24,6 +24,7 @@ def generate_launch_description():
     
     # File paths
     default_config = os.path.join(pkg_share, 'config', 'teachbot_params.yaml')
+    sim_initial_positions = os.path.join(pkg_share, 'config', 'sim_initial_positions.yaml')
     rviz_config = os.path.join(pkg_share, 'rviz', 'teachbot.rviz')
     
     # Generate URDF from xacro for UR5e
@@ -32,7 +33,7 @@ def generate_launch_description():
         'xacro ', urdf_xacro,
         ' ur_type:=ur5e',
         ' name:=ur5e',
-        ' tf_prefix:=""',
+        ' tf_prefix:=teachbot/',
         ' generate_ros2_control_tag:=false',
     ])
     
@@ -49,17 +50,10 @@ def generate_launch_description():
         executable='joint_state_publisher_gui',
         name='joint_state_publisher_gui',
         output='screen',
-        parameters=[{
-            'robot_description': robot_description,
-            'zeros': {
-                'shoulder_pan_joint': 0.0,
-                'shoulder_lift_joint': -1.57,
-                'elbow_joint': 1.57,
-                'wrist_1_joint': -1.57,
-                'wrist_2_joint': -1.57,
-                'wrist_3_joint': 0.0
-            }
-        }],
+        parameters=[
+            sim_initial_positions,
+            {'robot_description': robot_description}
+        ],
         remappings=[
             ('/joint_states', '/teachbot/joint_states'),
             ('/robot_description', '/teachbot_description')

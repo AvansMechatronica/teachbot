@@ -32,7 +32,7 @@ def generate_launch_description():
         'xacro ', urdf_xacro,
         ' ur_type:=ur5e',
         ' name:=ur5e',
-        ' tf_prefix:=""',
+        ' tf_prefix:=teachbot/',
         ' generate_ros2_control_tag:=false',
     ])
     
