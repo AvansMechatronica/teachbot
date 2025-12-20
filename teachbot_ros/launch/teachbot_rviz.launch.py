@@ -14,6 +14,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, Command
+from launch.conditions import IfCondition
 from launch_ros.actions import Node
 
 
@@ -41,6 +42,12 @@ def generate_launch_description():
         'config_file',
         default_value=default_config,
         description='Path to the configuration YAML file'
+    )
+    
+    use_monitor_gui_arg = DeclareLaunchArgument(
+        'use_monitor_gui',
+        default_value='true',
+        description='Launch the teachbot control monitor GUI'
     )
     
     # Teachbot publisher node
@@ -81,9 +88,20 @@ def generate_launch_description():
         arguments=['-d', rviz_config]
     )
     
+    # Teachbot Monitor GUI (optional)
+    monitor_gui_node = Node(
+        package='teachbot_ros',
+        executable='teachbot_monitor_gui',
+        name='teachbot_monitor_gui',
+        output='screen',
+        condition=IfCondition(LaunchConfiguration('use_monitor_gui'))
+    )
+    
     return LaunchDescription([
         config_file_arg,
+        use_monitor_gui_arg,
         teachbot_node,
         robot_state_publisher_node,
-        rviz_node
+        rviz_node,
+        monitor_gui_node
     ])

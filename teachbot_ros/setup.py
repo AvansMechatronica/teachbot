@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 from glob import glob
 
@@ -7,7 +7,7 @@ package_name = 'teachbot_ros'
 setup(
     name=package_name,
     version='0.0.1',
-    packages=[package_name],
+    packages=find_packages(exclude=['test']),
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -29,6 +29,8 @@ setup(
     entry_points={
         'console_scripts': [
             'teachbot_publisher = teachbot_ros.teachbot_publisher:main',
+            'teachbot_monitor = teachbot_ros.utils.teachbot_monitor:main',
+            'teachbot_monitor_gui = teachbot_ros.utils.teachbot_monitor_gui:main',
         ],
     },
 )
