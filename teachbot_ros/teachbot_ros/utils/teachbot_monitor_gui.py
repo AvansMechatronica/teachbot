@@ -199,8 +199,8 @@ class TeachbotMonitorGUI(Node):
         
         # Update Button 2
         if msg.btn2:
-            self.btn2_canvas.itemconfig(self.btn2_indicator, fill='#2196F3', outline='#1565C0')
-            self.btn2_text_label.config(text="PRESSED", foreground='#2196F3')
+            self.btn2_canvas.itemconfig(self.btn2_indicator, fill='#F44336', outline='#C62828')
+            self.btn2_text_label.config(text="PRESSED", foreground='#F44336')
         else:
             self.btn2_canvas.itemconfig(self.btn2_indicator, fill='#e0e0e0', outline='#999')
             self.btn2_text_label.config(text="Released", foreground='#666')
