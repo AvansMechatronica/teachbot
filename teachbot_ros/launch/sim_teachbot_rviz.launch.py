@@ -56,7 +56,7 @@ def generate_launch_description():
         ],
         remappings=[
             ('/joint_states', '/teachbot/joint_states'),
-            ('/robot_description', '/teachbot_description')
+            ('/robot_description', '/teachbot/robot_description')
         ]
     )
     
@@ -72,7 +72,7 @@ def generate_launch_description():
         }],
         remappings=[
             ('/joint_states', '/teachbot/joint_states'),
-            ('/robot_description', '/teachbot_description')
+            ('/robot_description', '/teachbot/robot_description')
         ]
     )
     

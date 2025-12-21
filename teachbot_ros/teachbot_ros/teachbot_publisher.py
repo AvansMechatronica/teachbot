@@ -66,7 +66,7 @@ class TeachbotPublisher(Node):
         
         self._pot_idle = self.get_parameter('pot_idle').value
         self._pot_full = self.get_parameter('pot_full').value
-        self._joint_names = list(self.get_parameter('joint_names').value)
+        self._joint_names = ['teachbot/' + name for name in self.get_parameter('joint_names').value]
         
         # State tracking for angle unwrapping
         self._prev_angles: List[Optional[float]] = [None] * self._dof

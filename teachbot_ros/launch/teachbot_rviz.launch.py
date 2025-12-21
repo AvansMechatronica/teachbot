@@ -75,9 +75,10 @@ def generate_launch_description():
         }],
         remappings=[
             ('/joint_states', '/teachbot/joint_states'),
-            ('/robot_description', '/teachbot_description')
+            ('/robot_description', '/teachbot/robot_description')
         ]
     )
+    
     
     # RViz node
     rviz_node = Node(
@@ -97,11 +98,20 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('use_monitor_gui'))
     )
     
+    # Static transform publisher for teachbot base
+    static_tf_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='teachbot_base_broadcaster',
+        arguments=['0', '0', '0', '0', '0', '0', 'world', 'teachbot/base_link']
+    )
+    
     return LaunchDescription([
         config_file_arg,
         use_monitor_gui_arg,
         teachbot_node,
         robot_state_publisher_node,
+        static_tf_node,
         rviz_node,
         monitor_gui_node
     ])

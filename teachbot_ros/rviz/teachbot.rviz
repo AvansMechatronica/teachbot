@@ -5,10 +5,10 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /RobotModel1
         - /RobotModel1/Description Topic1
         - /TF1/Frames1
         - /TF1/Tree1
-        - /Grid1
         - /BaseAxes1
       Splitter Ratio: 0.5
     Tree Height: 349
@@ -30,7 +30,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /teachbot_description
+        Value: /teachbot/robot_description
       Enabled: true
       Links:
         All Links Enabled: true

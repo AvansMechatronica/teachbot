@@ -29,7 +29,7 @@ class TeachbotMonitorGUI(Node):
         
         self.root = root
         self.root.title("Teachbot Control Monitor")
-        self.root.geometry("500x350")
+        self.root.geometry("500x500")
         self.root.resizable(False, False)
         
         # Configure style
