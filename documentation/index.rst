@@ -16,6 +16,7 @@ Welcome bij de TOS Teachbot documentation
    :maxdepth: 3
    :caption: Inhoudsopgave:
 
+   documentation/installation.md
    documentation/overview.md
 
 

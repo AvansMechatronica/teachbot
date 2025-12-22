@@ -1,52 +1,49 @@
-# Installatie van de TOS-Teachbot Software
+# Installation of the TOS-Teachbot Software
 
 
-Voor dat je begint dien je een clone van de `my_ur_ROS2` repository te maken.
+Before you begin, you need to make a clone of the `teachbot` repository.
 
 
-Voor dat je begint dien je een clone van de `my_ur_ROS2` repository te maken.
+## Cloning the TOS-Teachbot software
+To create the TOS-Teachbot software template, you use a prepared Github clone. You can choose to place this clone under your own Github account (1st option below). After that, you can easily make backups of your work to your own Github account.
 
 
-## Cloning de TOS-Teachbot software
-Voor het maken van de TOS-Teachbot software template maak je gebruik van een Github clone die is voorbereid. Je kunt er voor kiezen om deze clone onder een eigen account van Github te plaatsen (1e keuze hieronder). Je kunt daarna eenvoudig backup's van je werk maken naar je eigen Github account.
-
-> we maken gebruik van een prefix my_ur in de packages van de repository om onderscheid te maken met de standaard Universal Robots packages.
 
 :::::{card} 
 
 ::::{tab-set}
 
-:::{tab-item} Met GIT-repository support
+:::{tab-item} With GIT-repository support
 
-* Maak een account aan bij [Github](https://github.com/) en login op dit account
+* Create an account at [Github](https://github.com/) and login to this account
 
-* Open de [my_ur_ROS2](https://github.com/AvansMechatronica/my_ur_ROS2) repository
+* Open the [teachbot](https://github.com/AvansMechatronica/teachbot) repository
 
-* Maak een Fork van de repository naar je eigen Github account door op het **Fork icoon**  te klikken:
+* Make a Fork of the repository to your own Github account by clicking on the **Fork icon**:
 
 ![image](../images/fork.jpg)
 
-* Volg de instructies, maar wijzig de naam van de nieuwe repository niet. Bevestig met **Create Fork**  
+* Follow the instructions, but do not change the name of the new repository. Confirm with **Create Fork**  
 
-* Nu kun je de workspace als volgt creëren
+* Now you can create the workspace as follows
 
 ```bash
-mkdir -p ~/my_ur_ws/src
-cd ~/my_ur_ws/src
-git clone https://github.com/<jouw_account_naam>/my_ur_ROS2.git
+mkdir -p ~/teachbot_ws/src
+cd ~/teachbot_ws/src
+git clone https://github.com/<your_account_name>/teachbot.git
 ```
 
-*ps. Het gebruik van github (zoals add, commit & push commando's) valt  buiten de scope van deze documentatie*
+*ps. The use of github (such as add, commit & push commands) is outside the scope of this documentation*
 
 :::
 
-:::{tab-item} Zonder GIT-repository support
+:::{tab-item} Without GIT-repository support
 
-* Je kunt de workspace als volgt creëren
+* You can create the workspace as follows
 ```bash
-mkdir -p ~/my_ur_ws/src
-cd ~/my_ur_ws/src
-git clone https://github.com/AvansMechatronica/my_ur_ROS2.git
+mkdir -p ~/teachbot_ws/src
+cd ~/teachbot_ws/src
+git clone https://github.com/AvansMechatronica/teachbot.git
 ```
 
 :::
@@ -57,18 +54,13 @@ git clone https://github.com/AvansMechatronica/my_ur_ROS2.git
 
 
 
-## Installatie van Universal Robot support packages
 
-```bash
-cd ~/my_ur_ws/src/my_ur_ROS2/install
-./install
-```
 
-## Bouwen van de workspace
-> Dit is al gebeurd in de installatie. Wijzig je iets in de workspace dan kun je als volgt bouwen
+## Building the TOS Teacbot workspace
+
 ```bash
 # Build the workspace
-cd ~/my_ur_ws
+cd ~/teachbot_ws
 colcon build --symlink-install
 source install/setup.bash
 
