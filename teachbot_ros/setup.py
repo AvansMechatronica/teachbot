@@ -51,8 +51,8 @@ setup(
     entry_points={
         'console_scripts': [
             'teachbot_publisher = teachbot_ros.teachbot_publisher:main',
-            'teachbot_monitor = teachbot_ros.utils.teachbot_monitor:main',
             'teachbot_monitor_gui = teachbot_ros.utils.teachbot_monitor_gui:main',
+            'joint_state_remapper = teachbot_ros.utils.jointstate_remapper_to_target_robot:main',
         ],
     },
 )

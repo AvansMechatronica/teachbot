@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # sim_teachbot_rviz.launch.py
 """
-Launch file for TOS Teachbot with official UR5e visualization.
+Launch file for TOS Teachbot simulation with official UR5e visualization.
 
 Uses the official ur_description package for accurate UR5e model.
+Uses joint_state_publisher_gui to simulate teachbot movements.
 
 Usage:
-    ros2 launch teachbot_ros teachbot_rviz.launch.py
+    ros2 launch teachbot_ros sim_teachbot_rviz.launch.py
 """
 
 import os
@@ -24,6 +25,7 @@ def generate_launch_description():
     
     # File paths
     default_config = os.path.join(pkg_share, 'config', 'teachbot_params.yaml')
+    default_target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ur.yaml')
     sim_initial_positions = os.path.join(pkg_share, 'config', 'sim_initial_positions.yaml')
     rviz_config = os.path.join(pkg_share, 'rviz', 'teachbot.rviz')
     
@@ -44,6 +46,12 @@ def generate_launch_description():
         description='Path to the configuration YAML file'
     )
     
+    target_config_file_arg = DeclareLaunchArgument(
+        'target_config_file',
+        default_value=default_target_config,
+        description='Path to the target robot configuration YAML file'
+    )
+    
     # Joint State Publisher GUI node
     joint_state_publisher_gui_node = Node(
         package='joint_state_publisher_gui',
@@ -58,6 +66,17 @@ def generate_launch_description():
             ('/joint_states', '/teachbot/joint_states'),
             ('/robot_description', '/teachbot/robot_description')
         ]
+    )
+    
+    # Joint State Remapper (teachbot -> target robot)
+    joint_state_remapper_node = Node(
+        package='teachbot_ros',
+        executable='joint_state_remapper',
+        name='joint_state_remapper',
+        output='screen',
+        parameters=[{
+            'target_config_file': LaunchConfiguration('target_config_file')
+        }]
     )
     
     # Robot state publisher (publishes TF from URDF + joint states)
@@ -87,7 +106,9 @@ def generate_launch_description():
     
     return LaunchDescription([
         config_file_arg,
+        target_config_file_arg,
         joint_state_publisher_gui_node,
+        joint_state_remapper_node,
         robot_state_publisher_node,
         rviz_node
     ])
