@@ -39,7 +39,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
-html_logo = "_static/avans-hogeschool.png"
+html_logo = "_static/Logo_TOS_blauw.svg"
 
 myst_enable_extensions = ["html_admonition", "html_image", "colon_fence", "dollarmath"]
 

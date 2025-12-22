@@ -4,6 +4,11 @@ TeachBot Enable GUI
 
 This node provides a simple GUI with an ON/OFF button to enable/disable
 the teachbot follower by publishing to a boolean topic.
+
+Author: Gerard Harkema
+Date: 2025-12
+Initial version: 2025-12-22
+License: CC BY-NC-SA 4.0
 """
 
 import rclpy

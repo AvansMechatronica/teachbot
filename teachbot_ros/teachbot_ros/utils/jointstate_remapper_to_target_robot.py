@@ -6,6 +6,11 @@ Subscribes to /teachbot/joint_states and republishes to /teachbot/<target_robot>
 with target-specific joint names and angle offsets applied.
 
 This allows the teachbot to control different target robots with appropriate transformations.
+
+Author: Gerard Harkema
+Date: 2025-12
+Initial version: 2025-12-22
+License: CC BY-NC-SA 4.0
 """
 
 import rclpy

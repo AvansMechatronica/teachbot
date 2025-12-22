@@ -6,7 +6,7 @@ ROS2 Humble node for publishing TOS Teachbot joint states over ROS topics.
 
 ```bash
 # Terminal 1: Launch the teachbot node
-source ~/ros2_ws/install/setup.bash
+source ~/teachbot_ws/install/setup.bash
 ros2 launch teachbot_ros teachbot.launch.py
 
 # Terminal 2: Monitor joint states (radians)
@@ -22,7 +22,7 @@ ros2 topic hz /teachbot/joint_states
 ## Quick Start with RViz Visualization
 
 ```bash
-source ~/ros2_ws/install/setup.bash
+source ~/teachbot_ws/install/setup.bash
 ros2 launch teachbot_ros teachbot_rviz.launch.py
 ```
 
@@ -33,7 +33,7 @@ This launches the teachbot publisher with the official UR5e robot model in RViz,
 For testing without hardware:
 
 ```bash
-source ~/ros2_ws/install/setup.bash
+source ~/teachbot_ws/install/setup.bash
 ros2 launch teachbot_ros sim_teachbot_rviz.launch.py
 ```
 
@@ -72,7 +72,7 @@ The target robot topic name is determined by the `target_robot_name` parameter f
 ### Quick Install
 
 ```bash
-cd ~/ros2_ws/src/teachbot_ros
+cd ~/teachbot_ws/src/teachbot_ros
 chmod +x install_teachbot_ros.sh
 ./install_teachbot_ros.sh
 ```
@@ -85,18 +85,16 @@ sudo apt update
 sudo apt install ros-humble-desktop python3-colcon-common-extensions
 
 # Create workspace
-mkdir -p ~/ros2_ws/src
-cd ~/ros2_ws/src
+mkdir -p ~/teachbot_ws/src
+cd ~/teachbot_ws/src
 
 # Clone or copy the packages
 # (teachbot_interfaces and teachbot_ros)
 
 # Build
-cd ~/ros2_ws
+cd ~/teachbot_ws
 source /opt/ros/humble/setup.bash
-colcon build --packages-select teachbot_interfaces
-source install/setup.bash
-colcon build --packages-select teachbot_ros
+colcon build --symlink-install
 source install/setup.bash
 ```
 
@@ -106,7 +104,7 @@ source install/setup.bash
 
 ```bash
 # Source workspace (add to ~/.bashrc for convenience)
-source ~/ros2_ws/install/setup.bash
+source ~/teachbot_ws/install/setup.bash
 
 # Option 1: Use launch file (recommended)
 ros2 launch teachbot_ros teachbot.launch.py
@@ -118,7 +116,7 @@ ros2 run teachbot_ros teachbot_publisher
 ### Run with RViz Visualization
 
 ```bash
-source ~/ros2_ws/install/setup.bash
+source ~/teachbot_ws/install/setup.bash
 ros2 launch teachbot_ros teachbot_rviz.launch.py
 ```
 
@@ -158,8 +156,8 @@ ros2 topic info /teachbot/state
 
 ```bash
 # Copy and edit the config files
-cp ~/ros2_ws/install/teachbot_ros/share/teachbot_ros/config/teachbot_params.yaml ~/my_config.yaml
-cp ~/ros2_ws/install/teachbot_ros/share/teachbot_ros/config/target_robots/ur.yaml ~/my_target.yaml
+cp ~/teachbot_ws/install/teachbot_ros/share/teachbot_ros/config/teachbot_params.yaml ~/my_config.yaml
+cp ~/teachbot_ws/install/teachbot_ros/share/teachbot_ros/config/target_robots/ur.yaml ~/my_target.yaml
 # Edit files with your settings
 
 # Launch with custom config
@@ -313,7 +311,7 @@ ros2 run teachbot_ros teachbot_monitor_gui
 Direct TCP connection viewer (no ROS required):
 
 ```bash
-python3 ~/ros2_ws/src/teachbot_ros/teachbot_ros/teachbot_ros/utils/teachbot_viewer.py
+python3 ~/teachbot_ws/src/teachbot_ros/teachbot_ros/teachbot_ros/utils/teachbot_viewer.py
 ```
 
 Edit `TEACHBOT_IP` in the script to match your teachbot's IP address.

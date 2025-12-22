@@ -11,6 +11,11 @@ Displays real-time graphical status of:
 Usage:
     ros2 run teachbot_ros teachbot_monitor_gui
     python3 teachbot_monitor_gui.py
+
+Author: Gerard Harkema
+Date: 2025-12
+Initial version: 2025-12-22
+License: CC BY-NC-SA 4.0
 """
 
 import rclpy

@@ -5,6 +5,11 @@ TeachBot Enable from Button State
 This node subscribes to /teachbot/state topic and monitors button 1.
 When button 1 is pressed, it toggles the /teachbot/enable topic.
 The current enable state is displayed in a GUI.
+
+Author: Gerard Harkema
+Date: 2025-12
+Initial version: 2025-12-22
+License: CC BY-NC-SA 4.0
 """
 
 import rclpy
