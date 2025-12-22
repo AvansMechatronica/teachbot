@@ -40,7 +40,7 @@ setup(
     name=package_name,
     version='0.0.1',
     packages=find_packages(exclude=['test']),
-    data_files=package_files(data_files, ['launch/', 'rviz/', 'config/']),
+    data_files=package_files(data_files, ['teachbot_ros', 'launch/', 'rviz/', 'config/']),
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='tos',
@@ -53,6 +53,7 @@ setup(
             'teachbot_publisher = teachbot_ros.teachbot_publisher:main',
             'teachbot_monitor_gui = teachbot_ros.utils.teachbot_monitor_gui:main',
             'joint_state_remapper = teachbot_ros.utils.jointstate_remapper_to_target_robot:main',
+            'teachbot_state_publisher_gui = teachbot_ros.utils.teachbot_state_publisher_gui:main',
         ],
     },
 )

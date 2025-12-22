@@ -14,6 +14,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration, Command
 from launch_ros.actions import Node
 
@@ -51,7 +52,13 @@ def generate_launch_description():
         default_value=default_target_config,
         description='Path to the target robot configuration YAML file'
     )
-    
+
+    use_monitor_gui_arg = DeclareLaunchArgument(
+        'use_monitor_gui',
+        default_value='true',
+        description='Launch the teachbot control monitor GUI'
+    )
+
     # Joint State Publisher GUI node
     joint_state_publisher_gui_node = Node(
         package='joint_state_publisher_gui',
@@ -103,12 +110,32 @@ def generate_launch_description():
         output='screen',
         arguments=['-d', rviz_config]
     )
+
+    # Teachbot Monitor GUI (optional)
+    monitor_gui_node = Node(
+        package='teachbot_ros',
+        executable='teachbot_monitor_gui',
+        name='teachbot_monitor_gui',
+        output='screen',
+        condition=IfCondition(LaunchConfiguration('use_monitor_gui'))
+    )
+
+    # TeachbotState Publisher GUI
+    teachbot_state_publisher_gui_node = Node(
+        package='teachbot_ros',
+        executable='teachbot_state_publisher_gui',
+        name='teachbot_state_publisher_gui',
+        output='screen'
+    )
     
     return LaunchDescription([
         config_file_arg,
         target_config_file_arg,
+        use_monitor_gui_arg,
         joint_state_publisher_gui_node,
         joint_state_remapper_node,
         robot_state_publisher_node,
-        rviz_node
+        rviz_node,
+        teachbot_state_publisher_gui_node,
+        monitor_gui_node
     ])
