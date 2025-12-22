@@ -25,6 +25,7 @@ def generate_launch_description():
     
     # File paths
     default_config = os.path.join(pkg_share, 'config', 'teachbot_params.yaml')
+    target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ur.yaml')
     rviz_config = os.path.join(pkg_share, 'rviz', 'teachbot.rviz')
     
     # Generate URDF from xacro for UR5e
@@ -44,6 +45,12 @@ def generate_launch_description():
         description='Path to the configuration YAML file'
     )
     
+    target_config_arg = DeclareLaunchArgument(
+        'target_config_file',
+        default_value=target_config,
+        description='Path to the target robot configuration YAML file'
+    )
+    
     use_monitor_gui_arg = DeclareLaunchArgument(
         'use_monitor_gui',
         default_value='true',
@@ -56,7 +63,8 @@ def generate_launch_description():
         executable='teachbot_publisher',
         name='teachbot_publisher',
         output='screen',
-        parameters=[LaunchConfiguration('config_file')],
+        parameters=[LaunchConfiguration('config_file'), 
+                    LaunchConfiguration('target_config_file')],
         remappings=[
             # Remap to UR5e joint names
             #('/teachbot/joint_states', '/joint_states')
@@ -108,6 +116,7 @@ def generate_launch_description():
     
     return LaunchDescription([
         config_file_arg,
+        target_config_arg,
         use_monitor_gui_arg,
         teachbot_node,
         robot_state_publisher_node,

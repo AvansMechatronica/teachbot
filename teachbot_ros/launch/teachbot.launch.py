@@ -29,6 +29,13 @@ def generate_launch_description():
         default_value=default_config,
         description='Path to the configuration YAML file'
     )
+
+    target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ur.yaml')
+    target_config_arg = DeclareLaunchArgument(
+        'target_config_file',
+        default_value=target_config,
+        description='Path to the target robot configuration YAML file'
+    )    
     
     remote_ip_arg = DeclareLaunchArgument(
         'remote_ip',
@@ -48,7 +55,9 @@ def generate_launch_description():
         executable='teachbot_publisher',
         name='teachbot_publisher',
         output='screen',
-        parameters=[LaunchConfiguration('config_file')],
+        parameters=[LaunchConfiguration('config_file'), 
+                    LaunchConfiguration('target_config_file')
+                    ],
         # Remap topics if needed
         remappings=[
             # Example: ('/teachbot/joint_states', '/my_robot/joint_states')
@@ -57,6 +66,7 @@ def generate_launch_description():
     
     return LaunchDescription([
         config_file_arg,
+        target_config_arg,
         remote_ip_arg,
         publish_rate_arg,
         teachbot_node
