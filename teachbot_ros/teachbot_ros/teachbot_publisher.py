@@ -53,11 +53,6 @@ class TeachbotPublisher(Node):
         self.declare_parameter('joint_names', ['joint_1', 'joint_2', 'joint_3', 
                                                 'joint_4', 'joint_5', 'joint_6'])
 
-        # Taget robot parameters
-        self.declare_parameter('target_robot_name', 'no_name')
-        self.declare_parameter('target_joint_names', ['joint1', 'joint2', 'joint3', 
-                                                    'joint4', 'joint5', 'joint6'])
-        self.declare_parameter('target_degree_offsets', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
 
 
         # Get parameters
@@ -76,10 +71,6 @@ class TeachbotPublisher(Node):
         self._pot_full = self.get_parameter('pot_full').value
         self._joint_names = ['teachbot/' + name for name in self.get_parameter('joint_names').value]
 
-        # Target parameters
-        self._target_robot_name = self.get_parameter('target_robot_name').value
-        self._target_joint_names = list(self.get_parameter('target_joint_names').value)
-        self._target_degree_offsets = list(self.get_parameter('target_degree_offsets').value)
 
         # State tracking for angle unwrapping
         self._prev_angles: List[Optional[float]] = [None] * self._dof
@@ -99,12 +90,7 @@ class TeachbotPublisher(Node):
             '/teachbot/joint_states', 
             10
         )
-        topic_name = '/teachbot/' + self._target_robot_name + '/joint_states'
-        self._target_joint_state_pub = self.create_publisher(
-            JointState, 
-            topic_name, 
-            10
-        )
+
         self._state_pub = self.create_publisher(
             TeachbotState, 
             '/teachbot/state', 
@@ -210,22 +196,7 @@ class TeachbotPublisher(Node):
         joint_state_msg.effort = []    # Not available
         
         self._joint_state_pub.publish(joint_state_msg)
-        
-        # Publish target JointState message
-        target_joint_state_msg = JointState()
-        target_joint_state_msg.header.stamp = now
-        #target_joint_state_msg.header.frame_id = 'teachbot_base'
-        target_joint_state_msg.header.frame_id = ''
-        target_joint_state_msg.name = self._target_joint_names[:self._dof]
-        target_joint_state_msg.position = [
-            math.radians(angle + offset)
-            for angle, offset in zip(self._joint_angles[:self._dof],
-                                     self._target_degree_offsets[:self._dof])
-        ]
-        target_joint_state_msg.velocity = []  # Not available
-        target_joint_state_msg.effort = []    # Not available
-           
-        self._target_joint_state_pub.publish(target_joint_state_msg)    
+          
 
         # Publish TeachbotState message
         state_msg = TeachbotState()

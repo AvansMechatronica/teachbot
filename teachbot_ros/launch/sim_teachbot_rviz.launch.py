@@ -15,7 +15,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import IfCondition
-from launch.substitutions import LaunchConfiguration, Command
+from launch.substitutions import LaunchConfiguration, Command, PythonExpression
 from launch_ros.actions import Node
 
 
@@ -57,6 +57,13 @@ def generate_launch_description():
         'use_monitor_gui',
         default_value='true',
         description='Launch the teachbot control monitor GUI'
+    )
+
+    enable_mode_arg = DeclareLaunchArgument(
+        'enable_mode',
+        default_value='gui',
+        choices=['gui', 'button'],
+        description='Enable mode: "gui" for manual GUI button, "button" for teachbot button control'
     )
 
     # Joint State Publisher GUI node
@@ -127,15 +134,40 @@ def generate_launch_description():
         name='teachbot_state_publisher_gui',
         output='screen'
     )
+
+    # Enable GUI node (manual button control)
+    enable_gui_node = Node(
+        package='teachbot_ros',
+        executable='teachbot_enable_gui',
+        name='teachbot_enable_gui',
+        output='screen',
+        condition=IfCondition(
+            PythonExpression(["'", LaunchConfiguration('enable_mode'), "' == 'gui'"])
+        )
+    )
     
+    # Enable from button node (teachbot button control)
+    enable_button_node = Node(
+        package='teachbot_ros',
+        executable='teachbot_enable_from_button',
+        name='teachbot_enable_from_button',
+        output='screen',
+        condition=IfCondition(
+            PythonExpression(["'", LaunchConfiguration('enable_mode'), "' == 'button'"])
+        )
+    )
+
     return LaunchDescription([
         config_file_arg,
         target_config_file_arg,
         use_monitor_gui_arg,
+        enable_mode_arg,
         joint_state_publisher_gui_node,
         joint_state_remapper_node,
         robot_state_publisher_node,
         rviz_node,
         teachbot_state_publisher_gui_node,
-        monitor_gui_node
+        monitor_gui_node,
+        enable_gui_node,
+        enable_button_node,
     ])

@@ -56,18 +56,29 @@ def generate_launch_description():
         name='teachbot_publisher',
         output='screen',
         parameters=[LaunchConfiguration('config_file'), 
-                    LaunchConfiguration('target_config_file')
                     ],
         # Remap topics if needed
         remappings=[
             # Example: ('/teachbot/joint_states', '/my_robot/joint_states')
         ]
     )
-    
+
+    # Joint State Remapper (teachbot -> target robot)
+    joint_state_remapper_node = Node(
+        package='teachbot_ros',
+        executable='joint_state_remapper',
+        name='joint_state_remapper',
+        output='screen',
+        parameters=[{
+            'target_config_file': LaunchConfiguration('target_config_file')
+        }]
+    )
+
     return LaunchDescription([
         config_file_arg,
         target_config_arg,
         remote_ip_arg,
         publish_rate_arg,
-        teachbot_node
+        teachbot_node,
+        joint_state_remapper_node
     ])

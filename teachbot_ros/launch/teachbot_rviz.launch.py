@@ -13,7 +13,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration, Command
+from launch.substitutions import LaunchConfiguration, Command, PythonExpression
 from launch.conditions import IfCondition
 from launch_ros.actions import Node
 
@@ -55,6 +55,12 @@ def generate_launch_description():
         'use_monitor_gui',
         default_value='true',
         description='Launch the teachbot control monitor GUI'
+    )
+    
+    enable_mode_arg = DeclareLaunchArgument(
+        'enable_mode',
+        default_value='none',
+        description='Enable mode: gui, button, or none'
     )
     
     # Teachbot publisher node
@@ -113,14 +119,39 @@ def generate_launch_description():
         name='teachbot_base_broadcaster',
         arguments=['0', '0', '0', '0', '0', '0', 'world', 'teachbot/base_link']
     )
+
+    # Enable GUI node (manual button control)
+    enable_gui_node = Node(
+        package='teachbot_ros',
+        executable='teachbot_enable_gui',
+        name='teachbot_enable_gui',
+        output='screen',
+        condition=IfCondition(
+            PythonExpression(["'", LaunchConfiguration('enable_mode'), "' == 'gui'"])
+        )
+    )
     
+    # Enable from button node (teachbot button control)
+    enable_button_node = Node(
+        package='teachbot_ros',
+        executable='teachbot_enable_from_button',
+        name='teachbot_enable_from_button',
+        output='screen',
+        condition=IfCondition(
+            PythonExpression(["'", LaunchConfiguration('enable_mode'), "' == 'button'"])
+        )
+    )
+
     return LaunchDescription([
         config_file_arg,
         target_config_arg,
         use_monitor_gui_arg,
+        enable_mode_arg,
         teachbot_node,
         robot_state_publisher_node,
         static_tf_node,
         rviz_node,
-        monitor_gui_node
+        monitor_gui_node,
+        enable_gui_node,
+        enable_button_node
     ])

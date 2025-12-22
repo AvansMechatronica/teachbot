@@ -11,6 +11,7 @@ This allows the teachbot to control different target robots with appropriate tra
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
+from std_msgs.msg import Bool
 import yaml
 import os
 from ament_index_python.packages import get_package_share_directory
@@ -24,8 +25,19 @@ class JointStateRemapper(Node):
         # Declare parameters
         self.declare_parameter('target_config_file', '')
         
+        # Initialize enabled state
+        self.enabled = False
+        
         # Load target robot configuration
         self.load_target_config()
+        
+        # Create subscriber to teachbot enable topic
+        self.enable_subscription = self.create_subscription(
+            Bool,
+            '/teachbot/enable',
+            self.enable_callback,
+            10
+        )
         
         # Create subscriber to teachbot joint states
         self.subscription = self.create_subscription(
@@ -115,11 +127,21 @@ class JointStateRemapper(Node):
             self.get_logger().error(f'Traceback: {traceback.format_exc()}')
             self.get_logger().warn('Using default UR configuration')
     
+    def enable_callback(self, msg):
+        """Callback for enable/disable messages."""
+        self.enabled = msg.data
+        state = "enabled" if self.enabled else "disabled"
+        self.get_logger().info(f'Joint state remapper {state}')
+    
     def joint_state_callback(self, msg):
         """
         Callback for incoming joint states.
         Apply target-specific transformations and republish.
         """
+        # Only publish if enabled
+        if not self.enabled:
+            return
+        
         # Create new message for target robot
         target_msg = JointState()
         target_msg.header = msg.header
