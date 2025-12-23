@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome bij de TOS Teachbot documentation
-=========================================
+Welcome to the TOS Teachbot documentation
+==========================================
 
 **Welcome to the TOS Teachbot documentation** 
 
@@ -18,8 +18,11 @@ Welcome bij de TOS Teachbot documentation
 
    documentation/installation.md
    documentation/overview.md
+   documentation/follower.md
 
 
 
-# License
-[License CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+License
+-------
+`License CC BY-NC-SA 4.0 <https://creativecommons.org/licenses/by-nc-sa/4.0/>`_
+This documentation is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.

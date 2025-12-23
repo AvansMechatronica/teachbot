@@ -94,9 +94,7 @@ cd ~/teachbot_ws/src
 # Build
 cd ~/teachbot_ws
 source /opt/ros/humble/setup.bash
-colcon build --packages-select teachbot_interfaces
-source install/setup.bash
-colcon build --packages-select teachbot_ros
+colcon build --symlink-install
 source install/setup.bash
 ```
 

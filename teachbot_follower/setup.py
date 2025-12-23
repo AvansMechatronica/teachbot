@@ -1,9 +1,8 @@
 from setuptools import find_packages, setup
-import os
 from glob import glob
+import os
 
-
-package_name = 'teachbot_ros'
+package_name = 'teachbot_follower'
 
 data_files=[
         ('share/ament_index/resource_index/packages',
@@ -36,27 +35,25 @@ def package_files(data_files, directory_list):
 
     return data_files
 
-
 setup(
     name=package_name,
-    version='0.0.1',
+    version='0.0.0',
     packages=find_packages(exclude=['test']),
-    data_files=package_files(data_files, ['teachbot_ros', 'launch/', 'rviz/', 'config/']),
+    data_files=package_files(data_files, ['teachbot_follower', 'launch/', 'config/']),
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='tos',
-    maintainer_email='l.c.w.a.verstraete@student.tue.nl',
-    description='ROS2 node for TOS Teachbot joint state publishing',
-    license='MIT',
-    tests_require=['pytest'],
+    maintainer='Gerard Harkema',
+    maintainer_email='GerardAnneHarkema@gmail.com',
+    description='TODO: Package description',
+    license='TODO: License declaration',
+    extras_require={
+        'test': [
+            'pytest',
+        ],
+    },
     entry_points={
         'console_scripts': [
-            'teachbot_publisher = teachbot_ros.teachbot_publisher:main',
-            'teachbot_monitor_gui = teachbot_ros.utils.teachbot_monitor_gui:main',
-            'joint_state_remapper = teachbot_ros.utils.jointstate_remapper_to_target_robot:main',
-            'teachbot_state_publisher_gui = teachbot_ros.utils.teachbot_state_publisher_gui:main',
-            'teachbot_enable_gui = teachbot_ros.utils.teachbot_enable_gui:main',
-            'teachbot_enable_from_button = teachbot_ros.utils.teachbot_enable_from_button:main',
+            'teachbot_follower_action = teachbot_follower.teachbot_follower_action:main',
         ],
     },
 )
