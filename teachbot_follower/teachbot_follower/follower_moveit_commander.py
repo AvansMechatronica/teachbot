@@ -3,7 +3,12 @@
 UR Robot TeachBot Follower Node (Commander Interface)
 
 This node subscribes to joint states from a teachbot device and commands
-the UR robot to follow those positions using MoveIt's MoveGroupCommander.
+the target robot to follow those positions using MoveIt's MoveGroupCommander.
+
+Author: Gerard Harkema
+Date: 2025-12
+Initial version: 2025-12-22
+License: CC BY-NC-SA 4.0
 """
 
 import rclpy

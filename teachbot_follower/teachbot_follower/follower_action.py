@@ -3,7 +3,12 @@
 UR Robot TeachBot Follower Node (Action Client)
 
 This node subscribes to joint states from a teachbot device and commands
-the UR robot to follow those positions using action client for trajectory execution.
+the target robot to follow those positions using action client for trajectory execution.
+
+Author: Gerard Harkema
+Date: 2025-12
+Initial version: 2025-12-22
+License: CC BY-NC-SA 4.0
 """
 
 import rclpy

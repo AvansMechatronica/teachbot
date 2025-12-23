@@ -1,6 +1,6 @@
-# UR TeachBot Follower
+# TeachBot Follower
 
-This package contains ROS2 nodes that allow a UR robot to follow joint positions published by a teachbot device.
+This package contains ROS2 nodes that allow a target robot to follow joint positions published by a teachbot device.
 
 ## Overview
 
@@ -8,15 +8,13 @@ The teachbot device publishes joint states on `/teachbot/<target_robot>/joint_st
 
 ## Quick Start
 
-### Launch with GUI Control (Recommended)
+### Launch Control (Recommended)
 ```bash
-ros2 launch teachbot_follower teachbot_follower.launch.py
+ros2 launch teachbot_follower follower_action.launch.py
 ```
 
 This starts:
 - TeachBot follower action client
-
-
 
 
 ## Available Nodes
@@ -105,7 +103,7 @@ Make sure the joint names in the teachbot message match the UR robot joint names
 - For `teachbot_follower_action` or `teachbot_follower_moveit_commander`, adjust `trajectory_duration`
 
 ### Joint names don't match
-- Check your teachbot joint names: `ros2 topic echo /teachbot/joint_states --once`
+- Check your teachbot joint names: `ros2 topic echo /teachbot/<target_robot>/joint_states --once`
 - Verify UR joint names: `ros2 topic echo /joint_states --once`
 
 ## Safety Notes
