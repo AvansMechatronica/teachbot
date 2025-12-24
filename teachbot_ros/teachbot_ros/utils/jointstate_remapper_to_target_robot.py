@@ -75,7 +75,7 @@ class JointStateRemapper(Node):
         self.get_logger().info(f'Loading target config from: {config_file}')
         
         # Default values
-        self.target_robot_name = 'no_name'
+        self.target_robot_name = 'not_specified'
         self.target_joint_names = [
             'joint_1',
             'joint_2',

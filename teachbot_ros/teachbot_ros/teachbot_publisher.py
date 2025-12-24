@@ -33,7 +33,7 @@ class TeachbotPublisher(Node):
         
 
         # Declare parameters with defaults
-        self.declare_parameter('remote_ip', '192.168.100.0')
+        self.declare_parameter('remote_ip', '0.0.0.0')
         self.declare_parameter('start_port', 5004)
         self.declare_parameter('ee_port', 5011)
         self.declare_parameter('robot_model', 'Robot_200_200_mm')
