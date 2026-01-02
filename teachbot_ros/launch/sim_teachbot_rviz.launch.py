@@ -26,8 +26,8 @@ def generate_launch_description():
     
     # File paths
     default_config = os.path.join(pkg_share, 'config', 'teachbot_params.yaml')
-    #default_target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ur.yaml')
-    default_target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ufLite6.yaml')
+    default_target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ur.yaml')
+    #default_target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ufLite6.yaml')
     sim_initial_positions = os.path.join(pkg_share, 'config', 'sim_initial_positions.yaml')
     rviz_config = os.path.join(pkg_share, 'rviz', 'teachbot.rviz')
     
@@ -65,6 +65,12 @@ def generate_launch_description():
         default_value='gui',
         choices=['gui', 'button'],
         description='Enable mode: "gui" for manual GUI button, "button" for teachbot button control'
+    )
+
+    rviz_config_arg = DeclareLaunchArgument(
+        'rviz_config',
+        default_value=rviz_config,
+        description='Path to the RViz configuration file'
     )
 
     # Joint State Publisher GUI node
@@ -116,7 +122,7 @@ def generate_launch_description():
         executable='rviz2',
         name='rviz2',
         output='screen',
-        arguments=['-d', rviz_config]
+        arguments=['-d', LaunchConfiguration('rviz_config')]
     )
 
     # Teachbot Monitor GUI (optional)
@@ -163,6 +169,7 @@ def generate_launch_description():
         target_config_file_arg,
         use_monitor_gui_arg,
         enable_mode_arg,
+        rviz_config_arg,
         joint_state_publisher_gui_node,
         joint_state_remapper_node,
         robot_state_publisher_node,

@@ -21,7 +21,7 @@ def generate_launch_description():
     config_file = os.path.join(
         teachbot_follower_dir,
         'config',
-        'ufLite6.yaml'
+        'ur.yaml'
     )
     
     # Declare launch arguments
