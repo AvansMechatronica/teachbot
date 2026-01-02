@@ -6,7 +6,7 @@ teachbot_publisher:
   ros__parameters:
     
     target_robot_name: "ufLite6"
-    # UR joint names (official naming convention)
+    # UFactory Lite6 joint names (official naming convention)
     target_joint_names:
       - "joint1"
       - "joint2"
@@ -19,10 +19,10 @@ teachbot_publisher:
     # Degree offsets applied after count->angle conversion
     target_degree_offsets:
       - 0.0     # shoulder_pan
-      - 0.0     # shoulder_lift
+      - 90.0    # shoulder_lift
       - 0.0     # elbow
-      - 0.0     # wrist_1
-      - 0.0     # wrist_2
+      - 90.0    # wrist_1
+      - 180.0   # wrist_2
       - 0.0     # wrist_3
     
   

@@ -26,7 +26,8 @@ def generate_launch_description():
     
     # File paths
     default_config = os.path.join(pkg_share, 'config', 'teachbot_params.yaml')
-    default_target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ur.yaml')
+    #default_target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ur.yaml')
+    default_target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ufLite6.yaml')
     sim_initial_positions = os.path.join(pkg_share, 'config', 'sim_initial_positions.yaml')
     rviz_config = os.path.join(pkg_share, 'rviz', 'teachbot.rviz')
     

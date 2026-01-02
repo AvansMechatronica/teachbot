@@ -53,8 +53,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'teachbot_follower_action = teachbot_follower.teachbot_follower_action:main',
-            'follower_moveit_commander = teachbot_follower.teachbot_follower.follower_moveit_commander:main',
+            'follower_action = teachbot_follower.follower_action:main',
+            'follower_moveit_commander = teachbot_follower.follower_moveit_commander:main',
         ],
     },
 )

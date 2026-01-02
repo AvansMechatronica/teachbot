@@ -1,0 +1,13 @@
+teachbot_follower_action:
+  ros__parameters:
+    # Topic configuration
+    teachbot_topic: '/teachbot/ufLite6/joint_states'
+    enable_topic: '/teachbot/enable'
+    
+    # Controller configuration
+    controller_name: 'lite6_traj_controller'
+    
+    # Motion parameters
+    update_rate: 0.5              # seconds between updates
+    position_tolerance: 0.01      # radians - minimum change to trigger update
+    trajectory_duration: 2.0      # seconds - duration for trajectory execution
