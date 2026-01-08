@@ -239,6 +239,8 @@ class URTeachBotFollowerAction(Node):
         self.get_logger().info(
             f'Sending goal: {[f"{p:.3f}" for p in joint_states.position]}'
         )
+        self.get_logger().info(f'Joint names: {joint_names}')
+        self.get_logger().info(f'Trajectory points: {len(trajectory.points)}')
         
         # Send goal
         self._send_goal_future = self._action_client.send_goal_async(
@@ -252,13 +254,20 @@ class URTeachBotFollowerAction(Node):
     
     def goal_response_callback(self, future):
         """Handle goal response."""
-        goal_handle = future.result()
-        if not goal_handle.accepted:
-            self.get_logger().warn('Goal rejected')
+        try:
+            goal_handle = future.result()
+            if not goal_handle.accepted:
+                self.get_logger().warn('Goal rejected by action server')
+                self.get_logger().warn('Possible reasons: controller not ready, invalid trajectory, or joints mismatch')
+                self.get_logger().info('Check that the controller is running: ros2 control list_controllers')
+                self.is_executing = False
+                return
+            
+            self.get_logger().info('Goal accepted')
+        except Exception as e:
+            self.get_logger().error(f'Exception in goal response: {str(e)}')
             self.is_executing = False
             return
-        
-        self.get_logger().info('Goal accepted')
         
         self._get_result_future = goal_handle.get_result_async()
         self._get_result_future.add_done_callback(self.get_result_callback)
