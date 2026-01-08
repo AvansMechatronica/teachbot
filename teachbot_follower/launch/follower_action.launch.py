@@ -51,14 +51,6 @@ def generate_launch_description():
         )
     )
     
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            'enable_mode',
-            default_value='button',
-            choices=['gui', 'button', 'none'],
-            description='Enable mode: "gui" for manual GUI button, "button" for teachbot button control, "none" for no enable control'
-        )
-    )
     
     declared_arguments.append(
         DeclareLaunchArgument(
@@ -103,33 +95,10 @@ def generate_launch_description():
         )
     )
 
-    # Enable GUI node (manual button control)
-    enable_gui_node = Node(
-        package='teachbot_follower',
-        executable='teachbot_enable_gui',
-        name='teachbot_enable_gui',
-        output='screen',
-        condition=IfCondition(
-            PythonExpression(["'", enable_mode, "' == 'gui'"])
-        )
-    )
-    
-    # Enable from button node (teachbot button control)
-    enable_button_node = Node(
-        package='teachbot_follower',
-        executable='teachbot_enable_from_button',
-        name='teachbot_enable_from_button',
-        output='screen',
-        condition=IfCondition(
-            PythonExpression(["'", enable_mode, "' == 'button'"])
-        )
-    )
 
     nodes_to_launch = [
         teachbot_follower_node_from_config,
         teachbot_follower_node_from_params,
-        enable_gui_node,
-        enable_button_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_launch)

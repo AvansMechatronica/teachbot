@@ -59,7 +59,7 @@ def generate_launch_description():
     
     enable_mode_arg = DeclareLaunchArgument(
         'enable_mode',
-        default_value='none',
+        default_value='button',
         description='Enable mode: gui, button, or none'
     )
     
