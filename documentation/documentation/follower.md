@@ -67,10 +67,10 @@ ros2 run teachbot_follower follower_moveit_commander
 2. **Launch your UR robot with MoveIt:**
    ```bash
    # For simulation:
-   ros2 launch my_ur_bringup ur5e_bringup_sim.launch.py
+   ros2 launch my_ur_bringup simulation.launch.py
    
    # Or for real robot:
-   ros2 launch my_ur_bringup ur5e_bringup.launch.py robot_ip:=<ROBOT_IP>
+   ros2 launch my_ur_bringup real_robot.launch.py robot_ip:=<ROBOT_IP>
    ```
 
 3. **Start your teachbot device** (ensure it publishes to `/teachbot/joint_states`)
