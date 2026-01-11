@@ -24,5 +24,41 @@ teachbot_publisher:
       - 90.0    # wrist_1
       - 180.0   # wrist_2
       - 0.0     # wrist_3
+
+jointstate_remapper_to_target_robot:
+  ros__parameters:
+    target_robot_name: "ufLite6"
+    target_joint_names:
+      - "joint1"
+      - "joint2"
+      - "joint3"
+      - "joint4"
+      - "joint5"
+      - "joint6"
+    target_degree_offsets:
+      - 0.0     # shoulder_pan
+      - 90.0    # shoulder_lift
+      - 0.0     # elbow
+      - 90.0    # wrist_1
+      - 180.0   # wrist_2
+      - 0.0     # wrist_3
+
+joint_state_remapper:
+  ros__parameters:
+    target_robot_name: "ufLite6"
+    target_joint_names:
+      - "joint1"
+      - "joint2"
+      - "joint3"
+      - "joint4"
+      - "joint5"
+      - "joint6"
+    target_degree_offsets:
+      - 0.0     # shoulder_pan
+      - 90.0    # shoulder_lift
+      - 0.0     # elbow
+      - 90.0    # wrist_1
+      - 180.0   # wrist_2
+      - 0.0     # wrist_3
     
   

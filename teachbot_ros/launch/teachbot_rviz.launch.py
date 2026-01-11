@@ -12,20 +12,28 @@ Usage:
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration, Command, PythonExpression
 from launch.conditions import IfCondition
 from launch_ros.actions import Node
 
+def expand_path(path):
+    """Expand ~ and environment variables in path."""
+    return os.path.expanduser(os.path.expandvars(path))
 
-def generate_launch_description():
+
+def launch_setup(context, *args, **kwargs):
+    """Generate nodes with expanded paths."""
+    # Expand the target config file path  
+    config_file = LaunchConfiguration('config_file').perform(context)
+    config_file_expanded = expand_path(config_file)
+    
+    target_config = LaunchConfiguration('target_config_file').perform(context)
+    target_config_expanded = expand_path(target_config)
+    
     # Get package share directories
     pkg_share = get_package_share_directory('teachbot_ros')
     ur_description_share = get_package_share_directory('ur_description')
-    
-    # File paths
-    default_config = os.path.join(pkg_share, 'config', 'teachbot_params.yaml')
-    target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ur.yaml')
     rviz_config = os.path.join(pkg_share, 'rviz', 'teachbot.rviz')
     
     # Generate URDF from xacro for UR5e
@@ -38,43 +46,14 @@ def generate_launch_description():
         ' generate_ros2_control_tag:=false',
     ])
     
-    # Declare launch arguments
-    config_file_arg = DeclareLaunchArgument(
-        'config_file',
-        default_value=default_config,
-        description='Path to the configuration YAML file'
-    )
-    
-    target_config_arg = DeclareLaunchArgument(
-        'target_config_file',
-        default_value=target_config,
-        description='Path to the target robot configuration YAML file'
-    )
-    
-    use_monitor_gui_arg = DeclareLaunchArgument(
-        'use_monitor_gui',
-        default_value='true',
-        description='Launch the teachbot control monitor GUI'
-    )
-    
-    enable_mode_arg = DeclareLaunchArgument(
-        'enable_mode',
-        default_value='button',
-        description='Enable mode: gui, button, or none'
-    )
-    
     # Teachbot publisher node
     teachbot_node = Node(
         package='teachbot_ros',
         executable='teachbot_publisher',
         name='teachbot_publisher',
         output='screen',
-        parameters=[LaunchConfiguration('config_file'), 
-                    LaunchConfiguration('target_config_file')],
-        remappings=[
-            # Remap to UR5e joint names
-            #('/teachbot/joint_states', '/joint_states')
-        ]
+        parameters=[config_file_expanded, target_config_expanded],
+        remappings=[]
     )
     
     # Robot state publisher (publishes TF from URDF + joint states)
@@ -92,7 +71,6 @@ def generate_launch_description():
             ('/robot_description', '/teachbot/robot_description')
         ]
     )
-    
     
     # RViz node
     rviz_node = Node(
@@ -141,12 +119,8 @@ def generate_launch_description():
             PythonExpression(["'", LaunchConfiguration('enable_mode'), "' == 'button'"])
         )
     )
-
-    return LaunchDescription([
-        config_file_arg,
-        target_config_arg,
-        use_monitor_gui_arg,
-        enable_mode_arg,
+    
+    return [
         teachbot_node,
         robot_state_publisher_node,
         static_tf_node,
@@ -154,4 +128,58 @@ def generate_launch_description():
         monitor_gui_node,
         enable_gui_node,
         enable_button_node
+    ]
+
+
+def generate_launch_description():
+    # Get package share directories
+    pkg_share = get_package_share_directory('teachbot_ros')
+    ur_description_share = get_package_share_directory('ur_description')
+    
+    # File paths
+    default_config = os.path.join(pkg_share, 'config', 'teachbot_params.yaml')
+    target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ur.yaml')
+    rviz_config = os.path.join(pkg_share, 'rviz', 'teachbot.rviz')
+    
+    # Generate URDF from xacro for UR5e
+    urdf_xacro = os.path.join(ur_description_share, 'urdf', 'ur.urdf.xacro')
+    robot_description = Command([
+        'xacro ', urdf_xacro,
+        ' ur_type:=ur5e',
+        ' name:=ur5e',
+        ' tf_prefix:=teachbot/',
+        ' generate_ros2_control_tag:=false',
+    ])
+    
+    # Declare launch arguments
+    config_file_arg = DeclareLaunchArgument(
+        'config_file',
+        default_value=default_config,
+        description='Path to the configuration YAML file'
+    )
+    
+    target_config_arg = DeclareLaunchArgument(
+        'target_config_file',
+        default_value=target_config,
+        description='Path to the target robot configuration YAML file'
+    )
+    
+    use_monitor_gui_arg = DeclareLaunchArgument(
+        'use_monitor_gui',
+        default_value='true',
+        description='Launch the teachbot control monitor GUI'
+    )
+    
+    enable_mode_arg = DeclareLaunchArgument(
+        'enable_mode',
+        default_value='button',
+        description='Enable mode: gui, button, or none'
+    )
+    
+    return LaunchDescription([
+        config_file_arg,
+        target_config_arg,
+        use_monitor_gui_arg,
+        enable_mode_arg,
+        OpaqueFunction(function=launch_setup)
     ])

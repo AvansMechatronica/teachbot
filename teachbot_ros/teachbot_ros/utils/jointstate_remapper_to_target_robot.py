@@ -72,6 +72,10 @@ class JointStateRemapper(Node):
             pkg_share = get_package_share_directory('teachbot_ros')
             config_file = os.path.join(pkg_share, 'config', 'target_robots', 'ur.yaml')
         
+        # Expand user home directory (~) and environment variables
+        config_file = os.path.expanduser(config_file)
+        config_file = os.path.expandvars(config_file)
+        
         self.get_logger().info(f'Loading target config from: {config_file}')
         
         # Default values
@@ -110,13 +114,33 @@ class JointStateRemapper(Node):
             self.get_logger().info(f'Available config keys: {list(config.keys())}')
             
             # Navigate to the nested parameters structure
-            if 'teachbot_publisher' in config and 'ros__parameters' in config['teachbot_publisher']:
+            # First try to find parameters for this node's actual name
+            node_name = self.get_name()
+            if node_name in config and 'ros__parameters' in config[node_name]:
+                params = config[node_name]['ros__parameters']
+                self.target_robot_name = params.get('target_robot_name', self.target_robot_name)
+                self.target_joint_names = params.get('target_joint_names', self.target_joint_names)
+                self.target_degree_offsets = params.get('target_degree_offsets', self.target_degree_offsets)
+            # Fallback to 'jointstate_remapper_to_target_robot' (default node name)
+            elif 'jointstate_remapper_to_target_robot' in config and 'ros__parameters' in config['jointstate_remapper_to_target_robot']:
+                params = config['jointstate_remapper_to_target_robot']['ros__parameters']
+                self.target_robot_name = params.get('target_robot_name', self.target_robot_name)
+                self.target_joint_names = params.get('target_joint_names', self.target_joint_names)
+                self.target_degree_offsets = params.get('target_degree_offsets', self.target_degree_offsets)
+            # Another fallback to 'joint_state_remapper' (alternate name)
+            elif 'joint_state_remapper' in config and 'ros__parameters' in config['joint_state_remapper']:
+                params = config['joint_state_remapper']['ros__parameters']
+                self.target_robot_name = params.get('target_robot_name', self.target_robot_name)
+                self.target_joint_names = params.get('target_joint_names', self.target_joint_names)
+                self.target_degree_offsets = params.get('target_degree_offsets', self.target_degree_offsets)
+            # Fallback to 'teachbot_publisher' (legacy)
+            elif 'teachbot_publisher' in config and 'ros__parameters' in config['teachbot_publisher']:
                 params = config['teachbot_publisher']['ros__parameters']
                 self.target_robot_name = params.get('target_robot_name', self.target_robot_name)
                 self.target_joint_names = params.get('target_joint_names', self.target_joint_names)
                 self.target_degree_offsets = params.get('target_degree_offsets', self.target_degree_offsets)
             else:
-                # Fallback: try to get directly from config root
+                # Final fallback: try to get directly from config root
                 self.target_robot_name = config.get('target_robot_name', self.target_robot_name)
                 self.target_joint_names = config.get('target_joint_names', self.target_joint_names)
                 self.target_degree_offsets = config.get('target_degree_offsets', self.target_degree_offsets)
