@@ -64,10 +64,10 @@ class URTeachBotFollowerCommander(Node):
         )
         
         # Create publisher for joint trajectory commands
-        # Note: Most controllers accept commands on the /commands topic
+        # Note: UR controllers use /joint_trajectory topic, not /commands
         self.trajectory_pub = self.create_publisher(
             JointTrajectory,
-            f'/{controller_name}/commands',
+            f'/{controller_name}/joint_trajectory',
             qos_profile
         )
         
@@ -92,15 +92,21 @@ class URTeachBotFollowerCommander(Node):
         
         self.get_logger().info(f'Subscribed to {teachbot_topic}')
         self.get_logger().info(f'Subscribed to {enable_topic}')
-        self.get_logger().info(f'Publishing to /{controller_name}/commands')
+        self.get_logger().info(f'Publishing to /{controller_name}/joint_trajectory')
         self.get_logger().info(f'Update rate: {self.update_rate} seconds')
         self.get_logger().info('Ready to follow teachbot commands')
     
     def joint_state_callback(self, msg):
         """Store the latest joint state message."""
         with self.lock:
+            was_first = self.latest_joint_states is None
             self.latest_joint_states = msg
-        self.get_logger().info(f'Received joint states: {[f"{p:.3f}" for p in msg.position]}', throttle_duration_sec=2.0)
+        
+        if was_first:
+            self.get_logger().info(f'First joint state received! Joints: {msg.name}')
+            self.get_logger().info(f'Initial positions: {[f"{p:.3f}" for p in msg.position]}')
+        else:
+            self.get_logger().debug(f'Received joint states: {[f"{p:.3f}" for p in msg.position]}', throttle_duration_sec=2.0)
     
     def enable_callback(self, msg):
         """Handle enable/disable messages."""
@@ -109,6 +115,8 @@ class URTeachBotFollowerCommander(Node):
         
         if self.enabled and not was_enabled:
             self.get_logger().info('TeachBot following ENABLED')
+            if self.latest_joint_states is None:
+                self.get_logger().warn('Enabled but no joint states received yet - waiting for data...')
         elif not self.enabled and was_enabled:
             self.get_logger().info('TeachBot following DISABLED')
     
@@ -116,11 +124,12 @@ class URTeachBotFollowerCommander(Node):
         """Periodically update the robot position based on teachbot input."""
         # Check if enabled
         if not self.enabled:
+            self.get_logger().debug('Update skipped: following disabled', throttle_duration_sec=10.0)
             return
         
         with self.lock:
             if self.latest_joint_states is None:
-                self.get_logger().info('No joint states received yet', throttle_duration_sec=5.0)
+                self.get_logger().warn('No joint states received yet - check topic connection!', throttle_duration_sec=5.0)
                 return
             
             joint_states = self.latest_joint_states
@@ -128,23 +137,36 @@ class URTeachBotFollowerCommander(Node):
         try:
             # Check if we need to update (positions changed significantly)
             if self.should_update_position(joint_states):
+                self.get_logger().debug(f'Position changed - sending new command')
                 self.send_trajectory_command(joint_states)
             else:
-                self.get_logger().debug('Position change below tolerance')
+                self.get_logger().debug(f'Position change below tolerance ({self.position_tolerance} rad)', throttle_duration_sec=5.0)
         except Exception as e:
             self.get_logger().error(f'Error updating robot position: {str(e)}')
     
     def should_update_position(self, joint_states):
         """Check if the position has changed enough to warrant a new command."""
         if self.last_commanded_positions is None:
+            self.get_logger().debug('First command - no previous position to compare')
             return True
         
         # Check if any joint has moved beyond the tolerance
+        max_delta = 0.0
+        changed_joint = None
         for i, pos in enumerate(joint_states.position):
             if i < len(self.last_commanded_positions):
-                if abs(pos - self.last_commanded_positions[i]) > self.position_tolerance:
+                delta = abs(pos - self.last_commanded_positions[i])
+                if delta > max_delta:
+                    max_delta = delta
+                    changed_joint = i
+                if delta > self.position_tolerance:
+                    self.get_logger().debug(
+                        f'Joint {i} ({joint_states.name[i] if i < len(joint_states.name) else "unknown"}) '
+                        f'changed by {delta:.4f} rad (>{self.position_tolerance:.4f})'
+                    )
                     return True
         
+        self.get_logger().debug(f'Max joint change: {max_delta:.4f} rad at joint {changed_joint}', throttle_duration_sec=10.0)
         return False
     
     def send_trajectory_command(self, joint_states):
@@ -183,6 +205,10 @@ class URTeachBotFollowerCommander(Node):
         
         self.get_logger().info(
             f'Sent trajectory to {trajectory.joint_names}: {[f"{p:.3f}" for p in joint_states.position]}'
+        )
+        self.get_logger().debug(
+            f'Trajectory duration: {self.trajectory_duration}s, '
+            f'Target controller: {self.trajectory_pub.topic_name}'
         )
         
         # Update last commanded positions

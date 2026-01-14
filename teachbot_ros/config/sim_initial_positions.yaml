@@ -4,7 +4,7 @@ joint_state_publisher_gui:
     zeros:
       teachbot/shoulder_pan_joint: 0.0
       teachbot/shoulder_lift_joint: -1.57
-      teachbot/elbow_joint: 1.57
+      teachbot/elbow_joint: -1.57
       teachbot/wrist_1_joint: -1.57
-      teachbot/wrist_2_joint: -1.57
+      teachbot/wrist_2_joint: 1.57
       teachbot/wrist_3_joint: 0.0

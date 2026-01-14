@@ -174,6 +174,16 @@ class TeachbotPublisher(Node):
         btn1 = rs485_snap["btn1"]
         btn2 = rs485_snap["btn2"]
         
+        # Debug: Log button state changes
+        if not hasattr(self, '_last_btn1'):
+            self._last_btn1 = False
+            self._last_btn2 = False
+        
+        if btn1 != self._last_btn1 or btn2 != self._last_btn2:
+            self.get_logger().info(f'Button state changed: btn1={btn1}, btn2={btn2}, pot={pot_raw}')
+            self._last_btn1 = btn1
+            self._last_btn2 = btn2
+        
         # Compute FK
         tcp_x = tcp_y = tcp_z = 0.0
         tcp_rx = tcp_ry = tcp_rz = 0.0

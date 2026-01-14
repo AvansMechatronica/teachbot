@@ -1,7 +1,7 @@
 teachbot_follower_action:
   ros__parameters:
     # Topic configuration
-    teachbot_topic: '/teachbot/ur/joint_states'
+    teachbot_topic: '/teachbot/joint_states'  # Fixed: removed '/ur/' from topic name
     enable_topic: '/teachbot/enable'
     
     # Controller configuration

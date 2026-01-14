@@ -119,6 +119,20 @@ def launch_setup(context, *args, **kwargs):
             PythonExpression(["'", LaunchConfiguration('enable_mode'), "' == 'button'"])
         )
     )
+
+    # Joint State Remapper (teachbot -> target robot)
+    joint_state_remapper_node = Node(
+        package='teachbot_ros',
+        executable='joint_state_remapper',
+        name='joint_state_remapper',
+        output='screen',
+        parameters=[
+            target_config_expanded,
+            {
+                'target_config_file': target_config_expanded
+            }
+        ]
+    )
     
     return [
         teachbot_node,
@@ -127,7 +141,8 @@ def launch_setup(context, *args, **kwargs):
         rviz_node,
         monitor_gui_node,
         enable_gui_node,
-        enable_button_node
+        enable_button_node,
+        joint_state_remapper_node
     ]
 
 

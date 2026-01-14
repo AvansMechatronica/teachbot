@@ -169,9 +169,11 @@ class RS485Listener(threading.Thread):
             self._sock.connect((self._remote_ip, self.port))
             self._sock.settimeout(1.0)  # Shorter timeout for recv
             self._connected = True
+            print(f"RS485 Connected to {self._remote_ip}:{self.port}")
             return True
-        except (socket.timeout, socket.error, OSError):
+        except (socket.timeout, socket.error, OSError) as e:
             self._connected = False
+            print(f"RS485 Connection failed to {self._remote_ip}:{self.port}: {e}")
             if self._sock:
                 try:
                     self._sock.close()
@@ -209,8 +211,12 @@ class RS485Listener(threading.Thread):
 
     def _decode(self, buf: bytes) -> None:
         if len(buf) != 5 or buf[0] != START_BYTE:
+            # Uncomment for debugging invalid frames
+            # print(f"RS485 Invalid frame: len={len(buf)}, start={buf[0] if buf else 'empty'}")
             return
         if (sum(buf[:4]) & 0xFF) != buf[4]:
+            # Uncomment for debugging checksum failures
+            # print(f"RS485 Checksum fail: {buf.hex()}")
             return
 
         pot = (buf[2] << 8) | buf[1]
@@ -221,6 +227,11 @@ class RS485Listener(threading.Thread):
             self.btn1 = bool(btn & 0x01)
             self.btn2 = bool(btn & 0x02)
             self._freq.tick()
+            
+            # Debug: Print when button state changes
+            # Uncomment to see button state changes in real-time
+            # if self.btn1 or self.btn2:
+            #     print(f"RS485 Buttons: btn1={self.btn1}, btn2={self.btn2}, raw_byte={btn:08b}, pot={self.pot}")
 
     def stop(self) -> None:
         self._running.clear()
