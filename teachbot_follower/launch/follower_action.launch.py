@@ -7,7 +7,7 @@ Starts both the teachbot follower action node and the enable GUI
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, OpaqueFunction
+from launch.actions import DeclareLaunchArgument, OpaqueFunction, ExecuteProcess
 from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch.conditions import IfCondition
 from launch_ros.actions import Node
@@ -26,6 +26,18 @@ def launch_setup(context, *args, **kwargs):
     controller_name = LaunchConfiguration('controller_name')
     update_rate = LaunchConfiguration('update_rate')
     use_config_file = LaunchConfiguration('use_config_file')
+    
+    # Activate the scaled_joint_trajectory_controller
+    activate_controller = ExecuteProcess(
+        cmd=[
+            'ros2', 'service', 'call',
+            '/controller_manager/switch_controller',
+            'controller_manager_msgs/srv/SwitchController',
+            "{activate_controllers: ['scaled_joint_trajectory_controller'], deactivate_controllers: [], strictness: 2, activate_asap: true}"
+        ],
+        output='screen',
+        shell=False
+    )
     
     # Teachbot follower action node with config file
     teachbot_follower_node_from_config = Node(
@@ -55,6 +67,7 @@ def launch_setup(context, *args, **kwargs):
     )
     
     return [
+        activate_controller,
         teachbot_follower_node_from_config,
         teachbot_follower_node_from_params,
     ]

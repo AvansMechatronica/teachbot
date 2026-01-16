@@ -36,7 +36,7 @@ teachbot_publisher:
     
     # Degree offsets applied after count->angle conversion
     degree_offsets:
-      - 0.0     # shoulder_pan
+      - -90.0     # shoulder_pan
       - 0.0     # shoulder_lift
       - 0.0     # elbow
       - 0.0     # wrist_1
