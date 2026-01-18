@@ -4,8 +4,10 @@ teachbot_follower_action:
     teachbot_topic: '/teachbot/joint_states'  # Fixed: removed '/ur/' from topic name
     enable_topic: '/teachbot/enable'
     
-    # Controller configuration
-    controller_name: 'joint_trajectory_controller'
+    # Controller configuration of target robot
+    controller_name: 'scaled_joint_trajectory_controller'
+    # Controller configuration for simulation of target robot
+    controller_name_sim: 'joint_trajectory_controller'
     
     # Motion parameters
     update_rate: 0.5              # seconds between updates

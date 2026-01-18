@@ -32,6 +32,8 @@ class URTeachBotFollowerAction(Node):
         self.declare_parameter('teachbot_topic', '/teachbot/not_specified/joint_states')
         self.declare_parameter('enable_topic', '/teachbot/enable')
         self.declare_parameter('controller_name', 'not_specified_controller')
+        self.declare_parameter('controller_name_sim', 'not_specified_controller_sim')
+        self.declare_parameter('sim', False)  # Use simulation controller
         self.declare_parameter('update_rate', 0.5)  # seconds between updates
         self.declare_parameter('position_tolerance', 0.01)  # radians
         self.declare_parameter('trajectory_duration', 2.0)  # seconds - increased to avoid path tolerance violations
@@ -40,6 +42,8 @@ class URTeachBotFollowerAction(Node):
         teachbot_topic = self.get_parameter('teachbot_topic').value
         enable_topic = self.get_parameter('enable_topic').value
         controller_name = self.get_parameter('controller_name').value
+        controller_name_sim = self.get_parameter('controller_name_sim').value
+        sim = self.get_parameter('sim').value
         self.update_rate = self.get_parameter('update_rate').value
         self.position_tolerance = self.get_parameter('position_tolerance').value
         self.trajectory_duration = self.get_parameter('trajectory_duration').value
@@ -53,11 +57,18 @@ class URTeachBotFollowerAction(Node):
         self.is_executing = False
         
         # Create action client
-        self._action_client = ActionClient(
-            self,
-            FollowJointTrajectory,
-            f'/{controller_name}/follow_joint_trajectory'
-        )
+        if not sim:
+            self._action_client = ActionClient(
+                self,
+                FollowJointTrajectory,
+                f'/{controller_name}/follow_joint_trajectory'
+            )
+        else:
+            self._action_client = ActionClient(
+                self,
+                FollowJointTrajectory,
+                f'/{controller_name_sim}/follow_joint_trajectory'
+            )
         
         # Subscribe to teachbot joint states
         self.subscription = self.create_subscription(

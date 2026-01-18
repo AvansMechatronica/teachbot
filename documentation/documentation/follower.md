@@ -25,7 +25,7 @@ This node uses action client to send trajectory goals. Robust with feedback and 
 
 **Usage:**
 ```bash
-ros2 run teachbot_follower follower_action
+ros2 launch teachbot_follower follower_action.launch.py
 ```
 
 **Parameters:**
@@ -77,8 +77,16 @@ ros2 run teachbot_follower follower_moveit_commander
 
 4. **Run the follower node:**
    ```bash
-   ros2 run teachbot_follower teachbot_follower_action
+   # For simulation:
+   ros2 launch teachbot_follower follower_action.launch.py sim:=true
+
+   # Or for real robot:
+   ros2 launch teachbot_follower follower_action.launch.py
+
    ```
+
+
+
 
 ## Joint Names
 
