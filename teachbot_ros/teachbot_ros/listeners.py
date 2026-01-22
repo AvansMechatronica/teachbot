@@ -205,20 +205,37 @@ class RS485Listener(threading.Thread):
                 continue
 
             leftover += data
+
+            # TCP stream framing: search for start byte 0xAA to resynchronize
             while len(leftover) >= self._packet_size:
-                frame, leftover = leftover[:self._packet_size], leftover[self._packet_size:]
-                self._decode(frame)
+                # Find the start byte
+                start_idx = leftover.find(bytes([START_BYTE]))
+                if start_idx == -1:
+                    # No start byte found, discard buffer
+                    leftover = b""
+                    break
+                elif start_idx > 0:
+                    # Discard bytes before start byte (resync)
+                    leftover = leftover[start_idx:]
+                    continue
+
+                # We have a potential frame starting at index 0
+                if len(leftover) < self._packet_size:
+                    break  # Wait for more data
+
+                frame = leftover[:self._packet_size]
+
+                # Validate checksum before consuming
+                if (sum(frame[:4]) & 0xFF) == frame[4]:
+                    # Valid frame, consume and decode
+                    leftover = leftover[self._packet_size:]
+                    self._decode(frame)
+                else:
+                    # Invalid checksum - this 0xAA wasn't a real start byte
+                    # Skip this byte and search for next 0xAA
+                    leftover = leftover[1:]
 
     def _decode(self, buf: bytes) -> None:
-        if len(buf) != 5 or buf[0] != START_BYTE:
-            # Uncomment for debugging invalid frames
-            # print(f"RS485 Invalid frame: len={len(buf)}, start={buf[0] if buf else 'empty'}")
-            return
-        if (sum(buf[:4]) & 0xFF) != buf[4]:
-            # Uncomment for debugging checksum failures
-            # print(f"RS485 Checksum fail: {buf.hex()}")
-            return
-
         pot = (buf[2] << 8) | buf[1]
         btn = buf[3]
 
@@ -227,11 +244,6 @@ class RS485Listener(threading.Thread):
             self.btn1 = bool(btn & 0x01)
             self.btn2 = bool(btn & 0x02)
             self._freq.tick()
-            
-            # Debug: Print when button state changes
-            # Uncomment to see button state changes in real-time
-            # if self.btn1 or self.btn2:
-            #     print(f"RS485 Buttons: btn1={self.btn1}, btn2={self.btn2}, raw_byte={btn:08b}, pot={self.pot}")
 
     def stop(self) -> None:
         self._running.clear()
