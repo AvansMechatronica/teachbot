@@ -25,23 +25,18 @@ def expand_path(path):
 
 def launch_setup(context, *args, **kwargs):
     """Generate nodes with expanded paths."""
-    # Expand the target config file path
-    target_config = LaunchConfiguration('target_config_file').perform(context)
-    target_config_expanded = expand_path(target_config)
-    
-    # Joint State Remapper (teachbot -> target robot)
-    joint_state_remapper_node = Node(
+    # Node to convert /teachbot/joint_states_sim to /teachbot/joint_states with offsets
+    pkg_share = get_package_share_directory('teachbot_ros')
+    sim_offsets_path = os.path.join(pkg_share, 'config', 'sim_offsets.yaml')
+    publish_jointstates_from_sim_node = Node(
         package='teachbot_ros',
-        executable='joint_state_remapper',
-        name='joint_state_remapper',
+        executable='publish_jointstates_from_sim',
+        name='publish_jointstates_from_sim',
         output='screen',
-        parameters=[
-            target_config_expanded,
-            {
-                'target_config_file': target_config_expanded
-            }
-        ]
+        arguments=[sim_offsets_path]
     )
+    # Expand the target config file path
+
     
     # Robot state publisher (publishes TF from URDF + joint states)
     pkg_share = get_package_share_directory('teachbot_ros')
@@ -67,7 +62,7 @@ def launch_setup(context, *args, **kwargs):
             {'robot_description': robot_description}
         ],
         remappings=[
-            ('/joint_states', '/teachbot/joint_states'),
+            ('/joint_states', '/teachbot/joint_states_sim'),
             ('/robot_description', '/teachbot/robot_description')
         ]
     )
@@ -82,7 +77,7 @@ def launch_setup(context, *args, **kwargs):
             'publish_frequency': 250.0,
         }],
         remappings=[
-            ('/joint_states', '/teachbot/joint_states'),
+            ('/joint_states', '/teachbot/joint_states_sim'),
             ('/robot_description', '/teachbot/robot_description')
         ]
     )
@@ -137,13 +132,13 @@ def launch_setup(context, *args, **kwargs):
     
     return [
         joint_state_publisher_gui_node,
-        joint_state_remapper_node,
         robot_state_publisher_node,
         rviz_node,
         teachbot_state_publisher_gui_node,
         monitor_gui_node,
         enable_gui_node,
         enable_button_node,
+        publish_jointstates_from_sim_node,
     ]
 
 
@@ -154,8 +149,6 @@ def generate_launch_description():
     
     # File paths
     default_config = os.path.join(pkg_share, 'config', 'teachbot_params.yaml')
-    default_target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ur.yaml')
-    #default_target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ufLite6.yaml')
     sim_initial_positions = os.path.join(pkg_share, 'config', 'sim_initial_positions.yaml')
     rviz_config = os.path.join(pkg_share, 'rviz', 'teachbot.rviz')
     
@@ -182,11 +175,6 @@ def generate_launch_description():
         expanded_path = expand_path(config_path)
         return expanded_path
     
-    target_config_file_arg = DeclareLaunchArgument(
-        'target_config_file',
-        default_value=default_target_config,
-        description='Path to the target robot configuration YAML file'
-    )
 
     use_monitor_gui_arg = DeclareLaunchArgument(
         'use_monitor_gui',
@@ -209,7 +197,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         config_file_arg,
-        target_config_file_arg,
         use_monitor_gui_arg,
         enable_mode_arg,
         rviz_config_arg,

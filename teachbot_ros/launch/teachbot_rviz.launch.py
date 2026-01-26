@@ -28,8 +28,6 @@ def launch_setup(context, *args, **kwargs):
     config_file = LaunchConfiguration('config_file').perform(context)
     config_file_expanded = expand_path(config_file)
     
-    target_config = LaunchConfiguration('target_config_file').perform(context)
-    target_config_expanded = expand_path(target_config)
     
     # Get package share directories
     pkg_share = get_package_share_directory('teachbot_ros')
@@ -52,7 +50,7 @@ def launch_setup(context, *args, **kwargs):
         executable='teachbot_publisher',
         name='teachbot_publisher',
         output='screen',
-        parameters=[config_file_expanded, target_config_expanded],
+        parameters=[config_file_expanded],
         remappings=[]
     )
     
@@ -120,20 +118,7 @@ def launch_setup(context, *args, **kwargs):
         )
     )
 
-    # Joint State Remapper (teachbot -> target robot)
-    joint_state_remapper_node = Node(
-        package='teachbot_ros',
-        executable='joint_state_remapper',
-        name='joint_state_remapper',
-        output='screen',
-        parameters=[
-            target_config_expanded,
-            {
-                'target_config_file': target_config_expanded
-            }
-        ]
-    )
-    
+    # ...existing code...
     return [
         teachbot_node,
         robot_state_publisher_node,
@@ -141,8 +126,7 @@ def launch_setup(context, *args, **kwargs):
         rviz_node,
         monitor_gui_node,
         enable_gui_node,
-        enable_button_node,
-        joint_state_remapper_node
+        enable_button_node
     ]
 
 

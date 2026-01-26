@@ -21,10 +21,7 @@ def expand_path(path):
 
 
 def launch_setup(context, *args, **kwargs):
-    """Generate nodes with expanded paths."""
-    # Expand the target config file path
-    target_config = LaunchConfiguration('target_config_file').perform(context)
-    target_config_expanded = expand_path(target_config)
+
     
     # Create the teachbot node
     teachbot_node = Node(
@@ -36,23 +33,9 @@ def launch_setup(context, *args, **kwargs):
         remappings=[]
     )
 
-    # Joint State Remapper (teachbot -> target robot)
-    joint_state_remapper_node = Node(
-        package='teachbot_ros',
-        executable='joint_state_remapper',
-        name='joint_state_remapper',
-        output='screen',
-        parameters=[
-            target_config_expanded,
-            {
-                'target_config_file': target_config_expanded
-            }
-        ]
-    )
-    
+    # ...existing code...
     return [
-        teachbot_node,
-        joint_state_remapper_node
+        teachbot_node
     ]
 
 
@@ -69,13 +52,6 @@ def generate_launch_description():
         default_value=default_config,
         description='Path to the configuration YAML file'
     )
-
-    target_config = os.path.join(pkg_share, 'config', 'target_robots', 'ur.yaml')
-    target_config_arg = DeclareLaunchArgument(
-        'target_config_file',
-        default_value=target_config,
-        description='Path to the target robot configuration YAML file'
-    )    
     
     remote_ip_arg = DeclareLaunchArgument(
         'remote_ip',
@@ -91,7 +67,6 @@ def generate_launch_description():
     
     return LaunchDescription([
         config_file_arg,
-        target_config_arg,
         remote_ip_arg,
         publish_rate_arg,
         OpaqueFunction(function=launch_setup)
