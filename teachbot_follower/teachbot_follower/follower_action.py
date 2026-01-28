@@ -29,6 +29,7 @@ class URTeachBotFollowerAction(Node):
         super().__init__('teachbot_follower_action')
         
         # Declare parameters
+        self.declare_parameter('position_offsets', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         self.declare_parameter('teachbot_topic', '/teachbot/joint_states')
         self.declare_parameter('enable_topic', '/teachbot/enable')
         self.declare_parameter('controller_name', 'not_specified_controller')
@@ -38,11 +39,13 @@ class URTeachBotFollowerAction(Node):
         self.declare_parameter('position_tolerance', 0.01)  # radians
         self.declare_parameter('trajectory_duration', 2.0)  # seconds - increased to avoid path tolerance violations
 
-        self.declare_parameter('degree_offsets', [0.0, -5.0, -5.0, 0.0, 0.0, 0.0])
-        self.declare_parameter('joint_scale_factors', [-1.0, 1.0, 1.0, 1.0, -1.0, 1.0])
-        # Joint names for JointState message
-        self.declare_parameter('joint_names', ['joint_1', 'joint_2', 'joint_3', 
-                                                'joint_4', 'joint_5', 'joint_6'])
+        self.declare_parameter('degree_offsets', [0.0, 0, 0, 0.0, 0.0, 0.0])
+        self.declare_parameter('joint_scale_factors', [1.0, 1.0, 1.0, 1.0, 1.0, 1.0])
+        # Joint names for JointState message, fill wih dummy names by default
+        self.declare_parameter('target_joint_names', ['joint', 'joint', 'joint', 
+                                                'joint', 'joint', 'joint'])
+        self.declare_parameter('source_joint_names', ['joint', 'joint', 'joint', 
+                                                'joint', 'joint', 'joint'])
 
         # Get parameters
         teachbot_topic = self.get_parameter('teachbot_topic').value
@@ -56,8 +59,12 @@ class URTeachBotFollowerAction(Node):
 
         self.position_offsets = list(self.get_parameter('position_offsets').value)
         self.degree_offsets = list(self.get_parameter('degree_offsets').value)
-        #self._joint_names = ['teachbot/' + name for name in self.get_parameter('joint_names').value]
-        self.joint_names = list(self.get_parameter('joint_names').value)
+        #self._target_joint_names = ['teachbot/' + name for name in self.get_parameter('target_joint_names').value]
+        self.target_joint_names = list(self.get_parameter('target_joint_names').value)
+        self.source_joint_names = list(self.get_parameter('source_joint_names').value)
+
+        print(f'Target joint names: {self.target_joint_names}')
+        print(f'Source joint names: {self.source_joint_names}')
 
         # Storage for latest joint states
         self.latest_joint_states = None
@@ -179,12 +186,12 @@ class URTeachBotFollowerAction(Node):
         self.is_executing = True
 
         # Strip tf_prefix from joint names (e.g., 'teachbot/shoulder_pan_joint' -> 'shoulder_pan_joint')
-        joint_names = [name.split('/')[-1] for name in joint_states.name]
+        target_joint_names = [name.split('/')[-1] for name in joint_states.name]
 
         # Log joint name mapping for debugging
         if any('/' in name for name in joint_states.name):
             self.get_logger().debug(
-                f'Stripped tf_prefix: {list(joint_states.name)} -> {joint_names}'
+                f'Stripped tf_prefix: {list(joint_states.name)} -> {target_joint_names}'
             )
 
         # Apply scale factors and offsets from parameters
@@ -218,25 +225,25 @@ class URTeachBotFollowerAction(Node):
                     self.current_robot_state.position
                 )}
                 # Get positions in the same order as target
-                current_positions = [robot_joint_map.get(name, 0.0) for name in joint_names]
+                current_positions = [robot_joint_map.get(name, 0.0) for name in target_joint_names]
 
         # Create trajectory message
         trajectory = JointTrajectory()
-        trajectory.joint_names = self.joint_names
+        trajectory.target_joint_names = self.target_joint_names
 
         # If we have current position, create a 2-point trajectory (smooth motion)
         if current_positions is not None:
             # Point 0: Current position (very short time)
             point0 = JointTrajectoryPoint()
             point0.positions = current_positions
-            point0.velocities = [0.0] * len(joint_names)
+            point0.velocities = [0.0] * len(target_joint_names)
             point0.time_from_start = Duration(sec=0, nanosec=100000000)  # 0.1 seconds
             trajectory.points.append(point0)
 
             # Point 1: Target position (with offsets and scale factors)
             point1 = JointTrajectoryPoint()
             point1.positions = target_positions
-            point1.velocities = [0.0] * len(joint_names)
+            point1.velocities = [0.0] * len(target_joint_names)
             point1.time_from_start = Duration(
                 sec=int(self.trajectory_duration),
                 nanosec=int((self.trajectory_duration % 1) * 1e9)
@@ -246,7 +253,7 @@ class URTeachBotFollowerAction(Node):
             # Fallback: Single point trajectory
             point = JointTrajectoryPoint()
             point.positions = target_positions
-            point.velocities = [0.0] * len(joint_names)
+            point.velocities = [0.0] * len(target_joint_names)
             point.time_from_start = Duration(
                 sec=int(self.trajectory_duration),
                 nanosec=int((self.trajectory_duration % 1) * 1e9)
@@ -259,7 +266,7 @@ class URTeachBotFollowerAction(Node):
         goal_msg.trajectory = trajectory
 
         # Set path tolerances (relaxed to avoid violations during motion)
-        for joint_name in trajectory.joint_names:
+        for joint_name in trajectory.target_joint_names:
             tol = JointTolerance()
             tol.name = joint_name
             tol.position = 0.5  # radians - relaxed tolerance
@@ -268,7 +275,7 @@ class URTeachBotFollowerAction(Node):
             goal_msg.path_tolerance.append(tol)
 
         # Set goal tolerances (tighter at the end)
-        for joint_name in trajectory.joint_names:
+        for joint_name in trajectory.target_joint_names:
             tol = JointTolerance()
             tol.name = joint_name
             tol.position = 0.05  # radians
@@ -282,7 +289,7 @@ class URTeachBotFollowerAction(Node):
         self.get_logger().info(
             f'Sending goal: {[f"{p:.3f}" for p in target_positions]}'
         )
-        self.get_logger().info(f'Joint names: {joint_names}')
+        self.get_logger().info(f'Joint names: {target_joint_names}')
         self.get_logger().info(f'Trajectory points: {len(trajectory.points)}')
 
         # Send goal

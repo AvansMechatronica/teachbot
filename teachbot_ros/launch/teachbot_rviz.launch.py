@@ -96,27 +96,7 @@ def launch_setup(context, *args, **kwargs):
         arguments=['0', '0', '0', '0', '0', '0', 'world', 'teachbot/base_link']
     )
 
-    # Enable GUI node (manual button control)
-    enable_gui_node = Node(
-        package='teachbot_ros',
-        executable='teachbot_enable_gui',
-        name='teachbot_enable_gui',
-        output='screen',
-        condition=IfCondition(
-            PythonExpression(["'", LaunchConfiguration('enable_mode'), "' == 'gui'"])
-        )
-    )
-    
-    # Enable from button node (teachbot button control)
-    enable_button_node = Node(
-        package='teachbot_ros',
-        executable='teachbot_enable_from_button',
-        name='teachbot_enable_from_button',
-        output='screen',
-        condition=IfCondition(
-            PythonExpression(["'", LaunchConfiguration('enable_mode'), "' == 'button'"])
-        )
-    )
+
 
     # ...existing code...
     return [
@@ -125,8 +105,6 @@ def launch_setup(context, *args, **kwargs):
         static_tf_node,
         rviz_node,
         monitor_gui_node,
-        enable_gui_node,
-        enable_button_node
     ]
 
 
@@ -169,16 +147,10 @@ def generate_launch_description():
         description='Launch the teachbot control monitor GUI'
     )
     
-    enable_mode_arg = DeclareLaunchArgument(
-        'enable_mode',
-        default_value='button',
-        description='Enable mode: gui, button, or none'
-    )
     
     return LaunchDescription([
         config_file_arg,
         target_config_arg,
         use_monitor_gui_arg,
-        enable_mode_arg,
         OpaqueFunction(function=launch_setup)
     ])

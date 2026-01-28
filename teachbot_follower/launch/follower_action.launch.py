@@ -37,7 +37,16 @@ def launch_setup(context, *args, **kwargs):
         ]
     )
     
-    return [teachbot_follower_node]
+    # Teachbot enable GUI node
+    teachbot_enable_gui_node = Node(
+        package='teachbot_follower',
+        executable='teachbot_enable_gui',
+        name='teachbot_enable_gui',
+        output='screen',
+        parameters=[config_file_expanded]
+    )
+
+    return [teachbot_follower_node, teachbot_enable_gui_node]
 
 
 def generate_launch_description():

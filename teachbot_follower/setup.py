@@ -55,6 +55,8 @@ setup(
         'console_scripts': [
             'follower_action = teachbot_follower.follower_action:main',
             'follower_moveit_commander = teachbot_follower.follower_moveit_commander:main',
+            'teachbot_enable_gui = teachbot_follower.teachbot_enable_gui:main',
+            'teachbot_enable_from_button = teachbot_follower.teachbot_enable_from_button:main',
         ],
     },
 )

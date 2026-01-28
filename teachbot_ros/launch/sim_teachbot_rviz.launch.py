@@ -108,27 +108,7 @@ def launch_setup(context, *args, **kwargs):
         output='screen'
     )
 
-    # Enable GUI node (manual button control)
-    enable_gui_node = Node(
-        package='teachbot_ros',
-        executable='teachbot_enable_gui',
-        name='teachbot_enable_gui',
-        output='screen',
-        condition=IfCondition(
-            PythonExpression(["'", LaunchConfiguration('enable_mode'), "' == 'gui'"])
-        )
-    )
-    
-    # Enable from button node (teachbot button control)
-    enable_button_node = Node(
-        package='teachbot_ros',
-        executable='teachbot_enable_from_button',
-        name='teachbot_enable_from_button',
-        output='screen',
-        condition=IfCondition(
-            PythonExpression(["'", LaunchConfiguration('enable_mode'), "' == 'button'"])
-        )
-    )
+
     
     return [
         joint_state_publisher_gui_node,
@@ -136,8 +116,6 @@ def launch_setup(context, *args, **kwargs):
         rviz_node,
         teachbot_state_publisher_gui_node,
         monitor_gui_node,
-        enable_gui_node,
-        enable_button_node,
         publish_jointstates_from_sim_node,
     ]
 
@@ -182,12 +160,6 @@ def generate_launch_description():
         description='Launch the teachbot control monitor GUI'
     )
 
-    enable_mode_arg = DeclareLaunchArgument(
-        'enable_mode',
-        default_value='gui',
-        choices=['gui', 'button'],
-        description='Enable mode: "gui" for manual GUI button, "button" for teachbot button control'
-    )
 
     rviz_config_arg = DeclareLaunchArgument(
         'rviz_config',
@@ -198,7 +170,6 @@ def generate_launch_description():
     return LaunchDescription([
         config_file_arg,
         use_monitor_gui_arg,
-        enable_mode_arg,
         rviz_config_arg,
         OpaqueFunction(function=launch_setup)
     ])

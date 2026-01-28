@@ -10,7 +10,7 @@ joint_names:
   - "wrist_3_joint"
   
 degree_offsets:
-  - 0.0
+  - 90.0
   - 0.0
   - 0.0
   - 0.0
