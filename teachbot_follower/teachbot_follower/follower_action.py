@@ -67,35 +67,52 @@ class URTeachBotFollowerAction(Node):
         print(f'Source joint names: {self.source_joint_names}')
 
         # Storage for latest joint states
-        self.latest_joint_states = None
-        self.current_robot_state = None  # Current robot joint positions
-        self.last_commanded_positions = None
-        self.enabled = False  # Enable/disable flag
-        self.lock = threading.Lock()
-        self.is_executing = False
-        
-        # Create action client
-        if not sim:
-            self._action_client = ActionClient(
-                self,
-                FollowJointTrajectory,
-                f'/{controller_name}/follow_joint_trajectory'
-            )
-        else:
-            self._action_client = ActionClient(
-                self,
-                FollowJointTrajectory,
-                f'/{controller_name_sim}/follow_joint_trajectory'
-            )
-        
-        # Subscribe to teachbot joint states
-        self.subscription = self.create_subscription(
-            JointState,
-            teachbot_topic,
-            self.joint_state_callback,
-            10
-        )
-        
+
+            # Remove tf_prefix from incoming joint names
+            incoming_names = [name.split('/')[-1] for name in joint_states.name]
+            source_joint_names = self.source_joint_names
+            target_joint_names = self.target_joint_names
+
+            # Log mapping for debugging
+            self.get_logger().debug(f'Incoming joint names: {incoming_names}')
+            self.get_logger().debug(f'Source joint names: {source_joint_names}')
+            self.get_logger().debug(f'Target joint names: {target_joint_names}')
+
+            # Build a map from incoming name to position
+            name_to_position = {name: pos for name, pos in zip(incoming_names, joint_states.position)}
+
+            # Get scale factors and offsets for each target joint
+            import math
+            scale_factors = self.get_parameter('joint_scale_factors').value
+            degree_offsets = self.get_parameter('degree_offsets').value
+            offsets = [math.radians(deg) for deg in degree_offsets]
+
+            # Map source_joint_names to target_joint_names for target_positions
+            # For each target_joint_name, find its index in source_joint_names, then get the corresponding incoming position
+            target_positions = []
+            for i, tgt_name in enumerate(target_joint_names):
+                if tgt_name in source_joint_names:
+                    src_idx = source_joint_names.index(tgt_name)
+                    # Find the corresponding incoming name (may have tf_prefix removed)
+                    if src_idx < len(incoming_names):
+                        incoming_name = incoming_names[src_idx]
+                        pos = name_to_position.get(incoming_name, 0.0)
+                    else:
+                        pos = 0.0
+                    # Apply scale and offset
+                    if i < len(scale_factors) and i < len(offsets):
+                        target_positions.append(scale_factors[i] * pos + offsets[i])
+                    else:
+                        target_positions.append(pos)
+                else:
+                    # If target joint not in source, use 0.0
+                    target_positions.append(0.0)
+
+            # Warn if mapping is incomplete
+            if len(target_positions) != len(target_joint_names):
+                self.get_logger().warn(f"Target positions length ({len(target_positions)}) does not match target_joint_names ({len(target_joint_names)})")
+
+            # Get current robot positions for these joints
         # Subscribe to robot joint states to get current position
         self.robot_state_subscription = self.create_subscription(
             JointState,
@@ -105,11 +122,11 @@ class URTeachBotFollowerAction(Node):
         )
         
         # Subscribe to enable topic
-        self.enable_subscription = self.create_subscription(
+                    current_positions = [robot_joint_map.get(name, 0.0) for name in target_joint_names]
             Bool,
             enable_topic,
             self.enable_callback,
-            10
+            trajectory.target_joint_names = self.target_joint_names
         )
         
         # Create a timer to periodically send commands
@@ -122,23 +139,23 @@ class URTeachBotFollowerAction(Node):
         self.get_logger().info('Waiting for action server...')
         
         # Wait for action server
-        self._action_client.wait_for_server()
-        self.get_logger().info('Action server connected. Ready to follow teachbot commands')
-    
-    def joint_state_callback(self, msg):
-        """Store the latest joint state message."""
-        with self.lock:
-            self.latest_joint_states = msg
+                point1.positions = target_positions
+                point1.velocities = [0.0] * len(target_joint_names)
+                point1.time_from_start = Duration(
+                    sec=int(self.trajectory_duration),
+                    nanosec=int((self.trajectory_duration % 1) * 1e9)
+                )
+                trajectory.points.append(point1)
     
     def robot_state_callback(self, msg):
         """Store the current robot joint state."""
-        with self.lock:
-            self.current_robot_state = msg
-    
-    def enable_callback(self, msg):
-        """Handle enable/disable messages."""
-        was_enabled = self.enabled
-        self.enabled = msg.data
+                point.positions = target_positions
+                point.velocities = [0.0] * len(target_joint_names)
+                point.time_from_start = Duration(
+                    sec=int(self.trajectory_duration),
+                    nanosec=int((self.trajectory_duration % 1) * 1e9)
+                )
+                trajectory.points = [point]
         
         if self.enabled and not was_enabled:
             self.get_logger().info('TeachBot following ENABLED')
@@ -180,7 +197,7 @@ class URTeachBotFollowerAction(Node):
                     return True
         
         return False
-    
+            self.last_commanded_positions = [name_to_position.get(name, 0.0) for name in target_joint_names]
     def send_goal(self, joint_states):
         """Send a trajectory goal via action client, applying offsets and scale factors from YAML."""
         self.is_executing = True
