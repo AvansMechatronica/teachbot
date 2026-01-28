@@ -1,14 +1,14 @@
-teachbot_follower_action:
+teachbot_follower:
   ros__parameters:
     # Topic configuration
-    teachbot_topic: '/teachbot/joint_states'  
+    teachbot_topic: '/teachbot/joint_states'
     enable_topic: '/teachbot/enable'
-    
+
     # Controller configuration of target robot
     controller_name: 'scaled_joint_trajectory_controller'
     # Controller configuration for simulation of target robot
     controller_name_sim: 'joint_trajectory_controller'
-    
+
     # Motion parameters
     update_rate: 0.5              # seconds between updates
     position_tolerance: 0.01      # radians - minimum change to trigger update
@@ -34,10 +34,10 @@ teachbot_follower_action:
       - 0.0     # shoulder_pan_joint
       - 0.0    # shoulder_lift_joint
       - 0.0     # elbow_joint
-      - 0.0    # wrist_1_joint
-      - 0.0   # wrist_2_joint
+      - 0.0     # wrist_1_joint
+      - 0.0     # wrist_2_joint
       - 0.0     # wrist_3_joint
-    
+
     # Joint scale factors (use -1.0 to invert direction)
     joint_scale_factors:
       - 1.0     # shoulder_pan_joint

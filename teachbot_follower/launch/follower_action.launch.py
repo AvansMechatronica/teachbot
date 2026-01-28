@@ -19,8 +19,8 @@ def expand_path(path):
 def launch_setup(context, *args, **kwargs):
     """Generate nodes with expanded paths."""
     # Expand the config file path
-    config_file = LaunchConfiguration('config_file').perform(context)
-    config_file_expanded = expand_path(config_file)
+    #config_file = LaunchConfiguration('config_file').perform(context)
+    #config_file_expanded = expand_path(config_file)
     
     # Get sim parameter
     sim = LaunchConfiguration('sim').perform(context)
@@ -29,10 +29,9 @@ def launch_setup(context, *args, **kwargs):
     teachbot_follower_node = Node(
         package='teachbot_follower',
         executable='follower_action',
-        name='teachbot_follower_action',
+        name='teachbot_follower',
         output='screen',
-        parameters=[
-            config_file_expanded,
+            parameters=[LaunchConfiguration('config_file'),
             {'sim': sim == 'true'}
         ]
     )
@@ -40,10 +39,10 @@ def launch_setup(context, *args, **kwargs):
     # Teachbot enable GUI node
     teachbot_enable_gui_node = Node(
         package='teachbot_follower',
-        executable='teachbot_enable_gui',
-        name='teachbot_enable_gui',
+        executable='teachbot_enable_from_button',
+        name='teachbot_enable_from_button',
         output='screen',
-        parameters=[config_file_expanded]
+        parameters=[LaunchConfiguration('config_file')]
     )
 
     return [teachbot_follower_node, teachbot_enable_gui_node]
