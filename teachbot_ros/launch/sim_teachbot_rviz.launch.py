@@ -25,17 +25,14 @@ def expand_path(path):
 
 def launch_setup(context, *args, **kwargs):
     """Generate nodes with expanded paths."""
-    # Node to convert /teachbot/joint_states_sim to /teachbot/joint_states with offsets
-    pkg_share = get_package_share_directory('teachbot_ros')
-    sim_offsets_path = os.path.join(pkg_share, 'config', 'sim_offsets.yaml')
+
     publish_jointstates_from_sim_node = Node(
         package='teachbot_ros',
-        executable='publish_jointstates_from_sim',
-        name='publish_jointstates_from_sim',
+        executable='teachbot_sim_jointstate_publishers',
+        name='sim_jointstate_publisher',
         output='screen',
-        arguments=[sim_offsets_path]
+        parameters=[LaunchConfiguration('sim_parameters_file')],
     )
-    # Expand the target config file path
 
     
     # Robot state publisher (publishes TF from URDF + joint states)
@@ -129,7 +126,8 @@ def generate_launch_description():
     default_config = os.path.join(pkg_share, 'config', 'teachbot_params.yaml')
     sim_initial_positions = os.path.join(pkg_share, 'config', 'sim_initial_positions.yaml')
     rviz_config = os.path.join(pkg_share, 'rviz', 'teachbot.rviz')
-    
+    sim_parameters = os.path.join(pkg_share, 'config', 'sim_parameters.yaml')
+
     # Generate URDF from xacro for UR5e
     urdf_xacro = os.path.join(ur_description_share, 'urdf', 'ur.urdf.xacro')
     robot_description = Command([
@@ -146,7 +144,13 @@ def generate_launch_description():
         default_value=default_config,
         description='Path to the configuration YAML file'
     )
-    
+
+    sim_parameters_file_arg = DeclareLaunchArgument(
+        'sim_parameters_file',
+        default_value=sim_parameters,
+        description='Path to the simulation initial positions YAML file'
+    ) 
+
     def process_target_config(context):
         """Process and expand the target config file path."""
         config_path = LaunchConfiguration('target_config_file').perform(context)
@@ -169,6 +173,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         config_file_arg,
+        sim_parameters_file_arg,
         use_monitor_gui_arg,
         rviz_config_arg,
         OpaqueFunction(function=launch_setup)

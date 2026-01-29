@@ -71,6 +71,7 @@ class URTeachBotFollowerAction(Node):
         self.trajectory_duration = self.get_parameter('trajectory_duration').value
 
         self.degree_offsets = list(self.get_parameter('degree_offsets').value)
+        self.rad_offsets = [offset * 3.14159265 / 180.0 for offset in self.degree_offsets]
         #self._target_joint_names = ['teachbot/' + name for name in self.get_parameter('target_joint_names').value]
         self.target_joint_names = list(self.get_parameter('target_joint_names').value)
         self.source_joint_names = list(self.get_parameter('source_joint_names').value)

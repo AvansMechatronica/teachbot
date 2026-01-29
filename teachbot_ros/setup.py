@@ -54,7 +54,7 @@ setup(
             'teachbot_publisher = teachbot_ros.teachbot_publisher:main',
             'teachbot_monitor_gui = teachbot_ros.utils.teachbot_monitor_gui:main',
             'teachbot_state_publisher_gui = teachbot_ros.utils.teachbot_state_publisher_gui:main',
-            'publish_jointstates_from_sim = teachbot_ros.utils.publish_jointstates_from_sim:main',
+            'teachbot_sim_jointstate_publishers = teachbot_ros.utils.teachbot_sim_jointstate_publishers:main',
         ],
     },
 )

@@ -1,4 +1,4 @@
-teachbot_follower_action:
+teachbot_follower:
   ros__parameters:
     # Topic configuration
     teachbot_topic: '/teachbot/joint_states'
