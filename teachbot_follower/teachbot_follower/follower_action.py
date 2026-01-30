@@ -28,21 +28,7 @@ class URTeachBotFollowerAction(Node):
     def __init__(self):
         super().__init__('teachbot_follower')
 
-        # Get parameters
-        teachbot_topic = self.get_parameter('teachbot_topic').value
-        enable_topic = self.get_parameter('enable_topic').value
-        controller_name = self.get_parameter('controller_name').value
-        controller_name_sim = self.get_parameter('controller_name_sim').value
-        sim = self.get_parameter('sim').value
-        # Initialize action client for FollowJointTrajectory
-        controller_ns = controller_name_sim if sim else controller_name
-        self._action_client = ActionClient(
-            self,
-            FollowJointTrajectory,
-            f'/{controller_ns}/follow_joint_trajectory'
-        )
-        
-        # Declare parameters
+        # Declare parameters FIRST
         self.declare_parameter('teachbot_topic', '/teachbot/joint_states')
         self.declare_parameter('enable_topic', '/teachbot/enable')
         self.declare_parameter('controller_name', 'not_specified_controller')
@@ -51,16 +37,15 @@ class URTeachBotFollowerAction(Node):
         self.declare_parameter('update_rate', 0.5)  # seconds between updates
         self.declare_parameter('position_tolerance', 0.01)  # radians
         self.declare_parameter('trajectory_duration', 2.0)  # seconds - increased to avoid path tolerance violations
-
         self.declare_parameter('degree_offsets', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         self.declare_parameter('joint_scale_factors', [1.0, 1.0, 1.0, 1.0, 1.0, 1.0])
         # Joint names for JointState message, fill wih dummy names by default
-        self.declare_parameter('target_joint_names', ['joint', 'joint', 'joint', 
+        self.declare_parameter('teachbot_joint_names', ['joint', 'joint', 'joint', 
                                                 'joint', 'joint', 'joint'])
         self.declare_parameter('source_joint_names', ['joint', 'joint', 'joint', 
                                                 'joint', 'joint', 'joint'])
 
-        # Get parameters
+        # Now get parameters
         teachbot_topic = self.get_parameter('teachbot_topic').value
         enable_topic = self.get_parameter('enable_topic').value
         controller_name = self.get_parameter('controller_name').value
@@ -68,15 +53,20 @@ class URTeachBotFollowerAction(Node):
         sim = self.get_parameter('sim').value
         self.update_rate = self.get_parameter('update_rate').value
         self.position_tolerance = self.get_parameter('position_tolerance').value
+        # Initialize action client for FollowJointTrajectory
+        controller_ns = controller_name_sim if sim else controller_name
+        self._action_client = ActionClient(
+            self,
+            FollowJointTrajectory,
+            f'/{controller_ns}/follow_joint_trajectory'
+        )
         self.trajectory_duration = self.get_parameter('trajectory_duration').value
-
         self.degree_offsets = list(self.get_parameter('degree_offsets').value)
         self.rad_offsets = [offset * 3.14159265 / 180.0 for offset in self.degree_offsets]
-        #self._target_joint_names = ['teachbot/' + name for name in self.get_parameter('target_joint_names').value]
-        self.target_joint_names = list(self.get_parameter('target_joint_names').value)
+        self.teachbot_joint_names = list(self.get_parameter('teachbot_joint_names').value)
         self.source_joint_names = list(self.get_parameter('source_joint_names').value)
 
-        self.get_logger().info(f'Target joint names: {self.target_joint_names}')
+        self.get_logger().info(f'Target joint names: {self.teachbot_joint_names}')
         self.get_logger().info(f'Source joint names: {self.source_joint_names}')
 
         # Subscribe to /teachbot/joint_states
@@ -102,11 +92,16 @@ class URTeachBotFollowerAction(Node):
         # Timer to periodically update robot position
         self.timer = self.create_timer(self.update_rate, self.update_robot_position)
 
+        # Wait for action server to be available
+        self.get_logger().info('Waiting for action server...')
+        self._action_client.wait_for_server()
+        self.get_logger().info('Action server available!')
+
     def joint_states_callback(self, msg):
         """Callback for /teachbot/joint_states subscription."""
-        self.get_logger().info('Received joint states') 
+        #self.get_logger().info('Received joint states') 
         with self.lock:
-            self.get_logger().info('Received joint states after lock')
+            #self.get_logger().info('Received joint states after lock')
             self.latest_joint_states = msg
 
     def enable_callback(self, msg):
@@ -124,22 +119,27 @@ class URTeachBotFollowerAction(Node):
         """Periodically update the robot position based on teachbot input."""
         # Check if enabled
         if not self.enabled:
+            self.get_logger().debug('Update skipped: following disabled')
             return
-        
+
         # Don't send new commands while executing
         if self.is_executing:
+            self.get_logger().debug('Update skipped: already executing')
             return
-            
+
         with self.lock:
             if self.latest_joint_states is None:
+                self.get_logger().debug('Update skipped: no joint states received yet')
                 return
-            
             joint_states = self.latest_joint_states
-        
+
         try:
             # Check if we need to update (positions changed significantly)
             if self.should_update_position(joint_states):
+                self.get_logger().info('Position changed, sending goal...')
                 self.send_goal(joint_states)
+            else:
+                self.get_logger().debug('Position change below tolerance, not sending goal')
         except Exception as e:
             self.get_logger().error(f'Error updating robot position: {str(e)}')
     
@@ -157,15 +157,16 @@ class URTeachBotFollowerAction(Node):
         return False
     def send_goal(self, joint_states):
         """Send a trajectory goal via action client, applying offsets and scale factors from YAML."""
+        self.get_logger().info('Preparing to send goal to action server...')
         self.is_executing = True
 
         # Strip tf_prefix from joint names (e.g., 'teachbot/shoulder_pan_joint' -> 'shoulder_pan_joint')
-        target_joint_names = [name.split('/')[-1] for name in joint_states.name]
+        teachbot_joint_names = [name.split('/')[-1] for name in joint_states.name]
 
         # Log joint name mapping for debugging
         if any('/' in name for name in joint_states.name):
             self.get_logger().debug(
-                f'Stripped tf_prefix: {list(joint_states.name)} -> {target_joint_names}'
+                f'Stripped tf_prefix: {list(joint_states.name)} -> {teachbot_joint_names}'
             )
 
         # Apply scale factors and offsets from parameters
@@ -199,25 +200,25 @@ class URTeachBotFollowerAction(Node):
                     self.current_robot_state.position
                 )}
                 # Get positions in the same order as target
-                current_positions = [robot_joint_map.get(name, 0.0) for name in target_joint_names]
+                current_positions = [robot_joint_map.get(name, 0.0) for name in teachbot_joint_names]
 
         # Create trajectory message
         trajectory = JointTrajectory()
-        trajectory.joint_names = self.target_joint_names
+        trajectory.joint_names = self.teachbot_joint_names
 
         # If we have current position, create a 2-point trajectory (smooth motion)
         if current_positions is not None:
             # Point 0: Current position (very short time)
             point0 = JointTrajectoryPoint()
             point0.positions = current_positions
-            point0.velocities = [0.0] * len(target_joint_names)
+            point0.velocities = [0.0] * len(teachbot_joint_names)
             point0.time_from_start = Duration(sec=0, nanosec=100000000)  # 0.1 seconds
             trajectory.points.append(point0)
 
             # Point 1: Target position (with offsets and scale factors)
             point1 = JointTrajectoryPoint()
             point1.positions = target_positions
-            point1.velocities = [0.0] * len(target_joint_names)
+            point1.velocities = [0.0] * len(teachbot_joint_names)
             point1.time_from_start = Duration(
                 sec=int(self.trajectory_duration),
                 nanosec=int((self.trajectory_duration % 1) * 1e9)
@@ -227,7 +228,7 @@ class URTeachBotFollowerAction(Node):
             # Fallback: Single point trajectory
             point = JointTrajectoryPoint()
             point.positions = target_positions
-            point.velocities = [0.0] * len(target_joint_names)
+            point.velocities = [0.0] * len(teachbot_joint_names)
             point.time_from_start = Duration(
                 sec=int(self.trajectory_duration),
                 nanosec=int((self.trajectory_duration % 1) * 1e9)
@@ -263,7 +264,7 @@ class URTeachBotFollowerAction(Node):
         self.get_logger().info(
             f'Sending goal: {[f"{p:.3f}" for p in target_positions]}'
         )
-        self.get_logger().info(f'Joint names: {target_joint_names}')
+        self.get_logger().info(f'Joint names: {teachbot_joint_names}')
         self.get_logger().info(f'Trajectory points: {len(trajectory.points)}')
 
         # Send goal

@@ -14,7 +14,7 @@ teachbot_follower:
     position_tolerance: 0.01      # radians - minimum change to trigger update
     trajectory_duration: 2.0      # seconds - duration for trajectory execution
 
-    source_joint_names:
+    teachbot_joint_names:
       - "shoulder_pan_joint"
       - "shoulder_lift_joint"
       - "elbow_joint"
