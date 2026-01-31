@@ -19,7 +19,9 @@ from std_msgs.msg import Bool
 from control_msgs.action import FollowJointTrajectory
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from builtin_interfaces.msg import Duration
+from control_msgs.msg import JointTolerance
 import threading
+import math
 
 
 class URTeachBotFollowerAction(Node):
@@ -42,7 +44,7 @@ class URTeachBotFollowerAction(Node):
         # Joint names for JointState message, fill wih dummy names by default
         self.declare_parameter('teachbot_joint_names', ['joint', 'joint', 'joint', 
                                                 'joint', 'joint', 'joint'])
-        self.declare_parameter('source_joint_names', ['joint', 'joint', 'joint', 
+        self.declare_parameter('target_joint_names', ['joint', 'joint', 'joint', 
                                                 'joint', 'joint', 'joint'])
 
         # Now get parameters
@@ -63,11 +65,12 @@ class URTeachBotFollowerAction(Node):
         self.trajectory_duration = self.get_parameter('trajectory_duration').value
         self.degree_offsets = list(self.get_parameter('degree_offsets').value)
         self.rad_offsets = [offset * 3.14159265 / 180.0 for offset in self.degree_offsets]
+        self.joint_scale_factors = list(self.get_parameter('joint_scale_factors').value)
         self.teachbot_joint_names = list(self.get_parameter('teachbot_joint_names').value)
-        self.source_joint_names = list(self.get_parameter('source_joint_names').value)
+        self.target_joint_names = list(self.get_parameter('target_joint_names').value)
 
-        self.get_logger().info(f'Target joint names: {self.teachbot_joint_names}')
-        self.get_logger().info(f'Source joint names: {self.source_joint_names}')
+        self.get_logger().info(f'Teachbot joint names: {self.teachbot_joint_names}')
+        self.get_logger().info(f'Target joint names: {self.target_joint_names}')
 
         # Subscribe to /teachbot/joint_states
         self.latest_joint_states = None
@@ -156,7 +159,7 @@ class URTeachBotFollowerAction(Node):
         
         return False
     def send_goal(self, joint_states):
-        """Send a trajectory goal via action client, applying offsets and scale factors from YAML."""
+        """Send a trajectory goal via action client, applying offsets and scale factors from YAML, using target_joint_names."""
         self.get_logger().info('Preparing to send goal to action server...')
         self.is_executing = True
 
@@ -169,113 +172,99 @@ class URTeachBotFollowerAction(Node):
                 f'Stripped tf_prefix: {list(joint_states.name)} -> {teachbot_joint_names}'
             )
 
-        # Apply scale factors and offsets from parameters
-        # Use degree_offsets (deg) and joint_scale_factors from parameters
-        import math
-        scale_factors = self.get_parameter('joint_scale_factors').value
-        degree_offsets = self.get_parameter('degree_offsets').value
-        # Convert degree offsets to radians
-        offsets = [math.radians(deg) for deg in degree_offsets]
+        # Map teachbot joint states to target joint order
+        # Build a mapping from teachbot_joint_names to their positions
+        teachbot_joint_map = {name: pos for name, pos in zip(teachbot_joint_names, joint_states.position)}
 
-        # Apply to incoming joint_states.position
-        # If joint_states.position is not the same length, fallback to original
-        if len(joint_states.position) == len(scale_factors) == len(offsets):
-            target_positions = [
-                scale_factors[i] * joint_states.position[i] + offsets[i]
-                for i in range(len(joint_states.position))
-            ]
-        else:
-            self.get_logger().warn(
-                f"Mismatch in joint_states.position ({len(joint_states.position)}), scale_factors ({len(scale_factors)}), or offsets ({len(offsets)}). Using raw positions."
-            )
-            target_positions = list(joint_states.position)
+
+        # Map teachbot_joint_names to target_joint_names by index
+        target_positions = []
+        for i, target_joint in enumerate(self.target_joint_names):
+            # Find the teachbot value by index, not by name
+            if i < len(self.teachbot_joint_names) and i < len(joint_states.position):
+                teachbot_value = joint_states.position[self.teachbot_joint_names.index(self.teachbot_joint_names[i])]
+            else:
+                teachbot_value = 0.0
+            # Apply offset and scaler if available
+            offset = self.rad_offsets[i] if i < len(self.rad_offsets) else 0.0
+            scaler = self.joint_scale_factors[i] if i < len(self.joint_scale_factors) else 1.0
+            target_positions.append((teachbot_value + offset) * scaler)
 
         # Get current robot positions for these joints
         current_positions = None
         with self.lock:
             if self.current_robot_state is not None:
-                # Map joint names to positions
                 robot_joint_map = {name: pos for name, pos in zip(
-                    self.current_robot_state.name, 
+                    self.current_robot_state.name,
                     self.current_robot_state.position
                 )}
-                # Get positions in the same order as target
-                current_positions = [robot_joint_map.get(name, 0.0) for name in teachbot_joint_names]
+                current_positions = [robot_joint_map.get(name, 0.0) for name in self.target_joint_names]
 
         # Create trajectory message
         trajectory = JointTrajectory()
-        trajectory.joint_names = self.teachbot_joint_names
+        trajectory.joint_names = self.target_joint_names
 
         # If we have current position, create a 2-point trajectory (smooth motion)
         if current_positions is not None:
-            # Point 0: Current position (very short time)
             point0 = JointTrajectoryPoint()
             point0.positions = current_positions
-            point0.velocities = [0.0] * len(teachbot_joint_names)
+            point0.velocities = [0.0] * len(self.target_joint_names)
             point0.time_from_start = Duration(sec=0, nanosec=100000000)  # 0.1 seconds
             trajectory.points.append(point0)
 
-            # Point 1: Target position (with offsets and scale factors)
             point1 = JointTrajectoryPoint()
             point1.positions = target_positions
-            point1.velocities = [0.0] * len(teachbot_joint_names)
+            point1.velocities = [0.0] * len(self.target_joint_names)
             point1.time_from_start = Duration(
                 sec=int(self.trajectory_duration),
                 nanosec=int((self.trajectory_duration % 1) * 1e9)
             )
             trajectory.points.append(point1)
         else:
-            # Fallback: Single point trajectory
             point = JointTrajectoryPoint()
             point.positions = target_positions
-            point.velocities = [0.0] * len(teachbot_joint_names)
+            point.velocities = [0.0] * len(self.target_joint_names)
             point.time_from_start = Duration(
                 sec=int(self.trajectory_duration),
                 nanosec=int((self.trajectory_duration % 1) * 1e9)
             )
             trajectory.points = [point]
 
-        # Create goal with relaxed tolerances to avoid PATH_TOLERANCE_VIOLATED
-        from control_msgs.msg import JointTolerance
         goal_msg = FollowJointTrajectory.Goal()
         goal_msg.trajectory = trajectory
 
-        # Set path tolerances (relaxed to avoid violations during motion)
         for joint_name in trajectory.joint_names:
             tol = JointTolerance()
             tol.name = joint_name
-            tol.position = 0.5  # radians - relaxed tolerance
-            tol.velocity = 0.5  # rad/s
-            tol.acceleration = 1.0  # rad/s^2
+            tol.position = 0.5
+            tol.velocity = 0.5
+            tol.acceleration = 1.0
             goal_msg.path_tolerance.append(tol)
 
-        # Set goal tolerances (tighter at the end)
         for joint_name in trajectory.joint_names:
             tol = JointTolerance()
             tol.name = joint_name
-            tol.position = 0.05  # radians
-            tol.velocity = 0.1  # rad/s
-            tol.acceleration = 0.0  # Don't check acceleration at goal
+            tol.position = 0.05
+            tol.velocity = 0.1
+            tol.acceleration = 0.0
             goal_msg.goal_tolerance.append(tol)
 
-        # Set goal time tolerance
         goal_msg.goal_time_tolerance = Duration(sec=2, nanosec=0)
 
         self.get_logger().info(
             f'Sending goal: {[f"{p:.3f}" for p in target_positions]}'
         )
-        self.get_logger().info(f'Joint names: {teachbot_joint_names}')
+        self.get_logger().info(f'Joint names: {self.target_joint_names}')
         self.get_logger().info(f'Trajectory points: {len(trajectory.points)}')
 
-        # Send goal
         self._send_goal_future = self._action_client.send_goal_async(
             goal_msg,
             feedback_callback=self.feedback_callback
         )
         self._send_goal_future.add_done_callback(self.goal_response_callback)
 
-        # Update last commanded positions
-        self.last_commanded_positions = list(joint_states.position)
+        # Update last commanded positions (in teachbot joint order)
+        self.last_commanded_positions = [teachbot_joint_map.get(name, 0.0) for name in self.teachbot_joint_names]
     
     def goal_response_callback(self, future):
         """Handle goal response."""
