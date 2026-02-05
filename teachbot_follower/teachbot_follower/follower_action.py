@@ -39,7 +39,7 @@ class URTeachBotFollowerAction(Node):
         self.declare_parameter('update_rate', 0.5)  # seconds between updates
         self.declare_parameter('position_tolerance', 0.01)  # radians
         self.declare_parameter('trajectory_duration', 2.0)  # seconds - increased to avoid path tolerance violations
-        self.declare_parameter('degree_offsets', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+        self.declare_parameter('target_degree_offsets', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         self.declare_parameter('joint_scale_factors', [1.0, 1.0, 1.0, 1.0, 1.0, 1.0])
         # Joint names for JointState message, fill wih dummy names by default
         self.declare_parameter('teachbot_joint_names', ['joint', 'joint', 'joint', 
@@ -63,14 +63,16 @@ class URTeachBotFollowerAction(Node):
             f'/{controller_ns}/follow_joint_trajectory'
         )
         self.trajectory_duration = self.get_parameter('trajectory_duration').value
-        self.degree_offsets = list(self.get_parameter('degree_offsets').value)
-        self.rad_offsets = [offset * 3.14159265 / 180.0 for offset in self.degree_offsets]
+        self.target_degree_offsets = list(self.get_parameter('target_degree_offsets').value)
+        self.rad_offsets = [offset * 3.14159265 / 180.0 for offset in self.target_degree_offsets]
         self.joint_scale_factors = list(self.get_parameter('joint_scale_factors').value)
         self.teachbot_joint_names = list(self.get_parameter('teachbot_joint_names').value)
         self.target_joint_names = list(self.get_parameter('target_joint_names').value)
 
         self.get_logger().info(f'Teachbot joint names: {self.teachbot_joint_names}')
         self.get_logger().info(f'Target joint names: {self.target_joint_names}')
+        self.get_logger().info(f'Degree offsets: {self.target_degree_offsets}')
+        self.get_logger().info(f'Rad offsets: {self.rad_offsets}')
 
         # Subscribe to /teachbot/joint_states
         self.latest_joint_states = None

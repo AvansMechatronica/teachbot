@@ -25,14 +25,17 @@ def expand_path(path):
 
 def launch_setup(context, *args, **kwargs):
     """Generate nodes with expanded paths."""
-
+    # Node to convert /teachbot/joint_states_sim to /teachbot/joint_states with offsets
+    pkg_share = get_package_share_directory('teachbot_ros')
+    sim_offsets_path = os.path.join(pkg_share, 'config', 'sim_offsets.yaml')
     publish_jointstates_from_sim_node = Node(
         package='teachbot_ros',
-        executable='teachbot_sim_jointstate_publishers',
-        name='sim_jointstate_publisher',
+        executable='publish_jointstates_from_sim.py',
+        name='publish_jointstates_from_sim',
         output='screen',
-        parameters=[LaunchConfiguration('sim_parameters_file')],
+        arguments=[sim_offsets_path]
     )
+    # Expand the target config file path
 
     
     # Robot state publisher (publishes TF from URDF + joint states)
@@ -105,7 +108,27 @@ def launch_setup(context, *args, **kwargs):
         output='screen'
     )
 
-
+    # Enable GUI node (manual button control)
+    enable_gui_node = Node(
+        package='teachbot_ros',
+        executable='teachbot_enable_gui',
+        name='teachbot_enable_gui',
+        output='screen',
+        condition=IfCondition(
+            PythonExpression(["'", LaunchConfiguration('enable_mode'), "' == 'gui'"])
+        )
+    )
+    
+    # Enable from button node (teachbot button control)
+    enable_button_node = Node(
+        package='teachbot_ros',
+        executable='teachbot_enable_from_button',
+        name='teachbot_enable_from_button',
+        output='screen',
+        condition=IfCondition(
+            PythonExpression(["'", LaunchConfiguration('enable_mode'), "' == 'button'"])
+        )
+    )
     
     return [
         joint_state_publisher_gui_node,
@@ -113,6 +136,8 @@ def launch_setup(context, *args, **kwargs):
         rviz_node,
         teachbot_state_publisher_gui_node,
         monitor_gui_node,
+        enable_gui_node,
+        enable_button_node,
         publish_jointstates_from_sim_node,
     ]
 
@@ -126,8 +151,7 @@ def generate_launch_description():
     default_config = os.path.join(pkg_share, 'config', 'teachbot_params.yaml')
     sim_initial_positions = os.path.join(pkg_share, 'config', 'sim_initial_positions.yaml')
     rviz_config = os.path.join(pkg_share, 'rviz', 'teachbot.rviz')
-    sim_parameters = os.path.join(pkg_share, 'config', 'sim_parameters.yaml')
-
+    
     # Generate URDF from xacro for UR5e
     urdf_xacro = os.path.join(ur_description_share, 'urdf', 'ur.urdf.xacro')
     robot_description = Command([
@@ -144,13 +168,7 @@ def generate_launch_description():
         default_value=default_config,
         description='Path to the configuration YAML file'
     )
-
-    sim_parameters_file_arg = DeclareLaunchArgument(
-        'sim_parameters_file',
-        default_value=sim_parameters,
-        description='Path to the simulation initial positions YAML file'
-    ) 
-
+    
     def process_target_config(context):
         """Process and expand the target config file path."""
         config_path = LaunchConfiguration('target_config_file').perform(context)
@@ -164,6 +182,12 @@ def generate_launch_description():
         description='Launch the teachbot control monitor GUI'
     )
 
+    enable_mode_arg = DeclareLaunchArgument(
+        'enable_mode',
+        default_value='gui',
+        choices=['gui', 'button'],
+        description='Enable mode: "gui" for manual GUI button, "button" for teachbot button control'
+    )
 
     rviz_config_arg = DeclareLaunchArgument(
         'rviz_config',
@@ -173,8 +197,8 @@ def generate_launch_description():
 
     return LaunchDescription([
         config_file_arg,
-        sim_parameters_file_arg,
         use_monitor_gui_arg,
+        enable_mode_arg,
         rviz_config_arg,
         OpaqueFunction(function=launch_setup)
     ])

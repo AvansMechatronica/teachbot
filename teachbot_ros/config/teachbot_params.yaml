@@ -5,7 +5,7 @@
 teachbot_publisher:
   ros__parameters:
     # Network configuration
-    remote_ip: "192.168.0.150"   # IP address of the teachbot (TCP server)
+    remote_ip: "192.168.0.50"   # IP address of the teachbot (TCP server)
     start_port: 5004               # First encoder TCP port (encoders on 5004-5009)
     ee_port: 5011                  # RS-485 trigger/button TCP port
     
