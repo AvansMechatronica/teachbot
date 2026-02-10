@@ -18,9 +18,10 @@ sim_jointstate_publisher:
     degree_offsets:
       - 90.0
       - 0.0
+      - 360.0
       - 0.0
+      - 360.0
       - 0.0
-      - 0.0
-      - 0.0
+ 
 
 

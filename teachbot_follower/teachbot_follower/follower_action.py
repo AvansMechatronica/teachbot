@@ -165,6 +165,11 @@ class URTeachBotFollowerAction(Node):
         self.get_logger().info('Preparing to send goal to action server...')
         self.is_executing = True
 
+        self.get_logger().info(
+            f'Received goal: {list(joint_states.name)} / '
+            f'{[f"{p:.3f}" for p in joint_states.position]}'
+        )
+
         # Strip tf_prefix from joint names (e.g., 'teachbot/shoulder_pan_joint' -> 'shoulder_pan_joint')
         teachbot_joint_names = [name.split('/')[-1] for name in joint_states.name]
 
@@ -173,6 +178,7 @@ class URTeachBotFollowerAction(Node):
             self.get_logger().debug(
                 f'Stripped tf_prefix: {list(joint_states.name)} -> {teachbot_joint_names}'
             )
+
 
         # Map teachbot joint states to target joint order
         # Build a mapping from teachbot_joint_names to their positions
@@ -238,20 +244,20 @@ class URTeachBotFollowerAction(Node):
         for joint_name in trajectory.joint_names:
             tol = JointTolerance()
             tol.name = joint_name
-            tol.position = 0.5
-            tol.velocity = 0.5
-            tol.acceleration = 1.0
+            tol.position = 1.5  # Increased from 0.5
+            tol.velocity = 2.0  # Increased from 0.5
+            tol.acceleration = 3.0  # Increased from 1.0
             goal_msg.path_tolerance.append(tol)
 
         for joint_name in trajectory.joint_names:
             tol = JointTolerance()
             tol.name = joint_name
-            tol.position = 0.05
-            tol.velocity = 0.1
-            tol.acceleration = 0.0
+            tol.position = 0.2  # Increased from 0.05
+            tol.velocity = 0.5  # Increased from 0.1
+            tol.acceleration = 0.1  # Increased from 0.0
             goal_msg.goal_tolerance.append(tol)
 
-        goal_msg.goal_time_tolerance = Duration(sec=2, nanosec=0)
+        goal_msg.goal_time_tolerance = Duration(sec=5, nanosec=0)  # Increased from 2s
 
         self.get_logger().info(
             f'Sending goal: {[f"{p:.3f}" for p in target_positions]}'
