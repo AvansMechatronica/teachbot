@@ -28,13 +28,7 @@ def launch_setup(context, *args, **kwargs):
     # Node to convert /teachbot/joint_states_sim to /teachbot/joint_states with offsets
     pkg_share = get_package_share_directory('teachbot_ros')
     sim_offsets_path = os.path.join(pkg_share, 'config', 'sim_offsets.yaml')
-    publish_jointstates_from_sim_node = Node(
-        package='teachbot_ros',
-        executable='teachbot_sim_jointstate_publishers',
-        name='publish_jointstates_from_sim',
-        output='screen',
-        arguments=[sim_offsets_path]
-    )
+
     # Expand the target config file path
 
     
@@ -112,8 +106,9 @@ def launch_setup(context, *args, **kwargs):
     teachbot_sim_jointstate_publishers_node = Node(
         package='teachbot_ros',
         executable='teachbot_sim_jointstate_publishers',
-        name='teachbot_sim_jointstate_publishers',
-        output='screen'
+        name='sim_jointstate_publisher',
+        output='screen',
+        parameters=[os.path.join(pkg_share, 'config', 'sim_parameters.yaml')]
     )
     
     return [
@@ -123,8 +118,8 @@ def launch_setup(context, *args, **kwargs):
         teachbot_state_publisher_gui_node,
         teachbot_sim_jointstate_publishers_node,
         monitor_gui_node,
-        publish_jointstates_from_sim_node,
     ]
+    
 
 
 def generate_launch_description():

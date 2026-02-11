@@ -39,8 +39,8 @@ teachbot_publisher:
       - 0.0     # shoulder_pan
       - 0.0     # shoulder_lift
       - 0.0     # elbow
-      - 0.0     # wrist_1
-      - 0.0     # wrist_2
+      - 180.0     # wrist_1
+      - 180.0     # wrist_2
       - 0.0     # wrist_3
     
     # Joint scale factors (use -1.0 to invert direction)
