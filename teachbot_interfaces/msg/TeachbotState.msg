@@ -18,7 +18,7 @@ float64 tcp_ry
 float64 tcp_rz
 
 # Gripper/control inputs
-teachbot_interfaces/TeachbotPistol pistol
+teachbot_interfaces/TeachbotPistolState pistol
 
 # Encoder status per joint
 bool[6] encoder_errors

@@ -54,6 +54,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'recorder=teachbot_recorder.recorder:main',
+
         ],
     },
 )
