@@ -226,10 +226,10 @@ class TeachbotPublisher(Node):
         state_msg.tcp_rz = tcp_rz
         
         # Control inputs
-        state_msg.pot_raw = pot_raw
-        state_msg.pot_percent = pot_percent
-        state_msg.btn1 = btn1
-        state_msg.btn2 = btn2
+        state_msg.pistol.pot_raw = pot_raw
+        state_msg.pistol.pot_percent = pot_percent
+        state_msg.pistol.btn1 = btn1
+        state_msg.pistol.btn2 = btn2
         
         # Encoder status
         state_msg.encoder_errors = encoder_errors[:6]

@@ -125,12 +125,12 @@ class TeachbotStatePublisherGUI(Node):
         msg.header.frame_id = 'teachbot_gui'
         
         # Calculate pot_raw from pot_percent (0-100 -> 0-1023)
-        msg.pot_raw = int((self.pot_percent / 100.0) * 1023)
-        msg.pot_percent = self.pot_percent
+        msg.pistol.pot_raw = int((self.pot_percent / 100.0) * 1023)
+        msg.pistol.pot_percent = self.pot_percent
         
         # Set button states
-        msg.btn1 = self.btn1_state
-        msg.btn2 = self.btn2_state
+        msg.pistol.btn1 = self.btn1_state
+        msg.pistol.btn2 = self.btn2_state
         
         # Initialize other fields with default values
         msg.joint_angles_deg = [0.0] * 6

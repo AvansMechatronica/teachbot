@@ -181,21 +181,21 @@ class TeachbotMonitorGUI(Node):
         self.status_label.config(foreground='green')
         
         # Update potentiometer
-        self.pot_percent.set(msg.pot_percent)
-        self.pot_raw.set(msg.pot_raw)
-        self.pot_percent_label.config(text=f"{msg.pot_percent}%")
+        self.pot_percent.set(msg.pistol.pot_percent)
+        self.pot_raw.set(msg.pistol.pot_raw)
+        self.pot_percent_label.config(text=f"{msg.pistol.pot_percent}%")
         
         # Update color based on percentage
-        if msg.pot_percent < 33:
+        if msg.pistol.pot_percent < 33:
             color = '#4CAF50'  # Green
-        elif msg.pot_percent < 66:
+        elif msg.pistol.pot_percent < 66:
             color = '#FF9800'  # Orange
         else:
             color = '#F44336'  # Red
         self.pot_percent_label.config(foreground=color)
         
         # Update Button 1
-        if msg.btn1:
+        if msg.pistol.btn1:
             self.btn1_canvas.itemconfig(self.btn1_indicator, fill='#4CAF50', outline='#2E7D32')
             self.btn1_text_label.config(text="PRESSED", foreground='#4CAF50')
         else:
@@ -203,7 +203,7 @@ class TeachbotMonitorGUI(Node):
             self.btn1_text_label.config(text="Released", foreground='#666')
         
         # Update Button 2
-        if msg.btn2:
+        if msg.pistol.btn2:
             self.btn2_canvas.itemconfig(self.btn2_indicator, fill='#F44336', outline='#C62828')
             self.btn2_text_label.config(text="PRESSED", foreground='#F44336')
         else:

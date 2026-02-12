@@ -1,0 +1,32 @@
+teachbot_recorder:
+  ros__parameters:
+    # Topic configuration
+    robot_joint_topic: '/joint_states'
+    enable_topic: '/teachbot/enable'
+    teachbot_state_topic: '/teachbot/state'
+    pistol_topic: '/teachbot/pistol_state'
+
+    # Recording parameters  
+    recording_rate: 100.0        # Hz - how often to record joint states
+    record_pistol: True          # Whether to record pistol state (buttons and potentiometer)
+
+    # Controller configuration of target robot
+    controller_name: 'scaled_joint_trajectory_controller'
+    # Controller configuration for simulation of target robot
+    controller_name_sim: 'joint_trajectory_controller'
+
+    # Motion parameters
+    update_rate: 0.5              # seconds between updates
+    position_tolerance: 0.01      # radians - minimum change to trigger update
+    trajectory_duration: 2.0      # seconds - duration for trajectory execution
+
+
+    robot_joint_names:
+      - "shoulder_pan_joint"
+      - "shoulder_lift_joint"
+      - "elbow_joint"
+      - "wrist_1_joint"
+      - "wrist_2_joint"
+      - "wrist_3_joint"
+
+

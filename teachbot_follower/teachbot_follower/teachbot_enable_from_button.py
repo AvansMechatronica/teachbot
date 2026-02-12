@@ -65,7 +65,7 @@ class TeachBotEnableFromButton(Node):
     
     def state_callback(self, msg):
         
-        current_button_state = msg.btn1
+        current_button_state = msg.pistol.btn1
         
         # Detect rising edge (button press)
         if current_button_state == 1 and self.last_button_state == 0:
