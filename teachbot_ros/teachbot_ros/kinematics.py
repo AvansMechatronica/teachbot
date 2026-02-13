@@ -125,10 +125,59 @@ def calc_fk_cobot_200_200(joint_angles: List[float]) -> Dict[str, float]:
     return {"x": x, "y": y, "z": z, "w": w, "p": p, "r": r}
 
 
+def calc_fk_my_robot(joint_angles: List[float]) -> Dict[str, float]:
+    """Forward kinematics for my_robot (6-DOF arm, 7th joint is gripper).
+    
+    DH parameters derived from URDF joint origins and axes.
+    Joint axes from URDF:
+      joint_1_2: Z-axis, origin z=0.156875m
+      joint_2_3: X-axis, origin (0,0,0)
+      joint_3_4: X-axis, origin z=0.249m
+      joint_4_5: X-axis, origin y=-0.227m
+      joint_5_6: Z-axis, origin x=-0.038375m
+      joint_6_7: Y-axis, origin z=0.038375m
+    
+    NOTE: These DH parameters are approximate. Adjust if FK results
+    do not match your physical robot calibration.
+    """
+    j1 = np.deg2rad(joint_angles[0])
+    j2 = np.deg2rad(joint_angles[1])
+    j3 = np.deg2rad(joint_angles[2])
+    j4 = np.deg2rad(joint_angles[3])
+    j5 = np.deg2rad(joint_angles[4])
+    j6 = np.deg2rad(joint_angles[5])
+    
+    # DH parameters derived from URDF geometry (units: mm)
+    # Link 1: base to joint_1_2 (Z rotation), d=156.875mm
+    matrix1 = dh_matrix(0, j1, 156.875, 0, np.pi/2)
+    # Link 2: joint_2_3 (X rotation), a=249mm
+    matrix2 = dh_matrix(np.pi/2, -j2, 0, 249.0, 0)
+    # Link 3: joint_3_4 (X rotation)
+    matrix3 = dh_matrix(0, j3, 0, 0, -np.pi/2)
+    # Link 4: joint_4_5 (X rotation), d=-227mm
+    matrix4 = dh_matrix(0, j4, -227.0, 0, np.pi/2)
+    # Link 5: joint_5_6 (Z rotation)
+    matrix5 = dh_matrix(0, j5, 0, -38.375, -np.pi/2)
+    # Link 6: joint_6_7 (Y rotation), d=38.375mm
+    matrix6 = dh_matrix(0, j6, -38.375, 0, np.pi/2)
+    
+    T = matrix1 @ matrix2 @ matrix3 @ matrix4 @ matrix5 @ matrix6
+    
+    x = T[0, 3]
+    y = T[1, 3]
+    z = T[2, 3]
+    w = np.rad2deg(np.arctan2(T[2, 1], T[2, 2]))
+    p = np.rad2deg(-np.arcsin(np.clip(T[2, 0], -1.0, 1.0)))
+    r = np.rad2deg(np.arctan2(T[1, 0], T[0, 0]))
+    
+    return {"x": x, "y": y, "z": z, "w": w, "p": p, "r": r}
+
+
 # Model Registry
 KINEMATICS_FUNCTIONS = {
     "Robot_200_200_mm": calc_fk_robot_200_200,
     "Cobot_200_200_mm": calc_fk_cobot_200_200,
+    "my_robot": calc_fk_my_robot,
 }
 
 

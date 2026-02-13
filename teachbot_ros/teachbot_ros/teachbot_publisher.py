@@ -39,11 +39,12 @@ class TeachbotPublisher(Node):
         self.declare_parameter('robot_model', 'Robot_200_200_mm')
         self.declare_parameter('publish_rate', 250.0)
         self.declare_parameter('dof', 6)
+        self.declare_parameter('encoder_dof', 6)
         
         # Calibration parameters (lists)
-        self.declare_parameter('position_offsets', [46000, 99320, 96150, 56200, 81850, 44400])
-        self.declare_parameter('degree_offsets', [0.0, -5.0, -5.0, 0.0, 0.0, 0.0])
-        self.declare_parameter('joint_scale_factors', [-1.0, 1.0, 1.0, 1.0, -1.0, 1.0])
+        self.declare_parameter('position_offsets', [46000, 99320, 96150, 56200, 81850, 44400, 0])
+        self.declare_parameter('degree_offsets', [0.0, -5.0, -5.0, 0.0, 0.0, 0.0, 0.0])
+        self.declare_parameter('joint_scale_factors', [-1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0])
         
         # Potentiometer calibration
         self.declare_parameter('pot_idle', 811)
@@ -51,7 +52,7 @@ class TeachbotPublisher(Node):
         
         # Joint names for JointState message
         self.declare_parameter('joint_names', ['joint_1', 'joint_2', 'joint_3', 
-                                                'joint_4', 'joint_5', 'joint_6'])
+                                                'joint_4', 'joint_5', 'joint_6', 'joint_7'])
 
 
 
@@ -62,6 +63,7 @@ class TeachbotPublisher(Node):
         self._robot_model = self.get_parameter('robot_model').value
         self._publish_rate = self.get_parameter('publish_rate').value
         self._dof = self.get_parameter('dof').value
+        self._encoder_dof = self.get_parameter('encoder_dof').value
         
         self._position_offsets = list(self.get_parameter('position_offsets').value)
         self._degree_offsets = list(self.get_parameter('degree_offsets').value)
@@ -69,11 +71,11 @@ class TeachbotPublisher(Node):
         
         self._pot_idle = self.get_parameter('pot_idle').value
         self._pot_full = self.get_parameter('pot_full').value
-        self._joint_names = ['teachbot/' + name for name in self.get_parameter('joint_names').value]
+        self._joint_names = list(self.get_parameter('joint_names').value)
 
 
         # State tracking for angle unwrapping
-        self._prev_angles: List[Optional[float]] = [None] * self._dof
+        self._prev_angles: List[Optional[float]] = [None] * self._encoder_dof
         self._joint_angles: List[float] = [0.0] * self._dof
         
         # Initialize forward kinematics
@@ -99,7 +101,7 @@ class TeachbotPublisher(Node):
         
         # Start TCP listeners (connect to teachbot server)
         self._encoder_threads: List[EncoderListener] = []
-        for i in range(self._dof):
+        for i in range(self._encoder_dof):
             port = self._start_port + i
             listener = EncoderListener(self._remote_ip, port)
             listener.start()
@@ -174,6 +176,10 @@ class TeachbotPublisher(Node):
         btn1 = rs485_snap["btn1"]
         btn2 = rs485_snap["btn2"]
         
+        # Map potentiometer to final joint (0% = 0°, 100% = 15°)
+        if len(self._joint_angles) > len(self._encoder_threads):
+            self._joint_angles[len(self._encoder_threads)] = pot_percent / 100.0 * 15.0
+        
         # Debug: Log button state changes
         if not hasattr(self, '_last_btn1'):
             self._last_btn1 = False
@@ -184,12 +190,13 @@ class TeachbotPublisher(Node):
             self._last_btn1 = btn1
             self._last_btn2 = btn2
         
-        # Compute FK
+        # Compute FK (using first 6 arm joints, excluding gripper)
         tcp_x = tcp_y = tcp_z = 0.0
         tcp_rx = tcp_ry = tcp_rz = 0.0
+        fk_dof = min(self._dof, 6)  # FK uses arm joints only
         if self._fk is not None:
             try:
-                tcp = self._fk.compute(self._joint_angles[:6])
+                tcp = self._fk.compute(self._joint_angles[:fk_dof])
                 tcp_x, tcp_y, tcp_z = tcp["x"], tcp["y"], tcp["z"]
                 tcp_rx, tcp_ry, tcp_rz = tcp["rx"], tcp["ry"], tcp["rz"]
             except Exception as e:

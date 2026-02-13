@@ -17,6 +17,7 @@ from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration, Command, PythonExpression
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 
 def expand_path(path):
     """Expand ~ and environment variables in path."""
@@ -34,15 +35,9 @@ def launch_setup(context, *args, **kwargs):
     
     # Robot state publisher (publishes TF from URDF + joint states)
     pkg_share = get_package_share_directory('teachbot_ros')
-    ur_description_share = get_package_share_directory('ur_description')
-    urdf_xacro = os.path.join(ur_description_share, 'urdf', 'ur.urdf.xacro')
-    robot_description = Command([
-        'xacro ', urdf_xacro,
-        ' ur_type:=ur5e',
-        ' name:=ur5e',
-        ' tf_prefix:=teachbot/',
-        ' generate_ros2_control_tag:=false',
-    ])
+    my_robot_share = get_package_share_directory('my_robot_description')
+    urdf_xacro = os.path.join(my_robot_share, 'urdf', 'my_robot.urdf.xacro')
+    robot_description = ParameterValue(Command(['xacro ', urdf_xacro]), value_type=str)
     sim_initial_positions = os.path.join(pkg_share, 'config', 'sim_initial_positions.yaml')
     
     # Joint State Publisher GUI node
@@ -57,7 +52,6 @@ def launch_setup(context, *args, **kwargs):
         ],
         remappings=[
             ('/joint_states', '/teachbot/joint_states_sim'),
-            ('/robot_description', '/teachbot/robot_description')
         ]
     )
     
@@ -72,7 +66,6 @@ def launch_setup(context, *args, **kwargs):
         }],
         remappings=[
             ('/joint_states', '/teachbot/joint_states_sim'),
-            ('/robot_description', '/teachbot/robot_description')
         ]
     )
     
@@ -125,22 +118,11 @@ def launch_setup(context, *args, **kwargs):
 def generate_launch_description():
     # Get package share directories
     pkg_share = get_package_share_directory('teachbot_ros')
-    ur_description_share = get_package_share_directory('ur_description')
     
     # File paths
     default_config = os.path.join(pkg_share, 'config', 'teachbot_params.yaml')
     sim_initial_positions = os.path.join(pkg_share, 'config', 'sim_initial_positions.yaml')
     rviz_config = os.path.join(pkg_share, 'rviz', 'teachbot.rviz')
-    
-    # Generate URDF from xacro for UR5e
-    urdf_xacro = os.path.join(ur_description_share, 'urdf', 'ur.urdf.xacro')
-    robot_description = Command([
-        'xacro ', urdf_xacro,
-        ' ur_type:=ur5e',
-        ' name:=ur5e',
-        ' tf_prefix:=teachbot/',
-        ' generate_ros2_control_tag:=false',
-    ])
     
     # Declare launch arguments
     config_file_arg = DeclareLaunchArgument(

@@ -30,7 +30,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /teachbot/robot_description
+        Value: /robot_description
       Enabled: true
       Links:
         All Links Enabled: true
@@ -38,65 +38,50 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        teachbot/base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        teachbot/base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        teachbot/base_link_inertia:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        teachbot/flange:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        teachbot/forearm_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        teachbot/ft_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        teachbot/shoulder_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        teachbot/tool0:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        teachbot/upper_arm_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        teachbot/wrist_1_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        teachbot/wrist_2_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        teachbot/wrist_3_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         world:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        link_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_5:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_6:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_7:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_8:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
@@ -137,19 +122,19 @@ Visualization Manager:
         Z: 0
       Plane: XY
       Plane Cell Count: 10
-      Reference Frame: teachbot/base
+      Reference Frame: world
       Value: true
     - Class: rviz_default_plugins/Axes
       Enabled: true
       Length: 0.15000000596046448
       Name: BaseAxes
       Radius: 0.009999999776482582
-      Reference Frame: teachbot/base
+      Reference Frame: world
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: teachbot/base_link
+    Fixed Frame: world
     Frame Rate: 30
   Name: root
   Tools:
@@ -178,7 +163,7 @@ Visualization Manager:
       Name: Current View
       Near Clip Distance: 0.009999999776482582
       Pitch: 0.315000057220459
-      Target Frame: base_link
+      Target Frame: world
       Value: Orbit (rviz_default_plugins)
       Yaw: 3.5381782054901123
     Saved: ~
