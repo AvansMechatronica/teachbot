@@ -153,6 +153,7 @@ class RecordingNode(Node):
         self.current_joint_state = None
         self.recording_mode = 'button'  # 'button' or 'topic'
         self.recording_stopped_externally = False  # Track if stopped by enable_topic
+        self.last_record_time = None  # Throttle sampling to recording_rate
 
         # Create callback groups
         self.record_group = MutuallyExclusiveCallbackGroup()
@@ -175,10 +176,10 @@ class RecordingNode(Node):
             callback_group=self.control_group
         )
 
-        self.pistol_sub = self.create_subscription(
+        self.teachbot_state_sub = self.create_subscription(
             TeachbotState,
             self.teachbot_state_topic,
-            self.pistol_callback,
+            self.teachbot_state_callback,
             10,
             callback_group=self.record_group
         )
@@ -211,6 +212,13 @@ class RecordingNode(Node):
                 elapsed_time = time.time() - self.recording_start_time
             else:
                 elapsed_time = 0.0
+            # Throttle sampling to recording_rate
+            if self.recording_rate and self.recording_rate > 0:
+                min_interval = 1.0 / self.recording_rate
+                if self.last_record_time is not None:
+                    if (elapsed_time - self.last_record_time) < min_interval:
+                        return
+            self.last_record_time = elapsed_time
             # Record data point
             data_point = {
                 'time': elapsed_time,
@@ -231,13 +239,21 @@ class RecordingNode(Node):
                 self.stop_recording()
                 self.recording_stopped_externally = True
 
-    def pistol_callback(self, msg):
+    def teachbot_state_callback(self, msg):
         """Capture pistol state data"""
         self.pistol_state = {
-            'position': msg.tcp_x,
-            'tcp_y': msg.tcp_y,
-            'tcp_z': msg.tcp_z,
+            'pot_raw': msg.pistol.pot_raw,
+            'pot_percent': msg.pistol.pot_percent,
+            'btn1': msg.pistol.btn1,
+            'btn2': msg.pistol.btn2,
         }
+        if self.is_recording and self.record_pistol:
+            pistol_msg = TeachbotPistolState()
+            pistol_msg.pot_raw = msg.pistol.pot_raw
+            pistol_msg.pot_percent = msg.pistol.pot_percent
+            pistol_msg.btn1 = msg.pistol.btn1
+            pistol_msg.btn2 = msg.pistol.btn2
+            self.pistol_pub.publish(pistol_msg)
 
     def start_recording(self):
         """Start recording trajectory"""
@@ -245,6 +261,7 @@ class RecordingNode(Node):
         self.is_paused = False
         self.recording_time = 0.0
         self.recording_start_time = time.time()  # Record actual start time
+        self.last_record_time = None
         self.recorded_data = []
         self.get_logger().info('Recording started')
 
@@ -256,6 +273,7 @@ class RecordingNode(Node):
     def resume_recording(self):
         """Resume recording"""
         self.is_paused = False
+        self.last_record_time = None
         self.get_logger().info('Recording resumed')
 
     def stop_recording(self):
@@ -601,6 +619,11 @@ class RecordingGUI:
         ttk.Label(status_frame, text='Playback Progress:').pack(anchor=tk.W, pady=(10, 0))
         self.play_progress = ttk.Progressbar(status_frame, mode='determinate', length=400)
         self.play_progress.pack(anchor=tk.W, padx=20, pady=5)
+
+        # Pistol state section
+        ttk.Label(status_frame, text='Pistol State:').pack(anchor=tk.W, pady=(10, 0))
+        self.pistol_state_label = ttk.Label(status_frame, text='pot_raw=0, pot_percent=0.0, btn1=False, btn2=False', foreground='purple')
+        self.pistol_state_label.pack(anchor=tk.W, padx=20)
         button_frame = ttk.Frame(main_frame)
         button_frame.pack(fill=tk.X, pady=10)
 
@@ -793,6 +816,16 @@ class RecordingGUI:
         else:
             self.play_status_label.config(text='Stopped', foreground='gray')
             self.play_progress['value'] = 0
+
+        # Update pistol state display
+        if self.node.pistol_state:
+            pot_raw = self.node.pistol_state.get('pot_raw', 0)
+            pot_percent = self.node.pistol_state.get('pot_percent', 0.0)
+            btn1 = self.node.pistol_state.get('btn1', False)
+            btn2 = self.node.pistol_state.get('btn2', False)
+            self.pistol_state_label.config(
+                text=f'pot_raw={pot_raw}, pot_percent={pot_percent:.2f}, btn1={btn1}, btn2={btn2}'
+            )
 
         # Schedule next update
         self.update_timer = self.root.after(100, self.update_gui)
