@@ -1,0 +1,233 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-44e7bdb7e6e24a955f6f.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				},
+				{
+					"build" : "teachbot_interfaces__py",
+					"jsonFile" : "directory-teachbot_interfaces__py-f9f101e21588d160ef2f.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/home/martijn/teachbot/build/teachbot_interfaces/teachbot_interfaces__py",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "teachbot_interfaces",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_teachbot_interfaces_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_teachbot_interfaces_egg-207adee99675c8c27a75.json",
+					"name" : "ament_cmake_python_build_teachbot_interfaces_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_symlink_teachbot_interfaces::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_symlink_teachbot_interfaces-63111823460632525d93.json",
+					"name" : "ament_cmake_python_symlink_teachbot_interfaces",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces-38affb479c43c9bf3d54.json",
+					"name" : "teachbot_interfaces",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces__cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces__cpp-9f0d37bdbfea2da9ae39.json",
+					"name" : "teachbot_interfaces__cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "teachbot_interfaces__py::@6638a8ae257138b4e51b",
+					"jsonFile" : "target-teachbot_interfaces__py-7ee28ad2bed3ebaa1880.json",
+					"name" : "teachbot_interfaces__py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces__rosidl_generator_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces__rosidl_generator_c-3b9e01b8a84f21406bf2.json",
+					"name" : "teachbot_interfaces__rosidl_generator_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces__rosidl_generator_py::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces__rosidl_generator_py-44941d1e0baef95b36a6.json",
+					"name" : "teachbot_interfaces__rosidl_generator_py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces__rosidl_typesupport_c-590c3229f3d10307530f.json",
+					"name" : "teachbot_interfaces__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces__rosidl_typesupport_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces__rosidl_typesupport_c__pyext-717a5f260d3237429ca6.json",
+					"name" : "teachbot_interfaces__rosidl_typesupport_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces__rosidl_typesupport_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces__rosidl_typesupport_cpp-48962a4a5bd6ea3a2180.json",
+					"name" : "teachbot_interfaces__rosidl_typesupport_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces__rosidl_typesupport_fastrtps_c-e7b2d739e0c8f4dcd722.json",
+					"name" : "teachbot_interfaces__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces__rosidl_typesupport_fastrtps_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces__rosidl_typesupport_fastrtps_c__pyext-14274592418683f3be1e.json",
+					"name" : "teachbot_interfaces__rosidl_typesupport_fastrtps_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces__rosidl_typesupport_fastrtps_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces__rosidl_typesupport_fastrtps_cpp-7a7aede6c751a0c5eb52.json",
+					"name" : "teachbot_interfaces__rosidl_typesupport_fastrtps_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces__rosidl_typesupport_introspection_c-d3068ed231e0c17d44cf.json",
+					"name" : "teachbot_interfaces__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces__rosidl_typesupport_introspection_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces__rosidl_typesupport_introspection_c__pyext-7c905b7077b06612d07c.json",
+					"name" : "teachbot_interfaces__rosidl_typesupport_introspection_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces__rosidl_typesupport_introspection_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces__rosidl_typesupport_introspection_cpp-b41f9c398dcdd44e2746.json",
+					"name" : "teachbot_interfaces__rosidl_typesupport_introspection_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "teachbot_interfaces_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-teachbot_interfaces_uninstall-2332ef4060379a261bf8.json",
+					"name" : "teachbot_interfaces_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-cfda1eb328e972c4e951.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/martijn/teachbot/build/teachbot_interfaces",
+		"source" : "/home/martijn/teachbot/teachbot_interfaces"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

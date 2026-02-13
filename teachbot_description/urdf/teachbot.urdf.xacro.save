@@ -1,0 +1,107 @@
+t<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="teachbot">
+
+  <!-- ====== Global settings ====== -->
+  <xacro:property name="S" value="0.001"/> <!-- mm->m; set to 1.0 if meters -->
+
+  <!-- ====== A simple macro: one visual mesh link ====== -->
+  <xacro:macro name="mesh_link" params="name">
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://teachbot_description/meshes/${name}.dae"
+                scale="${S} ${S} ${S}"/>
+        </geometry>
+      </visual>
+
+      <!-- Optional: add collision primitives per link here later -->
+      <!--
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.1 0.1 0.1"/>
+        </geometry>
+      </collision>
+      -->
+    </link>
+  </xacro:macro>
+
+  <!-- ====== Frames ====== -->
+  <link name="world"/>
+
+  <!-- ====== Links (visual meshes) ====== -->
+  <xacro:mesh_link name="link_1"/>
+  <xacro:mesh_link name="link_2"/>
+  <xacro:mesh_link name="link_3"/>
+  <xacro:mesh_link name="link_4"/>
+  <xacro:mesh_link name="link_5"/>
+  <xacro:mesh_link name="link_6"/>
+  <xacro:mesh_link name="link_7"/>
+  <xacro:mesh_link name="link_8"/>
+
+  <!-- ====== Joints ====== -->
+  <joint name="world_to_link_1" type="fixed">
+    <parent link="world"/>
+    <child link="link_1"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Fill in origins/axes to match your CAD frames -->
+  <joint name="joint_1_2" type="revolute">
+    <parent link="link_1"/>
+    <child link="link_2"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
+  </joint>
+
+  <joint name="joint_2_3" type="revolute">
+    <parent link="link_2"/>
+    <child link="link_3"/>
+    <origin xyz="0 0 0.15955783" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
+  </joint>
+
+  <joint name="joint_3_4" type="revolute">
+    <parent link="link_3"/>
+    <child link="link_4"/>
+    <origin xyz="0 0 0.249" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
+  </joint>
+
+  <joint name="joint_4_5" type="revolute">
+    <parent link="link_4"/>
+    <child link="link_5"/>
+    <origin xyz="0.227 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
+  </joint>
+
+  <joint name="joint_5_6" type="revolute">
+    <parent link="link_5"/>
+    <child link="link_6"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
+  </joint>
+
+  <joint name="joint_6_7" type="revolute">
+    <parent link="link_6"/>
+    <child link="link_7"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
+  </joint>
+
+  <joint name="joint_7_8" type="revolute">
+    <parent link="link_7"/>
+    <child link="link_8"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
+  </joint>
+
+</robot>

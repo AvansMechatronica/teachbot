@@ -1,0 +1,22 @@
+running develop
+running egg_info
+writing teachbot_ros.egg-info/PKG-INFO
+writing dependency_links to teachbot_ros.egg-info/dependency_links.txt
+writing entry points to teachbot_ros.egg-info/entry_points.txt
+writing requirements to teachbot_ros.egg-info/requires.txt
+writing top-level names to teachbot_ros.egg-info/top_level.txt
+reading manifest file 'teachbot_ros.egg-info/SOURCES.txt'
+writing manifest file 'teachbot_ros.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/martijn/teachbot/install/teachbot_ros/lib/python3.10/site-packages/teachbot-ros.egg-link (link to .)
+Installing recording_playback script to /home/martijn/teachbot/install/teachbot_ros/lib/teachbot_ros
+Installing teachbot_monitor_gui script to /home/martijn/teachbot/install/teachbot_ros/lib/teachbot_ros
+Installing teachbot_publisher script to /home/martijn/teachbot/install/teachbot_ros/lib/teachbot_ros
+Installing teachbot_sim_jointstate_publishers script to /home/martijn/teachbot/install/teachbot_ros/lib/teachbot_ros
+Installing teachbot_state_publisher_gui script to /home/martijn/teachbot/install/teachbot_ros/lib/teachbot_ros
+
+Installed /home/martijn/teachbot/build/teachbot_ros
+running symlink_data
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/utils/recording_playback.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/utils/__pycache__/teachbot_state_publisher_gui.cpython-310.pyc -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils/__pycache__
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/utils/__pycache__/teachbot_sim_jointstate_publishers.cpython-310.pyc -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils/__pycache__

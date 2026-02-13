@@ -1,0 +1,29 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from teachbot_interfaces/msg/TeachbotPistolState.msg
+// generated code does not contain a copyright notice
+
+
+module teachbot_interfaces {
+  module msg {
+    @verbatim (language="comment", text=
+      "TeachbotPistol.msg")
+    struct TeachbotPistolState {
+      @verbatim (language="comment", text=
+        "Gripper/control inputs" "\n"
+        "Raw potentiometer value (0-1023)")
+      int32 pot_raw;
+
+      @verbatim (language="comment", text=
+        "Mapped potentiometer percentage (0-100)")
+      int32 pot_percent;
+
+      @verbatim (language="comment", text=
+        "Button 1 state")
+      boolean btn1;
+
+      @verbatim (language="comment", text=
+        "Button 2 state")
+      boolean btn2;
+    };
+  };
+};

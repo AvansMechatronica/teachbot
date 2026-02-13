@@ -125,8 +125,8 @@ def calc_fk_cobot_200_200(joint_angles: List[float]) -> Dict[str, float]:
     return {"x": x, "y": y, "z": z, "w": w, "p": p, "r": r}
 
 
-def calc_fk_my_robot(joint_angles: List[float]) -> Dict[str, float]:
-    """Forward kinematics for my_robot (6-DOF arm, 7th joint is gripper).
+def calc_fk_teachbot(joint_angles: List[float]) -> Dict[str, float]:
+    """Forward kinematics for teachbot (6-DOF arm, 7th joint is gripper).
     
     DH parameters derived from URDF joint origins and axes.
     Joint axes from URDF:
@@ -177,7 +177,7 @@ def calc_fk_my_robot(joint_angles: List[float]) -> Dict[str, float]:
 KINEMATICS_FUNCTIONS = {
     "Robot_200_200_mm": calc_fk_robot_200_200,
     "Cobot_200_200_mm": calc_fk_cobot_200_200,
-    "my_robot": calc_fk_my_robot,
+    "teachbot": calc_fk_teachbot,
 }
 
 

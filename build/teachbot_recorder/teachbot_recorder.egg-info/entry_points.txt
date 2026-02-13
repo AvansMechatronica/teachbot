@@ -1,0 +1,3 @@
+[console_scripts]
+recorder = teachbot_recorder.recorder:main
+

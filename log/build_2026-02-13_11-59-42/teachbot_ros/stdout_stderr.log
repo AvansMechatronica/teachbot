@@ -1,0 +1,60 @@
+running develop
+running egg_info
+creating teachbot_ros.egg-info
+writing teachbot_ros.egg-info/PKG-INFO
+writing dependency_links to teachbot_ros.egg-info/dependency_links.txt
+writing entry points to teachbot_ros.egg-info/entry_points.txt
+writing requirements to teachbot_ros.egg-info/requires.txt
+writing top-level names to teachbot_ros.egg-info/top_level.txt
+writing manifest file 'teachbot_ros.egg-info/SOURCES.txt'
+reading manifest file 'teachbot_ros.egg-info/SOURCES.txt'
+writing manifest file 'teachbot_ros.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/martijn/teachbot/install/teachbot_ros/lib/python3.10/site-packages/teachbot-ros.egg-link (link to .)
+Installing teachbot_monitor_gui script to /home/martijn/teachbot/install/teachbot_ros/lib/teachbot_ros
+Installing teachbot_publisher script to /home/martijn/teachbot/install/teachbot_ros/lib/teachbot_ros
+Installing teachbot_sim_jointstate_publishers script to /home/martijn/teachbot/install/teachbot_ros/lib/teachbot_ros
+Installing teachbot_state_publisher_gui script to /home/martijn/teachbot/install/teachbot_ros/lib/teachbot_ros
+
+Installed /home/martijn/teachbot/build/teachbot_ros
+running symlink_data
+creating /home/martijn/teachbot/install/teachbot_ros/share/ament_index
+creating /home/martijn/teachbot/install/teachbot_ros/share/ament_index/resource_index
+creating /home/martijn/teachbot/install/teachbot_ros/share/ament_index/resource_index/packages
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/resource/teachbot_ros -> /home/martijn/teachbot/install/teachbot_ros/share/ament_index/resource_index/packages
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/package.xml -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros
+creating /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/__init__.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/teachbot_publisher.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/listeners.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/kinematics.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros
+creating /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/__pycache__
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/__pycache__/kinematics.cpython-312.pyc -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/__pycache__
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/__pycache__/__init__.cpython-312.pyc -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/__pycache__
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/__pycache__/kinematics.cpython-310.pyc -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/__pycache__
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/__pycache__/teachbot_publisher.cpython-310.pyc -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/__pycache__
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/__pycache__/listeners.cpython-312.pyc -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/__pycache__
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/__pycache__/listeners.cpython-310.pyc -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/__pycache__
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/__pycache__/teachbot_publisher.cpython-312.pyc -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/__pycache__
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/__pycache__/__init__.cpython-310.pyc -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/__pycache__
+creating /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/utils/teachbot_monitor_gui.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/utils/teachbot_sim_jointstate_publishers.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/utils/__init__.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/utils/teachbot_state_publisher_gui.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/utils/teachbot_viewer.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils
+creating /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils/__pycache__
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/utils/__pycache__/teachbot_monitor_gui.cpython-310.pyc -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils/__pycache__
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/utils/__pycache__/.gitignore -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils/__pycache__
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/teachbot_ros/utils/__pycache__/__init__.cpython-310.pyc -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/teachbot_ros/utils/__pycache__
+creating /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/launch
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/launch/sim_teachbot_rviz.launch.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/launch/
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/launch/README.md -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/launch/
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/launch/teachbot.launch.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/launch/
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/launch/teachbot_rviz.launch.py -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/launch/
+creating /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/rviz
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/rviz/teachbot.rviz -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/rviz/
+creating /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/config
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/config/sim_initial_positions.yaml -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/config/
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/config/teachbot_params.yaml -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/config/
+symbolically linking /home/martijn/teachbot/build/teachbot_ros/config/sim_parameters.yaml -> /home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/config/

@@ -1,0 +1,20 @@
+[0.481s] Invoking command in '/home/martijn/teachbot/build/teachbot_follower': PYTHONPATH=/home/martijn/teachbot/build/teachbot_follower/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/martijn/teachbot/install/teachbot_follower/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/martijn/teachbot/build/teachbot_follower/build --no-deps symlink_data
+[0.603s] running develop
+[0.672s] running egg_info
+[0.672s] writing teachbot_follower.egg-info/PKG-INFO
+[0.673s] writing dependency_links to teachbot_follower.egg-info/dependency_links.txt
+[0.673s] writing entry points to teachbot_follower.egg-info/entry_points.txt
+[0.673s] writing requirements to teachbot_follower.egg-info/requires.txt
+[0.673s] writing top-level names to teachbot_follower.egg-info/top_level.txt
+[0.674s] reading manifest file 'teachbot_follower.egg-info/SOURCES.txt'
+[0.674s] writing manifest file 'teachbot_follower.egg-info/SOURCES.txt'
+[0.675s] running build_ext
+[0.675s] Creating /home/martijn/teachbot/install/teachbot_follower/lib/python3.10/site-packages/teachbot-follower.egg-link (link to .)
+[0.676s] Installing follower_action script to /home/martijn/teachbot/install/teachbot_follower/lib/teachbot_follower
+[0.676s] Installing follower_moveit_commander script to /home/martijn/teachbot/install/teachbot_follower/lib/teachbot_follower
+[0.676s] Installing teachbot_enable_from_button script to /home/martijn/teachbot/install/teachbot_follower/lib/teachbot_follower
+[0.676s] Installing teachbot_enable_gui script to /home/martijn/teachbot/install/teachbot_follower/lib/teachbot_follower
+[0.676s] 
+[0.676s] Installed /home/martijn/teachbot/build/teachbot_follower
+[0.676s] running symlink_data
+[0.694s] Invoked command in '/home/martijn/teachbot/build/teachbot_follower' returned '0': PYTHONPATH=/home/martijn/teachbot/build/teachbot_follower/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/martijn/teachbot/install/teachbot_follower/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/martijn/teachbot/build/teachbot_follower/build --no-deps symlink_data

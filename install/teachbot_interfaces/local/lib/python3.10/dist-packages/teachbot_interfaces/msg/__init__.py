@@ -1,0 +1,1 @@
+/home/martijn/teachbot/build/teachbot_interfaces/rosidl_generator_py/teachbot_interfaces/msg/__init__.py

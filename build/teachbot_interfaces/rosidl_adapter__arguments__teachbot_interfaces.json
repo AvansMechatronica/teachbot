@@ -1,0 +1,7 @@
+{
+  "package_name": "teachbot_interfaces",
+  "non_idl_tuples": [
+    "/home/martijn/teachbot/teachbot_interfaces:msg/TeachbotPistolState.msg",
+    "/home/martijn/teachbot/teachbot_interfaces:msg/TeachbotState.msg"
+  ]
+}

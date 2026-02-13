@@ -10,14 +10,14 @@ teachbot_publisher:
     ee_port: 5011                  # RS-485 trigger/button TCP port
     
     # Robot configuration
-    robot_model: "my_robot"  # FK model for calculations
+    robot_model: "teachbot"  # FK model for calculations
     dof: 7
     encoder_dof: 6
     
     # Publishing rate (Hz)
     publish_rate: 250.0
     
-    # Joint names (matching my_robot URDF)
+    # Joint names (matching teachbot URDF)
     joint_names:
       - "joint_1_2"
       - "joint_2_3"

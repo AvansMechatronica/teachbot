@@ -32,11 +32,11 @@ def launch_setup(context, *args, **kwargs):
     
     # Get package share directories
     pkg_share = get_package_share_directory('teachbot_ros')
-    my_robot_share = get_package_share_directory('my_robot_description')
+    teachbot_desc_share = get_package_share_directory('teachbot_description')
     rviz_config = os.path.join(pkg_share, 'rviz', 'teachbot.rviz')
     
     # Generate URDF from xacro for custom robot
-    urdf_xacro = os.path.join(my_robot_share, 'urdf', 'my_robot.urdf.xacro')
+    urdf_xacro = os.path.join(teachbot_desc_share, 'urdf', 'teachbot.urdf.xacro')
     robot_description = ParameterValue(Command(['xacro ', urdf_xacro]), value_type=str)
     
     # Teachbot publisher node

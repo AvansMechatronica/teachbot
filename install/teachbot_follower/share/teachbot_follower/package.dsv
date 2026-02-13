@@ -1,0 +1,9 @@
+source;share/teachbot_follower/hook/pythonpath.ps1
+source;share/teachbot_follower/hook/pythonpath.dsv
+source;share/teachbot_follower/hook/pythonpath.sh
+source;share/teachbot_follower/hook/ament_prefix_path.ps1
+source;share/teachbot_follower/hook/ament_prefix_path.dsv
+source;share/teachbot_follower/hook/ament_prefix_path.sh
+source;../../build/teachbot_follower/share/teachbot_follower/hook/pythonpath_develop.ps1
+source;../../build/teachbot_follower/share/teachbot_follower/hook/pythonpath_develop.dsv
+source;../../build/teachbot_follower/share/teachbot_follower/hook/pythonpath_develop.sh

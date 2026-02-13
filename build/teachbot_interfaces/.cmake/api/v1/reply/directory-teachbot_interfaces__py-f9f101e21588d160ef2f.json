@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "teachbot_interfaces__py",
+		"source" : "/home/martijn/teachbot/build/teachbot_interfaces/teachbot_interfaces__py"
+	}
+}

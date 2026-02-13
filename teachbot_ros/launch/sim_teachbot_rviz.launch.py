@@ -35,8 +35,8 @@ def launch_setup(context, *args, **kwargs):
     
     # Robot state publisher (publishes TF from URDF + joint states)
     pkg_share = get_package_share_directory('teachbot_ros')
-    my_robot_share = get_package_share_directory('my_robot_description')
-    urdf_xacro = os.path.join(my_robot_share, 'urdf', 'my_robot.urdf.xacro')
+    teachbot_desc_share = get_package_share_directory('teachbot_description')
+    urdf_xacro = os.path.join(teachbot_desc_share, 'urdf', 'teachbot.urdf.xacro')
     robot_description = ParameterValue(Command(['xacro ', urdf_xacro]), value_type=str)
     sim_initial_positions = os.path.join(pkg_share, 'config', 'sim_initial_positions.yaml')
     
