@@ -2,9 +2,10 @@
 joint_state_publisher_gui:
   ros__parameters:
     zeros:
-      teachbot/shoulder_pan_joint: 0.0
-      teachbot/shoulder_lift_joint: -1.57
-      teachbot/elbow_joint: -1.57
-      teachbot/wrist_1_joint: 0.0
-      teachbot/wrist_2_joint: 1.57
-      teachbot/wrist_3_joint: 0.0
+      joint_1_2: 0.0
+      joint_2_3: 0.0
+      joint_3_4: 0.0
+      joint_4_5: 0.0
+      joint_5_6: 0.0
+      joint_6_7: 0.0
+      joint_7_8: 0.0

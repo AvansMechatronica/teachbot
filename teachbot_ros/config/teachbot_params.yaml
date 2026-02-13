@@ -10,47 +10,52 @@ teachbot_publisher:
     ee_port: 5011                  # RS-485 trigger/button TCP port
     
     # Robot configuration
-    robot_model: "Cobot_200_200_mm"  # FK model for calculations
-    dof: 6
+    robot_model: "teachbot"  # FK model for calculations
+    dof: 7
+    encoder_dof: 6
     
     # Publishing rate (Hz)
     publish_rate: 250.0
     
-    # UR5e joint names (official naming convention)
+    # Joint names (matching teachbot URDF)
     joint_names:
-      - "shoulder_pan_joint"
-      - "shoulder_lift_joint"
-      - "elbow_joint"
-      - "wrist_1_joint"
-      - "wrist_2_joint"
-      - "wrist_3_joint"
+      - "joint_1_2"
+      - "joint_2_3"
+      - "joint_3_4"
+      - "joint_4_5"
+      - "joint_5_6"
+      - "joint_6_7"
+      - "joint_7_8"
     
     # Encoder calibration offsets (raw counts at zero position)
     position_offsets:
-      - 94465   # Joint 1 - shoulder_pan
-      - 122016  # Joint 2 - shoulder_lift
-      - 104800  # Joint 3 - elbow
-      - 17150   # Joint 4 - wrist_1
-      - 32100   # Joint 5 - wrist_2
-      - 0       # Joint 6 - wrist_3
+      - 94465   # Joint 1 - joint_1_2
+      - 122016  # Joint 2 - joint_2_3
+      - 104800  # Joint 3 - joint_3_4
+      - 17150   # Joint 4 - joint_4_5
+      - 32100   # Joint 5 - joint_5_6
+      - 0       # Joint 6 - joint_6_7
+      - 0       # Joint 7 - joint_7_8
     
     # Degree offsets applied after count->angle conversion
     degree_offsets:
-      - 0.0     # shoulder_pan
-      - 0.0     # shoulder_lift
-      - 0.0     # elbow
-      - 180.0     # wrist_1
-      - 180.0     # wrist_2
-      - 0.0     # wrist_3
+      - 0.0     # joint_1_2
+      - 0.0     # joint_2_3
+      - 0.0     # joint_3_4
+      - 180.0   # joint_4_5
+      - 180.0   # joint_5_6
+      - 0.0     # joint_6_7
+      - 0.0     # joint_7_8
     
     # Joint scale factors (use -1.0 to invert direction)
     joint_scale_factors:
-      - -1.0     # shoulder_pan
-      - -1.0     # shoulder_lift
-      - 1.0     # elbow
-      - -1.0     # wrist_1
-      - -1.0     # wrist_2
-      - -1.0     # wrist_3
+      - -1.0    # joint_1_2
+      - -1.0    # joint_2_3
+      - 1.0     # joint_3_4
+      - -1.0    # joint_4_5
+      - -1.0    # joint_5_6
+      - -1.0    # joint_6_7
+      - 1.0     # joint_7_8
     
     # Potentiometer calibration (raw ADC values)
     pot_idle: 846    # Value when trigger not pressed (0%)

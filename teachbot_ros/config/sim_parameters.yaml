@@ -8,20 +8,22 @@ sim_jointstate_publisher:
     teachbot_joint_topic: "/teachbot/joint_states"
 
     joint_names:
-      - "shoulder_pan_joint"
-      - "shoulder_lift_joint"
-      - "elbow_joint"
-      - "wrist_1_joint"
-      - "wrist_2_joint"
-      - "wrist_3_joint"
+      - "joint_1_2"
+      - "joint_2_3"
+      - "joint_3_4"
+      - "joint_4_5"
+      - "joint_5_6"
+      - "joint_6_7"
+      - "joint_7_8"
       
     degree_offsets:
-      - 90.0
       - 0.0
       - 0.0
       - 0.0
       - 0.0
-      - 90.0
+      - 0.0
+      - 0.0
+      - 0.0
  
 
 

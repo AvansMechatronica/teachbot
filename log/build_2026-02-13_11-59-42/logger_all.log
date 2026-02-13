@@ -1,0 +1,434 @@
+[0.096s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--symlink-install']
+[0.096s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=True, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=16, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x760965109870>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x760965275f00>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x760965275f00>>)
+[0.239s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.239s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.239s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.239s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.239s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.239s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.239s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/martijn/teachbot'
+[0.239s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.239s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.239s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.239s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.239s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.239s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.239s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.239s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.239s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extensions ['ignore', 'ignore_ament_install']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extension 'ignore'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extension 'ignore_ament_install'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extensions ['colcon_pkg']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extension 'colcon_pkg'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extensions ['colcon_meta']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extension 'colcon_meta'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extensions ['ros']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extension 'ros'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extensions ['cmake', 'python']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extension 'cmake'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extension 'python'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extensions ['python_setup_py']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation) by extension 'python_setup_py'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extensions ['ignore', 'ignore_ament_install']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extension 'ignore'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extension 'ignore_ament_install'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extensions ['colcon_pkg']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extension 'colcon_pkg'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extensions ['colcon_meta']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extension 'colcon_meta'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extensions ['ros']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extension 'ros'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extensions ['cmake', 'python']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extension 'cmake'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extension 'python'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extensions ['python_setup_py']
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/_static) by extension 'python_setup_py'
+[0.248s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extensions ['ignore', 'ignore_ament_install']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extension 'ignore'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extension 'ignore_ament_install'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extensions ['colcon_pkg']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extension 'colcon_pkg'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extensions ['colcon_meta']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extension 'colcon_meta'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extensions ['ros']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extension 'ros'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extensions ['cmake', 'python']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extension 'cmake'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extension 'python'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extensions ['python_setup_py']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/documentation) by extension 'python_setup_py'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extensions ['ignore', 'ignore_ament_install']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extension 'ignore'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extension 'ignore_ament_install'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extensions ['colcon_pkg']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extension 'colcon_pkg'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extensions ['colcon_meta']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extension 'colcon_meta'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extensions ['ros']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extension 'ros'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extensions ['cmake', 'python']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extension 'cmake'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extension 'python'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extensions ['python_setup_py']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(documentation/images) by extension 'python_setup_py'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extensions ['ignore', 'ignore_ament_install']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extension 'ignore'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extension 'ignore_ament_install'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extensions ['colcon_pkg']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extension 'colcon_pkg'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extensions ['colcon_meta']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extension 'colcon_meta'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extensions ['ros']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extension 'ros'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extensions ['cmake', 'python']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extension 'cmake'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extension 'python'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extensions ['python_setup_py']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(recordings) by extension 'python_setup_py'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_description) by extensions ['ignore', 'ignore_ament_install']
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_description) by extension 'ignore'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_description) by extension 'ignore_ament_install'
+[0.249s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_description) by extensions ['colcon_pkg']
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_description) by extension 'colcon_pkg'
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_description) by extensions ['colcon_meta']
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_description) by extension 'colcon_meta'
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_description) by extensions ['ros']
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_description) by extension 'ros'
+[0.251s] DEBUG:colcon.colcon_core.package_identification:Package 'teachbot_description' with type 'ros.ament_cmake' and name 'teachbot_description'
+[0.251s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_follower) by extensions ['ignore', 'ignore_ament_install']
+[0.251s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_follower) by extension 'ignore'
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_follower) by extension 'ignore_ament_install'
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_follower) by extensions ['colcon_pkg']
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_follower) by extension 'colcon_pkg'
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_follower) by extensions ['colcon_meta']
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_follower) by extension 'colcon_meta'
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_follower) by extensions ['ros']
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_follower) by extension 'ros'
+[0.252s] DEBUG:colcon.colcon_core.package_identification:Package 'teachbot_follower' with type 'ros.ament_python' and name 'teachbot_follower'
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_interfaces) by extensions ['ignore', 'ignore_ament_install']
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_interfaces) by extension 'ignore'
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_interfaces) by extension 'ignore_ament_install'
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_interfaces) by extensions ['colcon_pkg']
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_interfaces) by extension 'colcon_pkg'
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_interfaces) by extensions ['colcon_meta']
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_interfaces) by extension 'colcon_meta'
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_interfaces) by extensions ['ros']
+[0.252s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_interfaces) by extension 'ros'
+[0.253s] DEBUG:colcon.colcon_core.package_identification:Package 'teachbot_interfaces' with type 'ros.ament_cmake' and name 'teachbot_interfaces'
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_recorder) by extensions ['ignore', 'ignore_ament_install']
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_recorder) by extension 'ignore'
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_recorder) by extension 'ignore_ament_install'
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_recorder) by extensions ['colcon_pkg']
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_recorder) by extension 'colcon_pkg'
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_recorder) by extensions ['colcon_meta']
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_recorder) by extension 'colcon_meta'
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_recorder) by extensions ['ros']
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_recorder) by extension 'ros'
+[0.254s] DEBUG:colcon.colcon_core.package_identification:Package 'teachbot_recorder' with type 'ros.ament_python' and name 'teachbot_recorder'
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_ros) by extensions ['ignore', 'ignore_ament_install']
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_ros) by extension 'ignore'
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_ros) by extension 'ignore_ament_install'
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_ros) by extensions ['colcon_pkg']
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_ros) by extension 'colcon_pkg'
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_ros) by extensions ['colcon_meta']
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_ros) by extension 'colcon_meta'
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_ros) by extensions ['ros']
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(teachbot_ros) by extension 'ros'
+[0.254s] DEBUG:colcon.colcon_core.package_identification:Package 'teachbot_ros' with type 'ros.ament_python' and name 'teachbot_ros'
+[0.254s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.254s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.254s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.254s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.254s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.277s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.277s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.280s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 29 installed packages in /home/martijn/interbotix_ws/install
+[0.281s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 353 installed packages in /opt/ros/humble
+[0.282s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_description' build argument 'cmake_args' from command line to 'None'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_description' build argument 'cmake_target' from command line to 'None'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_description' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_description' build argument 'cmake_clean_cache' from command line to 'False'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_description' build argument 'cmake_clean_first' from command line to 'False'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_description' build argument 'cmake_force_configure' from command line to 'False'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_description' build argument 'ament_cmake_args' from command line to 'None'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_description' build argument 'catkin_cmake_args' from command line to 'None'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_description' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.318s] DEBUG:colcon.colcon_core.verb:Building package 'teachbot_description' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/martijn/teachbot/build/teachbot_description', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/martijn/teachbot/install/teachbot_description', 'merge_install': False, 'path': '/home/martijn/teachbot/teachbot_description', 'symlink_install': True, 'test_result_base': None}
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_follower' build argument 'cmake_args' from command line to 'None'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_follower' build argument 'cmake_target' from command line to 'None'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_follower' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_follower' build argument 'cmake_clean_cache' from command line to 'False'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_follower' build argument 'cmake_clean_first' from command line to 'False'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_follower' build argument 'cmake_force_configure' from command line to 'False'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_follower' build argument 'ament_cmake_args' from command line to 'None'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_follower' build argument 'catkin_cmake_args' from command line to 'None'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_follower' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.318s] DEBUG:colcon.colcon_core.verb:Building package 'teachbot_follower' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/martijn/teachbot/build/teachbot_follower', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/martijn/teachbot/install/teachbot_follower', 'merge_install': False, 'path': '/home/martijn/teachbot/teachbot_follower', 'symlink_install': True, 'test_result_base': None}
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_interfaces' build argument 'cmake_args' from command line to 'None'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_interfaces' build argument 'cmake_target' from command line to 'None'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_interfaces' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_interfaces' build argument 'cmake_clean_cache' from command line to 'False'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_interfaces' build argument 'cmake_clean_first' from command line to 'False'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_interfaces' build argument 'cmake_force_configure' from command line to 'False'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_interfaces' build argument 'ament_cmake_args' from command line to 'None'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_interfaces' build argument 'catkin_cmake_args' from command line to 'None'
+[0.318s] Level 5:colcon.colcon_core.verb:set package 'teachbot_interfaces' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.318s] DEBUG:colcon.colcon_core.verb:Building package 'teachbot_interfaces' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/martijn/teachbot/build/teachbot_interfaces', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/martijn/teachbot/install/teachbot_interfaces', 'merge_install': False, 'path': '/home/martijn/teachbot/teachbot_interfaces', 'symlink_install': True, 'test_result_base': None}
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_recorder' build argument 'cmake_args' from command line to 'None'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_recorder' build argument 'cmake_target' from command line to 'None'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_recorder' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_recorder' build argument 'cmake_clean_cache' from command line to 'False'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_recorder' build argument 'cmake_clean_first' from command line to 'False'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_recorder' build argument 'cmake_force_configure' from command line to 'False'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_recorder' build argument 'ament_cmake_args' from command line to 'None'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_recorder' build argument 'catkin_cmake_args' from command line to 'None'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_recorder' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.319s] DEBUG:colcon.colcon_core.verb:Building package 'teachbot_recorder' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/martijn/teachbot/build/teachbot_recorder', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/martijn/teachbot/install/teachbot_recorder', 'merge_install': False, 'path': '/home/martijn/teachbot/teachbot_recorder', 'symlink_install': True, 'test_result_base': None}
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_ros' build argument 'cmake_args' from command line to 'None'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_ros' build argument 'cmake_target' from command line to 'None'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_ros' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_ros' build argument 'cmake_clean_cache' from command line to 'False'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_ros' build argument 'cmake_clean_first' from command line to 'False'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_ros' build argument 'cmake_force_configure' from command line to 'False'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_ros' build argument 'ament_cmake_args' from command line to 'None'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_ros' build argument 'catkin_cmake_args' from command line to 'None'
+[0.319s] Level 5:colcon.colcon_core.verb:set package 'teachbot_ros' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.319s] DEBUG:colcon.colcon_core.verb:Building package 'teachbot_ros' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/martijn/teachbot/build/teachbot_ros', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/martijn/teachbot/install/teachbot_ros', 'merge_install': False, 'path': '/home/martijn/teachbot/teachbot_ros', 'symlink_install': True, 'test_result_base': None}
+[0.319s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.320s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.320s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/martijn/teachbot/teachbot_description' with build type 'ament_cmake'
+[0.320s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/martijn/teachbot/teachbot_description'
+[0.322s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.322s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.322s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.325s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/martijn/teachbot/teachbot_interfaces' with build type 'ament_cmake'
+[0.325s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/martijn/teachbot/teachbot_interfaces'
+[0.325s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.325s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.328s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/martijn/teachbot/teachbot_follower' with build type 'ament_python'
+[0.328s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_follower', 'ament_prefix_path')
+[0.328s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_follower/share/teachbot_follower/hook/ament_prefix_path.ps1'
+[0.329s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/install/teachbot_follower/share/teachbot_follower/hook/ament_prefix_path.dsv'
+[0.329s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_follower/share/teachbot_follower/hook/ament_prefix_path.sh'
+[0.330s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.330s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.332s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/martijn/teachbot/teachbot_recorder' with build type 'ament_python'
+[0.332s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_recorder', 'ament_prefix_path')
+[0.332s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/hook/ament_prefix_path.ps1'
+[0.333s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/hook/ament_prefix_path.dsv'
+[0.333s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/hook/ament_prefix_path.sh'
+[0.333s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.333s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.337s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/martijn/teachbot/build/teachbot_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/martijn/interbotix_ws/install/interbotix_xs_modules:/home/martijn/interbotix_ws/install/interbotix_common_modules:/opt/ros/humble /usr/bin/cmake /home/martijn/teachbot/teachbot_description -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/martijn/teachbot/install/teachbot_description
+[0.340s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/martijn/teachbot/build/teachbot_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/martijn/interbotix_ws/install/interbotix_xs_modules:/home/martijn/interbotix_ws/install/interbotix_common_modules:/opt/ros/humble /usr/bin/cmake /home/martijn/teachbot/teachbot_interfaces -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/martijn/teachbot/install/teachbot_interfaces
+[0.473s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/martijn/teachbot/teachbot_follower'
+[0.474s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.474s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.610s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/martijn/teachbot/teachbot_recorder'
+[0.610s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.610s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.856s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/martijn/teachbot/build/teachbot_recorder': PYTHONPATH=/home/martijn/teachbot/build/teachbot_recorder/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/martijn/teachbot/install/teachbot_recorder/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/martijn/teachbot/build/teachbot_recorder/build --no-deps symlink_data
+[0.857s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/martijn/teachbot/build/teachbot_follower': PYTHONPATH=/home/martijn/teachbot/build/teachbot_follower/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/martijn/teachbot/install/teachbot_follower/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/martijn/teachbot/build/teachbot_follower/build --no-deps symlink_data
+[0.900s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/martijn/teachbot/build/teachbot_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/martijn/interbotix_ws/install/interbotix_xs_modules:/home/martijn/interbotix_ws/install/interbotix_common_modules:/opt/ros/humble /usr/bin/cmake /home/martijn/teachbot/teachbot_description -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/martijn/teachbot/install/teachbot_description
+[0.902s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/martijn/teachbot/build/teachbot_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/martijn/interbotix_ws/install/interbotix_xs_modules:/home/martijn/interbotix_ws/install/interbotix_common_modules:/opt/ros/humble /usr/bin/cmake --build /home/martijn/teachbot/build/teachbot_description -- -j16 -l16
+[0.928s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/martijn/teachbot/build/teachbot_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/martijn/interbotix_ws/install/interbotix_xs_modules:/home/martijn/interbotix_ws/install/interbotix_common_modules:/opt/ros/humble /usr/bin/cmake --build /home/martijn/teachbot/build/teachbot_description -- -j16 -l16
+[0.934s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/martijn/teachbot/build/teachbot_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/martijn/interbotix_ws/install/interbotix_xs_modules:/home/martijn/interbotix_ws/install/interbotix_common_modules:/opt/ros/humble /usr/bin/cmake --install /home/martijn/teachbot/build/teachbot_description
+[1.066s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_follower', 'pythonpath_develop')
+[1.067s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/build/teachbot_follower/share/teachbot_follower/hook/pythonpath_develop.ps1'
+[1.067s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/martijn/teachbot/build/teachbot_follower' returned '0': PYTHONPATH=/home/martijn/teachbot/build/teachbot_follower/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/martijn/teachbot/install/teachbot_follower/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/martijn/teachbot/build/teachbot_follower/build --no-deps symlink_data
+[1.067s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/build/teachbot_follower/share/teachbot_follower/hook/pythonpath_develop.dsv'
+[1.067s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/build/teachbot_follower/share/teachbot_follower/hook/pythonpath_develop.sh'
+[1.070s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_follower' for CMake module files
+[1.070s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_follower' for CMake config files
+[1.070s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_follower/lib'
+[1.070s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_follower/bin'
+[1.070s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_follower/lib/pkgconfig/teachbot_follower.pc'
+[1.071s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_follower/lib/python3.10/site-packages'
+[1.071s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_follower', 'pythonpath')
+[1.071s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_follower/share/teachbot_follower/hook/pythonpath.ps1'
+[1.071s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/install/teachbot_follower/share/teachbot_follower/hook/pythonpath.dsv'
+[1.071s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_follower/share/teachbot_follower/hook/pythonpath.sh'
+[1.071s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_follower/bin'
+[1.071s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(teachbot_follower)
+[1.071s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_follower/share/teachbot_follower/package.ps1'
+[1.072s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/martijn/teachbot/install/teachbot_follower/share/teachbot_follower/package.dsv'
+[1.072s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_follower/share/teachbot_follower/package.sh'
+[1.073s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_follower/share/teachbot_follower/package.bash'
+[1.073s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_follower/share/teachbot_follower/package.zsh'
+[1.074s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/martijn/teachbot/install/teachbot_follower/share/colcon-core/packages/teachbot_follower)
+[1.074s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_recorder', 'pythonpath_develop')
+[1.074s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/martijn/teachbot/build/teachbot_recorder' returned '0': PYTHONPATH=/home/martijn/teachbot/build/teachbot_recorder/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/martijn/teachbot/install/teachbot_recorder/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/martijn/teachbot/build/teachbot_recorder/build --no-deps symlink_data
+[1.075s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/build/teachbot_recorder/share/teachbot_recorder/hook/pythonpath_develop.ps1'
+[1.075s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/build/teachbot_recorder/share/teachbot_recorder/hook/pythonpath_develop.dsv'
+[1.075s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/build/teachbot_recorder/share/teachbot_recorder/hook/pythonpath_develop.sh'
+[1.075s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_recorder' for CMake module files
+[1.076s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_recorder' for CMake config files
+[1.076s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_recorder/lib'
+[1.076s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_recorder/bin'
+[1.076s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_recorder/lib/pkgconfig/teachbot_recorder.pc'
+[1.076s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_recorder/lib/python3.10/site-packages'
+[1.076s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_recorder', 'pythonpath')
+[1.076s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/hook/pythonpath.ps1'
+[1.076s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/hook/pythonpath.dsv'
+[1.076s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/hook/pythonpath.sh'
+[1.077s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_recorder/bin'
+[1.077s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(teachbot_recorder)
+[1.077s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/package.ps1'
+[1.077s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/package.dsv'
+[1.077s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/package.sh'
+[1.077s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/package.bash'
+[1.078s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/package.zsh'
+[1.078s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/martijn/teachbot/install/teachbot_recorder/share/colcon-core/packages/teachbot_recorder)
+[1.085s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(teachbot_description)
+[1.085s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/martijn/teachbot/build/teachbot_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/martijn/interbotix_ws/install/interbotix_xs_modules:/home/martijn/interbotix_ws/install/interbotix_common_modules:/opt/ros/humble /usr/bin/cmake --install /home/martijn/teachbot/build/teachbot_description
+[1.085s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_description' for CMake module files
+[1.086s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_description' for CMake config files
+[1.086s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_description', 'cmake_prefix_path')
+[1.086s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/hook/cmake_prefix_path.ps1'
+[1.086s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/hook/cmake_prefix_path.dsv'
+[1.087s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/hook/cmake_prefix_path.sh'
+[1.087s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_description/bin'
+[1.087s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_description/lib/pkgconfig/teachbot_description.pc'
+[1.087s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_description/lib/python3.10/site-packages'
+[1.087s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_description/bin'
+[1.087s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/package.ps1'
+[1.088s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/package.dsv'
+[1.088s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/package.sh'
+[1.088s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/package.bash'
+[1.088s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/package.zsh'
+[1.088s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/martijn/teachbot/install/teachbot_description/share/colcon-core/packages/teachbot_description)
+[1.088s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(teachbot_description)
+[1.088s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_description' for CMake module files
+[1.089s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_description' for CMake config files
+[1.089s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_description', 'cmake_prefix_path')
+[1.089s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/hook/cmake_prefix_path.ps1'
+[1.089s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/hook/cmake_prefix_path.dsv'
+[1.089s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/hook/cmake_prefix_path.sh'
+[1.089s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_description/bin'
+[1.089s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_description/lib/pkgconfig/teachbot_description.pc'
+[1.090s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_description/lib/python3.10/site-packages'
+[1.090s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_description/bin'
+[1.090s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/package.ps1'
+[1.090s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/package.dsv'
+[1.090s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/package.sh'
+[1.090s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/package.bash'
+[1.091s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_description/share/teachbot_description/package.zsh'
+[1.091s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/martijn/teachbot/install/teachbot_description/share/colcon-core/packages/teachbot_description)
+[1.606s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/martijn/teachbot/build/teachbot_interfaces' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/martijn/interbotix_ws/install/interbotix_xs_modules:/home/martijn/interbotix_ws/install/interbotix_common_modules:/opt/ros/humble /usr/bin/cmake /home/martijn/teachbot/teachbot_interfaces -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/martijn/teachbot/install/teachbot_interfaces
+[1.607s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/martijn/teachbot/build/teachbot_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/martijn/interbotix_ws/install/interbotix_xs_modules:/home/martijn/interbotix_ws/install/interbotix_common_modules:/opt/ros/humble /usr/bin/cmake --build /home/martijn/teachbot/build/teachbot_interfaces -- -j16 -l16
+[3.014s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/martijn/teachbot/build/teachbot_interfaces' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/martijn/interbotix_ws/install/interbotix_xs_modules:/home/martijn/interbotix_ws/install/interbotix_common_modules:/opt/ros/humble /usr/bin/cmake --build /home/martijn/teachbot/build/teachbot_interfaces -- -j16 -l16
+[3.016s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/martijn/teachbot/build/teachbot_interfaces': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/martijn/interbotix_ws/install/interbotix_xs_modules:/home/martijn/interbotix_ws/install/interbotix_common_modules:/opt/ros/humble /usr/bin/cmake --install /home/martijn/teachbot/build/teachbot_interfaces
+[3.476s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(teachbot_interfaces)
+[3.477s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces' for CMake module files
+[3.477s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/martijn/teachbot/build/teachbot_interfaces' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/martijn/interbotix_ws/install/interbotix_xs_modules:/home/martijn/interbotix_ws/install/interbotix_common_modules:/opt/ros/humble /usr/bin/cmake --install /home/martijn/teachbot/build/teachbot_interfaces
+[3.477s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces' for CMake config files
+[3.477s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_interfaces', 'cmake_prefix_path')
+[3.477s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/hook/cmake_prefix_path.ps1'
+[3.478s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/hook/cmake_prefix_path.dsv'
+[3.478s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/hook/cmake_prefix_path.sh'
+[3.478s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces/lib'
+[3.478s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_interfaces', 'ld_library_path_lib')
+[3.478s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/hook/ld_library_path_lib.ps1'
+[3.478s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/hook/ld_library_path_lib.dsv'
+[3.478s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/hook/ld_library_path_lib.sh'
+[3.479s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces/bin'
+[3.479s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces/lib/pkgconfig/teachbot_interfaces.pc'
+[3.479s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces/lib/python3.10/site-packages'
+[3.479s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces/bin'
+[3.479s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/package.ps1'
+[3.479s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/package.dsv'
+[3.479s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/package.sh'
+[3.480s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/package.bash'
+[3.480s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/package.zsh'
+[3.480s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/martijn/teachbot/install/teachbot_interfaces/share/colcon-core/packages/teachbot_interfaces)
+[3.480s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(teachbot_interfaces)
+[3.480s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces' for CMake module files
+[3.480s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces' for CMake config files
+[3.481s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_interfaces', 'cmake_prefix_path')
+[3.481s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/hook/cmake_prefix_path.ps1'
+[3.481s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/hook/cmake_prefix_path.dsv'
+[3.481s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/hook/cmake_prefix_path.sh'
+[3.481s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces/lib'
+[3.481s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_interfaces', 'ld_library_path_lib')
+[3.481s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/hook/ld_library_path_lib.ps1'
+[3.482s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/hook/ld_library_path_lib.dsv'
+[3.482s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/hook/ld_library_path_lib.sh'
+[3.482s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces/bin'
+[3.482s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces/lib/pkgconfig/teachbot_interfaces.pc'
+[3.482s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces/lib/python3.10/site-packages'
+[3.482s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_interfaces/bin'
+[3.482s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/package.ps1'
+[3.482s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/package.dsv'
+[3.483s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/package.sh'
+[3.483s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/package.bash'
+[3.483s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_interfaces/share/teachbot_interfaces/package.zsh'
+[3.483s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/martijn/teachbot/install/teachbot_interfaces/share/colcon-core/packages/teachbot_interfaces)
+[3.483s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/martijn/teachbot/teachbot_ros' with build type 'ament_python'
+[3.483s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_ros', 'ament_prefix_path')
+[3.483s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/hook/ament_prefix_path.ps1'
+[3.484s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/hook/ament_prefix_path.dsv'
+[3.484s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/hook/ament_prefix_path.sh'
+[3.484s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[3.484s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[3.683s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/martijn/teachbot/teachbot_ros'
+[3.683s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[3.683s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[3.855s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/martijn/teachbot/build/teachbot_ros': AMENT_PREFIX_PATH=/home/martijn/teachbot/install/teachbot_interfaces:/home/martijn/teachbot/install/teachbot_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/martijn/teachbot/install/teachbot_interfaces:/home/martijn/teachbot/install/teachbot_description:${CMAKE_PREFIX_PATH} LD_LIBRARY_PATH=/home/martijn/teachbot/install/teachbot_interfaces/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/martijn/teachbot/build/teachbot_ros/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/martijn/teachbot/install/teachbot_ros/lib/python3.10/site-packages:/home/martijn/teachbot/install/teachbot_interfaces/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/martijn/teachbot/build/teachbot_ros/build --no-deps symlink_data
+[4.053s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_ros', 'pythonpath_develop')
+[4.054s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/build/teachbot_ros/share/teachbot_ros/hook/pythonpath_develop.ps1'
+[4.054s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/martijn/teachbot/build/teachbot_ros' returned '0': AMENT_PREFIX_PATH=/home/martijn/teachbot/install/teachbot_interfaces:/home/martijn/teachbot/install/teachbot_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/martijn/teachbot/install/teachbot_interfaces:/home/martijn/teachbot/install/teachbot_description:${CMAKE_PREFIX_PATH} LD_LIBRARY_PATH=/home/martijn/teachbot/install/teachbot_interfaces/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/martijn/teachbot/build/teachbot_ros/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/martijn/teachbot/install/teachbot_ros/lib/python3.10/site-packages:/home/martijn/teachbot/install/teachbot_interfaces/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/martijn/teachbot/build/teachbot_ros/build --no-deps symlink_data
+[4.054s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/build/teachbot_ros/share/teachbot_ros/hook/pythonpath_develop.dsv'
+[4.055s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/build/teachbot_ros/share/teachbot_ros/hook/pythonpath_develop.sh'
+[4.055s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_ros' for CMake module files
+[4.055s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_ros' for CMake config files
+[4.055s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_ros/lib'
+[4.056s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_ros/bin'
+[4.056s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_ros/lib/pkgconfig/teachbot_ros.pc'
+[4.056s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_ros/lib/python3.10/site-packages'
+[4.056s] Level 1:colcon.colcon_core.shell:create_environment_hook('teachbot_ros', 'pythonpath')
+[4.056s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/hook/pythonpath.ps1'
+[4.056s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/hook/pythonpath.dsv'
+[4.056s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/hook/pythonpath.sh'
+[4.056s] Level 1:colcon.colcon_core.environment:checking '/home/martijn/teachbot/install/teachbot_ros/bin'
+[4.056s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(teachbot_ros)
+[4.057s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/package.ps1'
+[4.057s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/package.dsv'
+[4.057s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/package.sh'
+[4.057s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/package.bash'
+[4.057s] INFO:colcon.colcon_core.shell:Creating package script '/home/martijn/teachbot/install/teachbot_ros/share/teachbot_ros/package.zsh'
+[4.057s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/martijn/teachbot/install/teachbot_ros/share/colcon-core/packages/teachbot_ros)
+[4.058s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[4.058s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[4.058s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[4.058s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[4.093s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[4.093s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[4.093s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[4.093s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[4.102s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[4.103s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/martijn/teachbot/install/local_setup.ps1'
+[4.103s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/martijn/teachbot/install/_local_setup_util_ps1.py'
+[4.104s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/martijn/teachbot/install/setup.ps1'
+[4.105s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/martijn/teachbot/install/local_setup.sh'
+[4.106s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/martijn/teachbot/install/_local_setup_util_sh.py'
+[4.106s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/martijn/teachbot/install/setup.sh'
+[4.107s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/martijn/teachbot/install/local_setup.bash'
+[4.107s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/martijn/teachbot/install/setup.bash'
+[4.108s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/martijn/teachbot/install/local_setup.zsh'
+[4.109s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/martijn/teachbot/install/setup.zsh'

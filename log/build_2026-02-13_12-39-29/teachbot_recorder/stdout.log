@@ -1,0 +1,15 @@
+running develop
+running egg_info
+writing teachbot_recorder.egg-info/PKG-INFO
+writing dependency_links to teachbot_recorder.egg-info/dependency_links.txt
+writing entry points to teachbot_recorder.egg-info/entry_points.txt
+writing requirements to teachbot_recorder.egg-info/requires.txt
+writing top-level names to teachbot_recorder.egg-info/top_level.txt
+reading manifest file 'teachbot_recorder.egg-info/SOURCES.txt'
+writing manifest file 'teachbot_recorder.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/martijn/teachbot/install/teachbot_recorder/lib/python3.10/site-packages/teachbot-recorder.egg-link (link to .)
+Installing recorder script to /home/martijn/teachbot/install/teachbot_recorder/lib/teachbot_recorder
+
+Installed /home/martijn/teachbot/build/teachbot_recorder
+running symlink_data

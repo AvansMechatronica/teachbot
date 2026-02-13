@@ -1,0 +1,17 @@
+[0.476s] Invoking command in '/home/martijn/teachbot/build/teachbot_recorder': PYTHONPATH=/home/martijn/teachbot/build/teachbot_recorder/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/martijn/teachbot/install/teachbot_recorder/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/martijn/teachbot/build/teachbot_recorder/build --no-deps symlink_data
+[0.599s] running develop
+[0.674s] running egg_info
+[0.674s] writing teachbot_recorder.egg-info/PKG-INFO
+[0.674s] writing dependency_links to teachbot_recorder.egg-info/dependency_links.txt
+[0.674s] writing entry points to teachbot_recorder.egg-info/entry_points.txt
+[0.674s] writing requirements to teachbot_recorder.egg-info/requires.txt
+[0.674s] writing top-level names to teachbot_recorder.egg-info/top_level.txt
+[0.675s] reading manifest file 'teachbot_recorder.egg-info/SOURCES.txt'
+[0.675s] writing manifest file 'teachbot_recorder.egg-info/SOURCES.txt'
+[0.676s] running build_ext
+[0.676s] Creating /home/martijn/teachbot/install/teachbot_recorder/lib/python3.10/site-packages/teachbot-recorder.egg-link (link to .)
+[0.677s] Installing recorder script to /home/martijn/teachbot/install/teachbot_recorder/lib/teachbot_recorder
+[0.677s] 
+[0.677s] Installed /home/martijn/teachbot/build/teachbot_recorder
+[0.677s] running symlink_data
+[0.695s] Invoked command in '/home/martijn/teachbot/build/teachbot_recorder' returned '0': PYTHONPATH=/home/martijn/teachbot/build/teachbot_recorder/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/martijn/teachbot/install/teachbot_recorder/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/martijn/teachbot/build/teachbot_recorder/build --no-deps symlink_data

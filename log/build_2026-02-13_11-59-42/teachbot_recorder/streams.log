@@ -1,0 +1,28 @@
+[0.524s] Invoking command in '/home/martijn/teachbot/build/teachbot_recorder': PYTHONPATH=/home/martijn/teachbot/build/teachbot_recorder/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/martijn/teachbot/install/teachbot_recorder/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/martijn/teachbot/build/teachbot_recorder/build --no-deps symlink_data
+[0.644s] running develop
+[0.715s] running egg_info
+[0.715s] creating teachbot_recorder.egg-info
+[0.715s] writing teachbot_recorder.egg-info/PKG-INFO
+[0.716s] writing dependency_links to teachbot_recorder.egg-info/dependency_links.txt
+[0.716s] writing entry points to teachbot_recorder.egg-info/entry_points.txt
+[0.716s] writing requirements to teachbot_recorder.egg-info/requires.txt
+[0.716s] writing top-level names to teachbot_recorder.egg-info/top_level.txt
+[0.716s] writing manifest file 'teachbot_recorder.egg-info/SOURCES.txt'
+[0.717s] reading manifest file 'teachbot_recorder.egg-info/SOURCES.txt'
+[0.717s] writing manifest file 'teachbot_recorder.egg-info/SOURCES.txt'
+[0.718s] running build_ext
+[0.718s] Creating /home/martijn/teachbot/install/teachbot_recorder/lib/python3.10/site-packages/teachbot-recorder.egg-link (link to .)
+[0.718s] Installing recorder script to /home/martijn/teachbot/install/teachbot_recorder/lib/teachbot_recorder
+[0.718s] 
+[0.718s] Installed /home/martijn/teachbot/build/teachbot_recorder
+[0.718s] running symlink_data
+[0.718s] creating /home/martijn/teachbot/install/teachbot_recorder/share/ament_index
+[0.718s] creating /home/martijn/teachbot/install/teachbot_recorder/share/ament_index/resource_index
+[0.718s] creating /home/martijn/teachbot/install/teachbot_recorder/share/ament_index/resource_index/packages
+[0.718s] symbolically linking /home/martijn/teachbot/build/teachbot_recorder/resource/teachbot_recorder -> /home/martijn/teachbot/install/teachbot_recorder/share/ament_index/resource_index/packages
+[0.718s] symbolically linking /home/martijn/teachbot/build/teachbot_recorder/package.xml -> /home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder
+[0.718s] creating /home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/launch
+[0.719s] symbolically linking /home/martijn/teachbot/build/teachbot_recorder/launch/recorder.launch.py -> /home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/launch/
+[0.719s] creating /home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/config
+[0.719s] symbolically linking /home/martijn/teachbot/build/teachbot_recorder/config/ur.yaml -> /home/martijn/teachbot/install/teachbot_recorder/share/teachbot_recorder/config/
+[0.742s] Invoked command in '/home/martijn/teachbot/build/teachbot_recorder' returned '0': PYTHONPATH=/home/martijn/teachbot/build/teachbot_recorder/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/martijn/teachbot/install/teachbot_recorder/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/martijn/teachbot/build/teachbot_recorder/build --no-deps symlink_data
