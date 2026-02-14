@@ -644,7 +644,7 @@ class RecordingGUI:
         self.root = root
         self.node = ros_node
         self.root.title('Teachbot Recorder')
-        self.root.geometry('800x1000')
+        self.root.geometry('750x980')
 
         # Threading
         self.ros_thread = None
@@ -655,7 +655,8 @@ class RecordingGUI:
         
         # Create log window
         self.log_window = LogWindow(self.root, self.logger)
-        self.log_window.show_window()
+        # Start with log window hidden
+        self.log_window.hide_window()
 
         # Create GUI
         self.create_widgets()
@@ -946,6 +947,10 @@ class RecordingGUI:
             messagebox.showwarning('Warning', 'No recording loaded')
             return
         self.logger.info('Moving to first point')
+        threading.Thread(target=self._go_to_first_point_thread, daemon=True).start()
+
+    def _go_to_first_point_thread(self):
+        """Background worker for first point movement"""
         if self.node.go_to_first_point():
             self.logger.info(f'First point goal sent (point 0 of {len(self.node.recorded_data)})')
         else:
@@ -957,6 +962,10 @@ class RecordingGUI:
             messagebox.showwarning('Warning', 'No recording loaded')
             return
         self.logger.info('Moving to previous point')
+        threading.Thread(target=self._go_to_previous_point_thread, daemon=True).start()
+
+    def _go_to_previous_point_thread(self):
+        """Background worker for previous point movement"""
         if self.node.go_to_previous_point():
             self.logger.info(f'Previous point goal sent (point {self.node.current_point_index} of {len(self.node.recorded_data)})')
         else:
@@ -968,6 +977,10 @@ class RecordingGUI:
             messagebox.showwarning('Warning', 'No recording loaded')
             return
         self.logger.info('Moving to next point')
+        threading.Thread(target=self._go_to_next_point_thread, daemon=True).start()
+
+    def _go_to_next_point_thread(self):
+        """Background worker for next point movement"""
         if self.node.go_to_next_point():
             self.logger.info(f'Next point goal sent (point {self.node.current_point_index} of {len(self.node.recorded_data)})')
         else:
@@ -978,6 +991,10 @@ class RecordingGUI:
         if not self.node.recorded_data:
             messagebox.showwarning('Warning', 'No recording loaded')
             return
+        threading.Thread(target=self._jump_forward_thread, args=(num_points,), daemon=True).start()
+
+    def _jump_forward_thread(self, num_points):
+        """Background worker for jump forward"""
         if self.node.go_forward_by_points(num_points):
             self.logger.info(f'Jumped forward {num_points} points (now at point {self.node.current_point_index} of {len(self.node.recorded_data)})')
         else:
@@ -1004,6 +1021,10 @@ class RecordingGUI:
         if not self.node.recorded_data:
             messagebox.showwarning('Warning', 'No recording loaded')
             return
+        threading.Thread(target=self._jump_backward_thread, args=(num_points,), daemon=True).start()
+
+    def _jump_backward_thread(self, num_points):
+        """Background worker for jump backward"""
         if self.node.go_backward_by_points(num_points):
             self.logger.info(f'Jumped backward {num_points} points (now at point {self.node.current_point_index} of {len(self.node.recorded_data)})')
         else:

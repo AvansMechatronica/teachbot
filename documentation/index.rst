@@ -19,6 +19,7 @@ Welcome to the TOS Teachbot documentation
    documentation/installation.md
    documentation/overview.md
    documentation/follower.md
+   documentation/recorder.md
 
 
 

@@ -1,4 +1,4 @@
-# TeachBot Follower
+# Follower
 
 This package contains ROS2 nodes that allow a target robot to follow joint positions published by a teachbot device.
 
