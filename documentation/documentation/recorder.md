@@ -23,7 +23,7 @@ The default configuration is for Universal Robots in [config/ur.yaml](config/ur.
 To use a different robot, pass an absolute path to the config file (the launch system does not expand `~`):
 
 ```bash
-ros2 launch teachbot_recorder recorder.launch.py config:=/home/gerard/teachbot_ws/src/teachbot_ros/teachbot_recorder/config/ufLite6.yaml
+ros2 launch teachbot_recorder recorder.launch.py config:=/home/<user>/teachbot_ws/src/teachbot_ros/teachbot_recorder/config/ufLite6.yaml
 ```
 
 ## Notes
