@@ -146,6 +146,7 @@ class RecordingNode(Node):
         self.is_recording = False
         self.is_playing = False
         self.is_paused = False
+        self.is_moving = False  # Track if robot is currently moving
         self.recording_time = 0.0
         self.recording_start_time = None  # Track actual time when recording started
         self.playback_start_time = None  # Track when playback started for timeout
@@ -384,6 +385,7 @@ class RecordingNode(Node):
 
         self.is_playing = True
         self.is_paused = False
+        self.is_moving = True
         self.playback_start_time = time.time()  # Track when playback started
 
         # Execute each datapoint individually
@@ -400,6 +402,7 @@ class RecordingNode(Node):
             self.get_logger().error(f'Action server not reachable: {action_server}')
             self.get_logger().info('Available action servers can be listed with: ros2 action list')
             self.is_playing = False
+            self.is_moving = False
             return
 
         last_time = None
@@ -412,6 +415,36 @@ class RecordingNode(Node):
 
             # Update current point index for GUI display
             self.current_point_index = i
+
+            # Update pistol state for GUI display and publish if available
+            if 'pistol_state' in data_point and data_point['pistol_state']:
+                self.pistol_state = data_point['pistol_state'].copy()
+                # Publish pistol state - use very defensive type handling
+                try:
+                    ps = data_point['pistol_state']
+                    pistol_msg = TeachbotPistolState()
+                    
+                    # Ensure values are proper Python types (not numpy, not string, etc.)
+                    raw_pot_raw = ps.get('pot_raw', 0)
+                    raw_pot_percent = ps.get('pot_percent', 0.0)
+                    raw_btn1 = ps.get('btn1', False)
+                    raw_btn2 = ps.get('btn2', False)
+                    
+                    # Convert to native Python types, being very explicit
+                    pistol_msg.pot_raw = int(raw_pot_raw) if raw_pot_raw is not None else 0
+                    pistol_msg.pot_percent = int(raw_pot_percent) if raw_pot_percent is not None else 0
+                    pistol_msg.btn1 = bool(raw_btn1) if raw_btn1 is not None else False
+                    pistol_msg.btn2 = bool(raw_btn2) if raw_btn2 is not None else False
+                    
+                    # Verify types before publishing
+                    assert isinstance(pistol_msg.pot_raw, int), f"pot_raw is {type(pistol_msg.pot_raw)}, not int"
+                    assert isinstance(pistol_msg.pot_percent, int), f"pot_percent is {type(pistol_msg.pot_percent)}, not int"
+                    assert isinstance(pistol_msg.btn1, bool), f"btn1 is {type(pistol_msg.btn1)}, not bool"
+                    assert isinstance(pistol_msg.btn2, bool), f"btn2 is {type(pistol_msg.btn2)}, not bool"
+                    
+                    self.pistol_pub.publish(pistol_msg)
+                except Exception as e:
+                    self.get_logger().error(f'Failed to publish pistol state at point {i}: {e}')
 
             # Compute per-point duration
             if last_time is None:
@@ -433,9 +466,15 @@ class RecordingNode(Node):
 
             if not self._send_single_point_goal(trajectory, i):
                 self.is_playing = False
+                self.is_moving = False
+                # Reset pistol state to zero on failure
+                self._reset_pistol_state()
                 return
 
         self.is_playing = False
+        self.is_moving = False
+        # Reset pistol state to zero at end of playback
+        self._reset_pistol_state()
 
     def _send_single_point_goal(self, trajectory, index):
         """Send a single-point trajectory goal and wait for result"""
@@ -483,6 +522,23 @@ class RecordingNode(Node):
 
         return True
 
+    def _reset_pistol_state(self):
+        """Reset pistol state to zero/false"""
+        pistol_msg = TeachbotPistolState()
+        pistol_msg.pot_raw = 0
+        pistol_msg.pot_percent = 0
+        pistol_msg.btn1 = False
+        pistol_msg.btn2 = False
+        self.pistol_pub.publish(pistol_msg)
+        # Update internal state for GUI display
+        self.pistol_state = {
+            'pot_raw': 0,
+            'pot_percent': 0,
+            'btn1': False,
+            'btn2': False
+        }
+        self.get_logger().info('Pistol state reset to zero')
+
     def pause_playback(self):
         """Pause playback"""
         self.is_paused = True
@@ -497,6 +553,8 @@ class RecordingNode(Node):
         """Stop playback"""
         self.is_playing = False
         self.is_paused = False
+        self.is_moving = False
+        self._reset_pistol_state()
         self.get_logger().info('Playback stopped')
 
 
@@ -554,8 +612,11 @@ class RecordingNode(Node):
 
         self.get_logger().info(f'Moving to point {index}: {point_data["positions"]}')
         
-        # Use shared _send_single_point_goal function
-        return self._send_single_point_goal(trajectory, index)
+        # Set moving flag and use shared _send_single_point_goal function
+        self.is_moving = True
+        result = self._send_single_point_goal(trajectory, index)
+        self.is_moving = False
+        return result
 
     def go_forward_by_points(self, num_points):
         """Move robot forward by specified number of points"""
@@ -574,135 +635,6 @@ class RecordingNode(Node):
         new_index = max(self.current_point_index - num_points, 0)
         self.current_point_index = new_index
         return self.go_to_point(new_index)
-
-    def build_trajectory(self):
-        """Build JointTrajectory message from recorded data"""
-        trajectory = JointTrajectory()
-        trajectory.joint_names = self.robot_joint_names
-        
-        if not self.recorded_data:
-            return trajectory
-
-        # Calculate time scaling
-        max_time = self.recorded_data[-1]['time'] if self.recorded_data else 1.0
-        time_scale = self.trajectory_duration / max(max_time, 0.1)
-        self.get_logger().info(f'Time scaling: recorded duration={max_time:.2f}s, trajectory_duration={self.trajectory_duration}s, time_scale={time_scale:.3f}')
-
-        last_time = -1.0  # Track last time to ensure strictly increasing
-        min_time_increment = 0.001  # Minimum 1ms between points
-
-        for i, data_point in enumerate(self.recorded_data):
-            point = JointTrajectoryPoint()
-            point.positions = data_point['positions']
-            # Scale velocities proportionally with time compression
-            point.velocities = [v * time_scale for v in data_point['velocities']]
-            point.effort = []  # Don't include effort - controller uses position/velocity interface
-            
-            # Calculate scaled time
-            scaled_time = data_point['time'] * time_scale
-            
-            # Ensure strictly increasing time
-            if scaled_time <= last_time:
-                scaled_time = last_time + min_time_increment
-                self.get_logger().debug(f'Point {i}: adjusted time from {data_point["time"] * time_scale:.6f} to {scaled_time:.6f} to maintain strict ordering')
-            
-            point.time_from_start.sec = int(scaled_time)
-            point.time_from_start.nanosec = int((scaled_time % 1.0) * 1e9)
-            
-            # Validate point data
-            if any(float('nan') if isinstance(p, float) and p != p else False for p in point.positions):
-                self.get_logger().error(f'Point {i} contains NaN in positions: {point.positions}')
-                continue
-            if any(float('inf') if isinstance(p, float) and abs(p) == float('inf') else False for p in point.positions):
-                self.get_logger().error(f'Point {i} contains inf in positions: {point.positions}')
-                continue
-                
-            trajectory.points.append(point)
-            last_time = scaled_time
-        
-        # Ensure last point has zero velocities (safety requirement)
-        if trajectory.points:
-            last_point = trajectory.points[-1]
-            last_point.velocities = [0.0] * len(self.robot_joint_names)
-            self.get_logger().info('Set final trajectory point velocities to zero')
-        
-        # Log trajectory info
-        self.get_logger().info(f'Built trajectory: {len(trajectory.points)} valid points, joint_names={trajectory.joint_names}')
-        if trajectory.points:
-            self.get_logger().debug(f'First point: pos={trajectory.points[0].positions}, vel={trajectory.points[0].velocities}, time={trajectory.points[0].time_from_start}')
-            self.get_logger().debug(f'Last point: pos={trajectory.points[-1].positions}, vel={trajectory.points[-1].velocities}, time={trajectory.points[-1].time_from_start}')
-
-        return trajectory
-
-    def send_trajectory_goal(self, trajectory):
-        """Send trajectory goal to action server"""
-        # Log action server name
-        action_server = f'{self.controller_name_sim if self.use_sim else self.controller_name}/follow_joint_trajectory'
-        self.get_logger().info(f'Action server: {action_server}')
-        self.get_logger().info(f'Sim mode: {self.use_sim}')
-        self.get_logger().info(f'Trajectory has {len(trajectory.points)} points')
-        
-        if not self.action_client.wait_for_server(timeout_sec=5.0):
-            self.get_logger().error(f'Action server not available: {action_server}')
-            self.is_playing = False
-            return
-
-        goal = FollowJointTrajectory.Goal()
-        goal.trajectory = trajectory
-        
-        # Add generous tolerances - allows robot to start from different positions
-        # State tolerance (path tolerance) must be large to allow motion from current position to trajectory start
-        goal.path_tolerance = [
-            JointTolerance(name=joint, position=3.0, velocity=10.0)
-            for joint in self.robot_joint_names
-        ]
-        # Goal tolerance - tighter tolerance at trajectory end
-        goal.goal_tolerance = [
-            JointTolerance(name=joint, position=0.1, velocity=0.5, time_from_start=rclpy.time.Duration(seconds=2))
-            for joint in self.robot_joint_names
-        ]
-
-        self.get_logger().info(f'Sending trajectory with {len(trajectory.points)} points to action server')
-        self.get_logger().debug(f'Joint names in trajectory: {trajectory.joint_names}')
-        self.get_logger().debug(f'Expected joint names: {self.robot_joint_names}')
-        self.get_logger().info('Calling send_goal_async...')
-        future = self.action_client.send_goal_async(goal)
-        self.get_logger().info(f'Goal future returned: {future}')
-        future.add_done_callback(self.goal_response_callback)
-        self.get_logger().info('Callback added to future')
-
-    def goal_response_callback(self, future):
-        """Handle action goal response"""
-        try:
-            self.get_logger().info('goal_response_callback invoked')
-            goal_handle = future.result()
-            self.get_logger().info(f'Goal handle received: {goal_handle}')
-            if not goal_handle.accepted:
-                self.get_logger().error('Goal rejected by action server')
-                self.is_playing = False
-                return
-
-            self.get_logger().info('Goal accepted by action server')
-            self.get_logger().info('Requesting result async...')
-            goal_handle.get_result_async().add_done_callback(self.get_result_callback)
-            self.get_logger().info('Result callback registered')
-        except Exception as e:
-            self.get_logger().error(f'Goal response error: {e}')
-            import traceback
-            self.get_logger().error(traceback.format_exc())
-            self.is_playing = False
-
-    def get_result_callback(self, future):
-        """Handle action result"""
-        try:
-            result = future.result()
-            self.get_logger().info('Playback completed successfully')
-            self.is_playing = False
-        except Exception as e:
-            self.get_logger().error(f'Playback result callback error: {e}')
-            self.is_playing = False
-            # Force stop playback in case callback failed
-            self.stop_playback()
 
 
 class RecordingGUI:
@@ -858,6 +790,12 @@ class RecordingGUI:
         ttk.Label(status_frame, text='Pistol State:').pack(anchor=tk.W, pady=(10, 0))
         self.pistol_state_label = ttk.Label(status_frame, text='pot_raw=0, pot_percent=0.0, btn1=False, btn2=False', foreground='purple')
         self.pistol_state_label.pack(anchor=tk.W, padx=20)
+
+        # Robot movement status
+        ttk.Label(status_frame, text='Robot Status:').pack(anchor=tk.W, pady=(10, 0))
+        self.robot_status_label = ttk.Label(status_frame, text='Idle', foreground='gray', font=('Arial', 10, 'bold'))
+        self.robot_status_label.pack(anchor=tk.W, padx=20)
+
         button_frame = ttk.Frame(main_frame)
         button_frame.pack(fill=tk.X, pady=10)
 
@@ -1131,6 +1069,12 @@ class RecordingGUI:
             self.pistol_state_label.config(
                 text=f'pot_raw={pot_raw}, pot_percent={pot_percent:.2f}, btn1={btn1}, btn2={btn2}'
             )
+
+        # Update robot movement status
+        if self.node.is_moving:
+            self.robot_status_label.config(text='🤖 Robot Moving...', foreground='orange')
+        else:
+            self.robot_status_label.config(text='Idle', foreground='gray')
 
         # Schedule next update
         self.update_timer = self.root.after(100, self.update_gui)
