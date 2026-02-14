@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Recording GUI application for TOS Teachbot
+Recording GUI application for Teachbot
 Records joint states and pistol state during robot movement.
 Can playback recorded trajectories using action interface.
 """
@@ -23,6 +23,7 @@ from control_msgs.action import FollowJointTrajectory
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from rclpy.action import ActionClient
 from teachbot_interfaces.msg import TeachbotState, TeachbotPistolState
+from control_msgs.msg import JointTolerance
 
 
 class TextWidgetLogHandler(logging.Handler):
@@ -59,7 +60,7 @@ class LogWindow:
         """Create the log window"""
         if self.window is None:
             self.window = tk.Toplevel(self.parent)
-            self.window.title('TOS Teachbot Recorder - Debug Log')
+            self.window.title('Teachbot Recorder - Debug Log')
             self.window.geometry('800x400')
             self.window.protocol('WM_DELETE_WINDOW', self.hide_window)
             
@@ -154,6 +155,7 @@ class RecordingNode(Node):
         self.recording_mode = 'button'  # 'button' or 'topic'
         self.recording_stopped_externally = False  # Track if stopped by enable_topic
         self.last_record_time = None  # Throttle sampling to recording_rate
+        self.current_point_index = 0  # Track current point for navigation
 
         # Create callback groups
         self.record_group = MutuallyExclusiveCallbackGroup()
@@ -219,15 +221,30 @@ class RecordingNode(Node):
                     if (elapsed_time - self.last_record_time) < min_interval:
                         return
             self.last_record_time = elapsed_time
-            # Record data point
+            
+            # Capture joint names from message (handles any joint order from source)
+            joint_names_from_msg = list(msg.name)
+            
+            # Record data point with joint names for ordering verification
             data_point = {
                 'time': elapsed_time,
+                'joint_names': joint_names_from_msg,  # Store joint names from message
                 'positions': list(msg.position),
                 'velocities': list(msg.velocity),
                 'efforts': list(msg.effort),
                 'pistol_state': self.pistol_state.copy()
             }
             self.recorded_data.append(data_point)
+            
+            # Log joint name mismatch on first recording
+            if len(self.recorded_data) == 1:
+                if joint_names_from_msg != self.robot_joint_names:
+                    self.get_logger().warn(f'Joint order mismatch detected!')
+                    self.get_logger().warn(f'  Message joint_names: {joint_names_from_msg}')
+                    self.get_logger().warn(f'  YAML joint_names:    {self.robot_joint_names}')
+                    self.get_logger().info('Will reorder positions during playback to match YAML configuration.')
+                else:
+                    self.get_logger().info(f'Joint order matches YAML: {joint_names_from_msg}')
 
     def enable_callback(self, msg):
         """Start recording when enable signal is received"""
@@ -285,10 +302,16 @@ class RecordingNode(Node):
     def save_recording(self, filepath):
         """Save recording to JSON file"""
         try:
+            # Extract joint names from first recorded point (if available)
+            recorded_joint_names = None
+            if self.recorded_data:
+                recorded_joint_names = self.recorded_data[0].get('joint_names')
+            
             data = {
                 'timestamp': datetime.now().isoformat(),
                 'controller_name': self.controller_name_sim if self.use_sim else self.controller_name,
-                'robot_joint_names': self.robot_joint_names,
+                'robot_joint_names': self.robot_joint_names,  # YAML configuration
+                'recorded_joint_names': recorded_joint_names,  # Joint order from /joint_states
                 'recording_rate': self.recording_rate,
                 'trajectory_duration': self.trajectory_duration,
                 'points': self.recorded_data
@@ -296,6 +319,8 @@ class RecordingNode(Node):
             with open(filepath, 'w') as f:
                 json.dump(data, f, indent=2)
             self.get_logger().info(f'Recording saved to {filepath}')
+            if recorded_joint_names and recorded_joint_names != self.robot_joint_names:
+                self.get_logger().info(f'  (Note: Recording has different joint order than YAML - will be reordered on playback)')
             return True
         except Exception as e:
             self.get_logger().error(f'Failed to save recording: {e}')
@@ -307,11 +332,49 @@ class RecordingNode(Node):
             with open(filepath, 'r') as f:
                 data = json.load(f)
             self.recorded_data = data.get('points', [])
+            
+            # Check for joint order mismatch
+            recorded_joint_names = data.get('recorded_joint_names')
+            if recorded_joint_names and recorded_joint_names != self.robot_joint_names:
+                self.get_logger().warn(f'Loaded recording has different joint order than current YAML:')
+                self.get_logger().warn(f'  Recorded: {recorded_joint_names}')
+                self.get_logger().warn(f'  YAML:     {self.robot_joint_names}')
+                self.get_logger().info('Positions will be reordered during playback to match YAML joints.')
+                # Reorder all recorded positions to match YAML joint order
+                self._reorder_recorded_data(recorded_joint_names)
+            elif recorded_joint_names:
+                self.get_logger().info(f'Joint order matches: {recorded_joint_names}')
+            else:
+                self.get_logger().warn('Loaded recording has no joint_names metadata - assuming order matches YAML')
+            
             self.get_logger().info(f'Loaded {len(self.recorded_data)} points from {filepath}')
             return True
         except Exception as e:
             self.get_logger().error(f'Failed to load recording: {e}')
             return False
+    
+    def _reorder_recorded_data(self, source_joint_names):
+        """Reorder positions/velocities in recorded data to match robot_joint_names"""
+        if not source_joint_names or source_joint_names == self.robot_joint_names:
+            return
+        
+        # Build mapping from source order to YAML order
+        try:
+            reorder_indices = [source_joint_names.index(joint) for joint in self.robot_joint_names]
+        except ValueError as e:
+            self.get_logger().error(f'Joint name mismatch - cannot reorder: {e}')
+            return
+        
+        # Reorder all recorded points
+        for data_point in self.recorded_data:
+            if 'positions' in data_point and len(data_point['positions']) == len(reorder_indices):
+                data_point['positions'] = [data_point['positions'][i] for i in reorder_indices]
+            if 'velocities' in data_point and len(data_point['velocities']) == len(reorder_indices):
+                data_point['velocities'] = [data_point['velocities'][i] for i in reorder_indices]
+            if 'efforts' in data_point and len(data_point['efforts']) == len(reorder_indices):
+                data_point['efforts'] = [data_point['efforts'][i] for i in reorder_indices]
+        
+        self.get_logger().info(f'Reordered {len(self.recorded_data)} points from {source_joint_names} to {self.robot_joint_names}')
 
     def start_playback(self):
         """Start playback of recorded trajectory"""
@@ -323,35 +386,101 @@ class RecordingNode(Node):
         self.is_paused = False
         self.playback_start_time = time.time()  # Track when playback started
 
-        # Build trajectory from recorded data
-        trajectory = self.build_trajectory()
-        
-        # Validate trajectory
-        if not trajectory.points:
-            self.get_logger().error('Built trajectory has no points')
-            self.is_playing = False
-            return False
-        
-        if len(trajectory.joint_names) != len(self.robot_joint_names):
-            self.get_logger().error(
-                f'Joint names mismatch: trajectory has {len(trajectory.joint_names)} joints, '
-                f'but {len(self.robot_joint_names)} expected'
-            )
-            self.is_playing = False
-            return False
-        
-        # Check if action server is available
+        # Execute each datapoint individually
+        playback_thread = threading.Thread(target=self._playback_points_thread, daemon=True)
+        playback_thread.start()
+        return True
+
+    def _playback_points_thread(self):
+        """Playback by executing each recorded datapoint as an individual goal"""
         action_server = f'{self.controller_name_sim if self.use_sim else self.controller_name}/follow_joint_trajectory'
         self.get_logger().info(f'Checking action server availability: {action_server}')
-        
+
         if not self.action_client.wait_for_server(timeout_sec=2.0):
             self.get_logger().error(f'Action server not reachable: {action_server}')
             self.get_logger().info('Available action servers can be listed with: ros2 action list')
             self.is_playing = False
+            return
+
+        last_time = None
+        for i, data_point in enumerate(self.recorded_data):
+            if not self.is_playing:
+                break
+
+            while self.is_paused and self.is_playing:
+                time.sleep(0.05)
+
+            # Update current point index for GUI display
+            self.current_point_index = i
+
+            # Compute per-point duration
+            if last_time is None:
+                dt = 0.05
+            else:
+                dt = max(0.01, data_point['time'] - last_time)
+            last_time = data_point['time']
+
+            trajectory = JointTrajectory()
+            trajectory.joint_names = self.robot_joint_names
+
+            point = JointTrajectoryPoint()
+            point.positions = data_point['positions']
+            point.velocities = [0.0] * len(self.robot_joint_names)
+            point.effort = []
+            point.time_from_start.sec = int(dt)
+            point.time_from_start.nanosec = int((dt % 1.0) * 1e9)
+            trajectory.points.append(point)
+
+            if not self._send_single_point_goal(trajectory, i):
+                self.is_playing = False
+                return
+
+        self.is_playing = False
+
+    def _send_single_point_goal(self, trajectory, index):
+        """Send a single-point trajectory goal and wait for result"""
+        goal = FollowJointTrajectory.Goal()
+        goal.trajectory = trajectory
+
+        goal.path_tolerance = [
+            JointTolerance(name=joint, position=6.0, velocity=10.0)
+            for joint in self.robot_joint_names
+        ]
+        goal.goal_tolerance = [
+            JointTolerance(name=joint, position=0.1, velocity=0.5, time_from_start=rclpy.time.Duration(seconds=2))
+            for joint in self.robot_joint_names
+        ]
+
+        done_event = threading.Event()
+        goal_handle_container = {}
+
+        def _goal_done(future):
+            goal_handle_container['handle'] = future.result()
+            done_event.set()
+
+        future = self.action_client.send_goal_async(goal)
+        future.add_done_callback(_goal_done)
+        if not done_event.wait(timeout=5.0):
+            self.get_logger().error(f'Point {index}: goal request timed out')
             return False
 
-        # Send goal to action server
-        self.send_trajectory_goal(trajectory)
+        goal_handle = goal_handle_container.get('handle')
+        if goal_handle is None or not goal_handle.accepted:
+            self.get_logger().error(f'Point {index}: goal rejected')
+            return False
+
+        result_event = threading.Event()
+        result_container = {}
+
+        def _result_done(result_future):
+            result_container['result'] = result_future.result()
+            result_event.set()
+
+        goal_handle.get_result_async().add_done_callback(_result_done)
+        if not result_event.wait(timeout=15.0):
+            self.get_logger().error(f'Point {index}: result timed out')
+            return False
+
         return True
 
     def pause_playback(self):
@@ -369,6 +498,82 @@ class RecordingNode(Node):
         self.is_playing = False
         self.is_paused = False
         self.get_logger().info('Playback stopped')
+
+
+    def go_to_first_point(self):
+        """Move robot to first recorded point"""
+        if not self.recorded_data:
+            self.get_logger().warn('No recording available')
+            return False
+        self.current_point_index = 0
+        return self.go_to_point(0)
+
+    def go_to_previous_point(self):
+        """Move robot to previous recorded point"""
+        if not self.recorded_data:
+            self.get_logger().warn('No recording available')
+            return False
+        if self.current_point_index > 0:
+            self.current_point_index -= 1
+            return self.go_to_point(self.current_point_index)
+        else:
+            self.get_logger().info('Already at first point')
+            return False
+
+    def go_to_next_point(self):
+        """Move robot to next recorded point"""
+        if not self.recorded_data:
+            self.get_logger().warn('No recording available')
+            return False
+        if self.current_point_index < len(self.recorded_data) - 1:
+            self.current_point_index += 1
+            return self.go_to_point(self.current_point_index)
+        else:
+            self.get_logger().info('Already at last point')
+            return False
+
+    def go_to_point(self, index):
+        """Move robot to specific point by index"""
+        if not self.recorded_data or index < 0 or index >= len(self.recorded_data):
+            self.get_logger().warn('Invalid point index')
+            return False
+
+        # Create a single-point trajectory with specified point
+        trajectory = JointTrajectory()
+        trajectory.joint_names = self.robot_joint_names
+
+        point_data = self.recorded_data[index]
+        point = JointTrajectoryPoint()
+        point.positions = point_data['positions']
+        point.velocities = [0.0] * len(self.robot_joint_names)
+        point.effort = []
+        # Use 2.0 seconds for point-to-point navigation to allow smooth execution
+        point.time_from_start.sec = 2
+        point.time_from_start.nanosec = 0
+        trajectory.points.append(point)
+
+        self.get_logger().info(f'Moving to point {index}: {point_data["positions"]}')
+        
+        # Use shared _send_single_point_goal function
+        return self._send_single_point_goal(trajectory, index)
+
+    def go_forward_by_points(self, num_points):
+        """Move robot forward by specified number of points"""
+        if not self.recorded_data:
+            self.get_logger().warn('No recording available')
+            return False
+        new_index = min(self.current_point_index + num_points, len(self.recorded_data) - 1)
+        self.current_point_index = new_index
+        return self.go_to_point(new_index)
+
+    def go_backward_by_points(self, num_points):
+        """Move robot backward by specified number of points"""
+        if not self.recorded_data:
+            self.get_logger().warn('No recording available')
+            return False
+        new_index = max(self.current_point_index - num_points, 0)
+        self.current_point_index = new_index
+        return self.go_to_point(new_index)
 
     def build_trajectory(self):
         """Build JointTrajectory message from recorded data"""
@@ -447,7 +652,6 @@ class RecordingNode(Node):
         
         # Add generous tolerances - allows robot to start from different positions
         # State tolerance (path tolerance) must be large to allow motion from current position to trajectory start
-        from control_msgs.msg import JointTolerance
         goal.path_tolerance = [
             JointTolerance(name=joint, position=3.0, velocity=10.0)
             for joint in self.robot_joint_names
@@ -507,8 +711,8 @@ class RecordingGUI:
     def __init__(self, root, ros_node):
         self.root = root
         self.node = ros_node
-        self.root.title('TOS Teachbot Recorder')
-        self.root.geometry('900x800')
+        self.root.title('Teachbot Recorder')
+        self.root.geometry('800x1000')
 
         # Threading
         self.ros_thread = None
@@ -553,7 +757,7 @@ class RecordingGUI:
         main_frame.pack(fill=tk.BOTH, expand=True)
 
         # Title
-        title = ttk.Label(main_frame, text='TOS Teachbot Recorder', font=('Arial', 16, 'bold'))
+        title = ttk.Label(main_frame, text='Teachbot Recorder', font=('Arial', 16, 'bold'))
         title.pack(pady=10)
 
         # Recording mode selection
@@ -596,6 +800,32 @@ class RecordingGUI:
         self.stop_play_button = ttk.Button(playback_frame, text='Stop', command=self.stop_playback, state=tk.DISABLED)
         self.stop_play_button.pack(side=tk.LEFT, padx=5)
 
+        self.go_first_button = ttk.Button(playback_frame, text='Go to First Point', command=self.go_to_first_point, state=tk.DISABLED)
+        self.go_first_button.pack(side=tk.LEFT, padx=5)
+
+        self.prev_button = ttk.Button(playback_frame, text='< Previous', command=self.go_to_previous_point, state=tk.DISABLED)
+        self.prev_button.pack(side=tk.LEFT, padx=5)
+
+        self.next_button = ttk.Button(playback_frame, text='Next >', command=self.go_to_next_point, state=tk.DISABLED)
+        self.next_button.pack(side=tk.LEFT, padx=5)
+
+        # Jump navigation section
+        jump_frame = ttk.LabelFrame(main_frame, text='Jump Navigation', padding='10')
+        jump_frame.pack(fill=tk.X, pady=10)
+
+        ttk.Label(jump_frame, text='Step Size:', font=('Arial', 9, 'bold')).pack(side=tk.LEFT, padx=5)
+        
+        self.step_size_var = tk.StringVar(value='5')
+        self.step_size_combo = ttk.Combobox(jump_frame, textvariable=self.step_size_var, values=['2', '5', '10', '20', '50', '100'], 
+                                            state='readonly', width=5)
+        self.step_size_combo.pack(side=tk.LEFT, padx=5)
+        
+        self.back_button = ttk.Button(jump_frame, text='<< Back', command=self.jump_backward_from_dropdown, state=tk.DISABLED, width=10)
+        self.back_button.pack(side=tk.LEFT, padx=10)
+        
+        self.fwd_button = ttk.Button(jump_frame, text='Forward >>', command=self.jump_forward_from_dropdown, state=tk.DISABLED, width=10)
+        self.fwd_button.pack(side=tk.LEFT, padx=10)
+
         # Status section
         status_frame = ttk.LabelFrame(main_frame, text='Status', padding='10')
         status_frame.pack(fill=tk.X, pady=10)
@@ -611,6 +841,10 @@ class RecordingGUI:
         ttk.Label(status_frame, text='Recorded Points:').pack(anchor=tk.W, pady=(10, 0))
         self.point_count_label = ttk.Label(status_frame, text='0', foreground='blue')
         self.point_count_label.pack(anchor=tk.W, padx=20)
+
+        ttk.Label(status_frame, text='Current Point:').pack(anchor=tk.W, pady=(10, 0))
+        self.current_point_label = ttk.Label(status_frame, text='0 / 0', foreground='green')
+        self.current_point_label.pack(anchor=tk.W, padx=20)
 
         ttk.Label(status_frame, text='Playback Status:').pack(anchor=tk.W, pady=(10, 0))
         self.play_status_label = ttk.Label(status_frame, text='Stopped', foreground='gray')
@@ -645,7 +879,7 @@ class RecordingGUI:
         self.ros_thread.start()
         
         # Log startup
-        self.logger.info('TOS Teachbot Recorder started')
+        self.logger.info('Teachbot Recorder started')
 
     def toggle_log_window(self):
         """Toggle log window visibility"""
@@ -724,6 +958,12 @@ class RecordingGUI:
             if self.node.load_recording(filepath):
                 self.logger.info(f'Recording loaded successfully - {len(self.node.recorded_data)} points')
                 self.play_button.config(state=tk.NORMAL)
+                self.go_first_button.config(state=tk.NORMAL)
+                self.prev_button.config(state=tk.NORMAL)
+                self.next_button.config(state=tk.NORMAL)
+                # Enable jump buttons
+                self.back_button.config(state=tk.NORMAL)
+                self.fwd_button.config(state=tk.NORMAL)
                 messagebox.showinfo('Success', f'Recording loaded from {filepath}')
             else:
                 self.logger.error('Failed to load recording')
@@ -762,6 +1002,75 @@ class RecordingGUI:
         self.stop_play_button.config(state=tk.DISABLED)
         self.load_button.config(state=tk.NORMAL)
 
+    def go_to_first_point(self):
+        """Move robot to first recorded point"""
+        if not self.node.recorded_data:
+            messagebox.showwarning('Warning', 'No recording loaded')
+            return
+        self.logger.info('Moving to first point')
+        if self.node.go_to_first_point():
+            self.logger.info(f'First point goal sent (point 0 of {len(self.node.recorded_data)})')
+        else:
+            self.logger.error('Failed to send first point goal')
+
+    def go_to_previous_point(self):
+        """Move robot to previous recorded point"""
+        if not self.node.recorded_data:
+            messagebox.showwarning('Warning', 'No recording loaded')
+            return
+        self.logger.info('Moving to previous point')
+        if self.node.go_to_previous_point():
+            self.logger.info(f'Previous point goal sent (point {self.node.current_point_index} of {len(self.node.recorded_data)})')
+        else:
+            self.logger.error('Cannot move to previous point')
+
+    def go_to_next_point(self):
+        """Move robot to next recorded point"""
+        if not self.node.recorded_data:
+            messagebox.showwarning('Warning', 'No recording loaded')
+            return
+        self.logger.info('Moving to next point')
+        if self.node.go_to_next_point():
+            self.logger.info(f'Next point goal sent (point {self.node.current_point_index} of {len(self.node.recorded_data)})')
+        else:
+            self.logger.error('Cannot move to next point')
+
+    def jump_forward(self, num_points):
+        """Jump forward by specified number of points"""
+        if not self.node.recorded_data:
+            messagebox.showwarning('Warning', 'No recording loaded')
+            return
+        if self.node.go_forward_by_points(num_points):
+            self.logger.info(f'Jumped forward {num_points} points (now at point {self.node.current_point_index} of {len(self.node.recorded_data)})')
+        else:
+            self.logger.error(f'Failed to jump forward {num_points} points')
+
+    def jump_forward_from_dropdown(self):
+        """Jump forward using step size from dropdown"""
+        try:
+            step_size = int(self.step_size_var.get())
+            self.jump_forward(step_size)
+        except ValueError:
+            messagebox.showerror('Error', 'Invalid step size')
+
+    def jump_backward_from_dropdown(self):
+        """Jump backward using step size from dropdown"""
+        try:
+            step_size = int(self.step_size_var.get())
+            self.jump_backward(step_size)
+        except ValueError:
+            messagebox.showerror('Error', 'Invalid step size')
+
+    def jump_backward(self, num_points):
+        """Jump backward by specified number of points"""
+        if not self.node.recorded_data:
+            messagebox.showwarning('Warning', 'No recording loaded')
+            return
+        if self.node.go_backward_by_points(num_points):
+            self.logger.info(f'Jumped backward {num_points} points (now at point {self.node.current_point_index} of {len(self.node.recorded_data)})')
+        else:
+            self.logger.error(f'Failed to jump backward {num_points} points')
+
     def update_gui(self):
         """Update GUI status labels"""
         # Check if recording was stopped externally (by enable_topic)
@@ -790,29 +1099,25 @@ class RecordingGUI:
         # Update point count
         self.point_count_label.config(text=str(len(self.node.recorded_data)))
 
+        # Update current point display
+        if self.node.recorded_data:
+            self.current_point_label.config(text=f'{self.node.current_point_index} / {len(self.node.recorded_data) - 1}')
+        else:
+            self.current_point_label.config(text='0 / 0')
+
         # Update playback status
         if self.node.is_playing:
             if self.node.is_paused:
                 self.play_status_label.config(text='Paused', foreground='orange')
             else:
                 self.play_status_label.config(text='Playing', foreground='green')
-                # Update progress bar
-                if self.node.playback_start_time is not None:
+                # Update progress bar based on recorded trajectory duration (if available)
+                if self.node.playback_start_time is not None and self.node.recorded_data:
                     elapsed = time.time() - self.node.playback_start_time
-                    progress = min(100, (elapsed / self.node.trajectory_duration) * 100)
+                    # Estimate total duration: last point's time + execution buffer
+                    estimated_duration = self.node.recorded_data[-1]['time'] + 5.0 if self.node.recorded_data else 10.0
+                    progress = min(100, (elapsed / estimated_duration) * 100)
                     self.play_progress['value'] = progress
-                # Check for playback timeout - if playing much longer than trajectory duration, force stop
-                if self.node.playback_start_time is not None:
-                    elapsed = time.time() - self.node.playback_start_time
-                    max_allowed = self.node.trajectory_duration * 2.0 + 2.0  # Allow 2x duration plus 2 seconds buffer
-                    if elapsed > max_allowed:
-                        self.logger.warning(f'Playback timeout: elapsed {elapsed:.1f}s > max {max_allowed:.1f}s, stopping playback')
-                        self.node.is_playing = False
-                        self.play_button.config(state=tk.NORMAL)
-                        self.pause_play_button.config(state=tk.DISABLED, text='Pause')
-                        self.stop_play_button.config(state=tk.DISABLED)
-                        self.load_button.config(state=tk.NORMAL)
-                        self.play_progress['value'] = 0
         else:
             self.play_status_label.config(text='Stopped', foreground='gray')
             self.play_progress['value'] = 0
