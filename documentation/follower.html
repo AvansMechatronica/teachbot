@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="nl" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Follower &mdash; TOS Teachbot ROS Documentatie 0.1 documentatie</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=a57088fb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/translations.js?v=e4d38c6a"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Zoeken" href="../search.html" />
+    <link rel="next" title="Recorder" href="recorder.html" />
+    <link rel="prev" title="TOS Teachbot ROS2 Node" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            TOS Teachbot ROS Documentatie
+              <img src="../_static/Logo_TOS_blauw.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Zoek in documentatie" aria-label="Zoek in documentatie" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigatiemenu">
+              <p class="caption" role="heading"><span class="caption-text">Inhoudsopgave:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of the TOS-Teachbot Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">TOS Teachbot ROS2 Node</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Follower</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#launch-control-recommended">Launch Control (Recommended)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#available-nodes">Available Nodes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#follower-action-recommended-action-client">1. <code class="docutils literal notranslate"><span class="pre">follower_action</span></code> ✅ <strong>RECOMMENDED - Action Client</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#teachbot-follower-moveit-commander-alternative-direct-commands-experimental">2. <code class="docutils literal notranslate"><span class="pre">teachbot_follower_moveit_commander</span></code> 📝 <strong>Alternative - Direct Commands  - Experimental</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-workflow">Complete Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#joint-names">Joint Names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#robot-doesn-t-move">Robot doesn’t move</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#movement-is-too-slow-fast">Movement is too slow/fast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#joint-names-don-t-match">Joint names don’t match</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#safety-notes">Safety Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="recorder.html">Recorder</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Navigatiemenu voor mobiel" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">TOS Teachbot ROS Documentatie</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Paginanavigatie">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Follower</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/documentation/follower.md.txt" rel="nofollow"> Bekijk paginabron</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="follower">
+<h1>Follower<a class="headerlink" href="#follower" title="Link to this heading"></a></h1>
+<p>This package contains ROS2 nodes that allow a target robot to follow joint positions published by a teachbot device.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The teachbot device publishes joint states on <code class="docutils literal notranslate"><span class="pre">/teachbot/&lt;target_robot&gt;/joint_states</span></code>, and these nodes command the UR robot to move to match those positions.</p>
+</section>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<section id="launch-control-recommended">
+<h3>Launch Control (Recommended)<a class="headerlink" href="#launch-control-recommended" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>launch<span class="w"> </span>teachbot_follower<span class="w"> </span>follower_action.launch.py
+</pre></div>
+</div>
+<p>This starts:</p>
+<ul class="simple">
+<li><p>TeachBot follower action client</p></li>
+</ul>
+</section>
+</section>
+<section id="available-nodes">
+<h2>Available Nodes<a class="headerlink" href="#available-nodes" title="Link to this heading"></a></h2>
+<section id="follower-action-recommended-action-client">
+<h3>1. <code class="docutils literal notranslate"><span class="pre">follower_action</span></code> ✅ <strong>RECOMMENDED - Action Client</strong><a class="headerlink" href="#follower-action-recommended-action-client" title="Link to this heading"></a></h3>
+<p>This node uses action client to send trajectory goals. Robust with feedback and result handling.</p>
+<p><strong>Usage:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>launch<span class="w"> </span>teachbot_follower<span class="w"> </span>follower_action.launch.py
+</pre></div>
+</div>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">teachbot_topic</span></code> (default: <code class="docutils literal notranslate"><span class="pre">/teachbot/joint_states</span></code>) - Topic to subscribe to for teachbot commands</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable_topic</span></code> (default: <code class="docutils literal notranslate"><span class="pre">/teachbot/enable</span></code>) - Topic for enable/disable control</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">controller_name</span></code> (default: <code class="docutils literal notranslate"><span class="pre">scaled_joint_trajectory_controller</span></code>) - Name of the joint trajectory controller</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update_rate</span></code> (default: <code class="docutils literal notranslate"><span class="pre">0.5</span></code>) - Seconds between updates</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">position_tolerance</span></code> (default: <code class="docutils literal notranslate"><span class="pre">0.01</span></code>) - Minimum position change (radians) to trigger movement</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trajectory_duration</span></code> (default: <code class="docutils literal notranslate"><span class="pre">2.0</span></code>) - Duration for each trajectory segment</p></li>
+</ul>
+</section>
+<section id="teachbot-follower-moveit-commander-alternative-direct-commands-experimental">
+<h3>2. <code class="docutils literal notranslate"><span class="pre">teachbot_follower_moveit_commander</span></code> 📝 <strong>Alternative - Direct Commands  - Experimental</strong><a class="headerlink" href="#teachbot-follower-moveit-commander-alternative-direct-commands-experimental" title="Link to this heading"></a></h3>
+<p>This node directly publishes trajectory commands to the robot controller.</p>
+<p><strong>Usage:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>run<span class="w"> </span>teachbot_follower<span class="w"> </span>follower_moveit_commander
+</pre></div>
+</div>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">teachbot_topic</span></code> (default: <code class="docutils literal notranslate"><span class="pre">/teachbot/joint_states</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable_topic</span></code> (default: <code class="docutils literal notranslate"><span class="pre">/teachbot/enable</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">controller_name</span></code> (default: <code class="docutils literal notranslate"><span class="pre">scaled_joint_trajectory_controller</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update_rate</span></code> (default: <code class="docutils literal notranslate"><span class="pre">0.5</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">position_tolerance</span></code> (default: <code class="docutils literal notranslate"><span class="pre">0.01</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trajectory_duration</span></code> (default: <code class="docutils literal notranslate"><span class="pre">0.5</span></code>)</p></li>
+</ul>
+</section>
+</section>
+<section id="complete-workflow">
+<h2>Complete Workflow<a class="headerlink" href="#complete-workflow" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Build the package:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/teachbot_ws
+colcon<span class="w"> </span>build<span class="w"> </span>--packages-select<span class="w"> </span>teachbot_follower<span class="w"> </span>--symlink-install
+<span class="nb">source</span><span class="w"> </span>install/setup.bash
+</pre></div>
+</div>
+</li>
+<li><p><strong>Launch your UR robot with MoveIt:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># For simulation:</span>
+ros2<span class="w"> </span>launch<span class="w"> </span>my_ur_bringup<span class="w"> </span>simulation.launch.py
+
+<span class="c1"># Or for real robot:</span>
+ros2<span class="w"> </span>launch<span class="w"> </span>my_ur_bringup<span class="w"> </span>real_robot.launch.py<span class="w"> </span>robot_ip:<span class="o">=</span>&lt;ROBOT_IP&gt;
+</pre></div>
+</div>
+</li>
+<li><p><strong>Start your teachbot device</strong> (ensure it publishes to <code class="docutils literal notranslate"><span class="pre">/teachbot/joint_states</span></code>)</p></li>
+<li><p><strong>Run the follower node:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># For simulation:</span>
+ros2<span class="w"> </span>launch<span class="w"> </span>teachbot_follower<span class="w"> </span>follower_action.launch.py<span class="w"> </span>sim:<span class="o">=</span><span class="nb">true</span>
+
+<span class="c1"># Or for real robot:</span>
+ros2<span class="w"> </span>launch<span class="w"> </span>teachbot_follower<span class="w"> </span>follower_action.launch.py
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="joint-names">
+<h2>Joint Names<a class="headerlink" href="#joint-names" title="Link to this heading"></a></h2>
+<p>Make sure the joint names in the teachbot message match the UR robot joint names:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">shoulder_pan_joint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shoulder_lift_joint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">elbow_joint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrist_1_joint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrist_2_joint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wrist_3_joint</span></code></p></li>
+</ul>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="robot-doesn-t-move">
+<h3>Robot doesn’t move<a class="headerlink" href="#robot-doesn-t-move" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Check that <code class="docutils literal notranslate"><span class="pre">/teachbot/joint_states</span></code> is being published: <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">topic</span> <span class="pre">echo</span> <span class="pre">/teachbot/joint_states</span></code></p></li>
+<li><p>Verify MoveIt is running: <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">node</span> <span class="pre">list</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">move_group</span></code></p></li>
+<li><p>Check for errors: <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">topic</span> <span class="pre">echo</span> <span class="pre">/rosout</span></code></p></li>
+</ul>
+</section>
+<section id="movement-is-too-slow-fast">
+<h3>Movement is too slow/fast<a class="headerlink" href="#movement-is-too-slow-fast" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Adjust <code class="docutils literal notranslate"><span class="pre">update_rate</span></code> parameter (lower = faster updates)</p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">ur_teachbot_simple</span></code>, adjust <code class="docutils literal notranslate"><span class="pre">velocity_scaling</span></code> and <code class="docutils literal notranslate"><span class="pre">acceleration_scaling</span></code></p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">teachbot_follower_action</span></code> or <code class="docutils literal notranslate"><span class="pre">teachbot_follower_moveit_commander</span></code>, adjust <code class="docutils literal notranslate"><span class="pre">trajectory_duration</span></code></p></li>
+</ul>
+</section>
+<section id="joint-names-don-t-match">
+<h3>Joint names don’t match<a class="headerlink" href="#joint-names-don-t-match" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Check your teachbot joint names: <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">topic</span> <span class="pre">echo</span> <span class="pre">/teachbot/&lt;target_robot&gt;/joint_states</span> <span class="pre">--once</span></code></p></li>
+<li><p>Verify UR joint names: <code class="docutils literal notranslate"><span class="pre">ros2</span> <span class="pre">topic</span> <span class="pre">echo</span> <span class="pre">/joint_states</span> <span class="pre">--once</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="safety-notes">
+<h2>Safety Notes<a class="headerlink" href="#safety-notes" title="Link to this heading"></a></h2>
+<p>⚠️ <strong>Warning</strong>: This node will command the robot to follow the teachbot positions. Ensure:</p>
+<ul class="simple">
+<li><p>The workspace is clear of obstacles</p></li>
+<li><p>Emergency stop is accessible</p></li>
+<li><p>The robot is in a safe starting configuration</p></li>
+<li><p>You start with slow update rates and small movements to test</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Voettekst">
+        <a href="overview.html" class="btn btn-neutral float-left" title="TOS Teachbot ROS2 Node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Vorige</a>
+        <a href="recorder.html" class="btn btn-neutral float-right" title="Recorder" accesskey="n" rel="next">Volgende <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright TOS Teachbot Project, 2024.</p>
+  </div>
+
+  Gebouwd met <a href="https://www.sphinx-doc.org/">Sphinx</a> met een
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thema</a>
+    geleverd door <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
