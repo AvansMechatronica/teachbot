@@ -1,0 +1,27 @@
+# sim_parameters.yaml
+# Offsets (in degrees) for each joint, to be applied to /teachbot/joint_states_sim before publishing to /teachbot/joint_states
+
+sim_jointstate_publisher:
+  ros__parameters:
+    
+    gui_joint_topic: "/teachbot/joint_states_sim"
+    teachbot_joint_topic: "/teachbot/joint_states"
+
+    joint_names:
+      - "shoulder_pan_joint"
+      - "shoulder_lift_joint"
+      - "elbow_joint"
+      - "wrist_1_joint"
+      - "wrist_2_joint"
+      - "wrist_3_joint"
+      
+    degree_offsets:
+      - 90.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 90.0
+ 
+
+
