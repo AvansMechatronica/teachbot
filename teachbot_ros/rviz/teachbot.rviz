@@ -38,57 +38,42 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        teachbot/base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        teachbot/base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        teachbot/base_link_inertia:
+        link_1:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        teachbot/flange:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        teachbot/forearm_link:
+        link_2:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        teachbot/ft_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        teachbot/shoulder_link:
+        link_3:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        teachbot/tool0:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        teachbot/upper_arm_link:
+        link_4:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        teachbot/wrist_1_link:
+        link_5:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        teachbot/wrist_2_link:
+        link_6:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        teachbot/wrist_3_link:
+        link_7:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_8:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -148,8 +133,8 @@ Visualization Manager:
       Value: true
   Enabled: true
   Global Options:
-    Background Color: 48; 48; 48
-    Fixed Frame: teachbot/base_link
+    Background Color: 205; 171; 143
+    Fixed Frame: world
     Frame Rate: 30
   Name: root
   Tools:
@@ -162,25 +147,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 2.253662586212158
+      Distance: 1.2569645643234253
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0.30000001192092896
+        X: 0.0429210290312767
+        Y: -0.028401551768183708
+        Z: 0.20497414469718933
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.315000057220459
+      Pitch: 0.3250000774860382
       Target Frame: base_link
       Value: Orbit (rviz_default_plugins)
-      Yaw: 3.5381782054901123
+      Yaw: 5.353191375732422
     Saved: ~
 Window Geometry:
   Displays:
@@ -192,5 +177,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 126
-  Y: 106
+  X: 2190
+  Y: 90
