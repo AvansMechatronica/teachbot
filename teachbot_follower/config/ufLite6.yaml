@@ -31,12 +31,12 @@ teachbot_follower:
       - "joint6"
 
     target_degree_offsets:
-      - 0.0     # joint1
-      - 0.0    # joint2
-      - 0.0     # joint3
+      - -90.0     # joint1
+      - 90.0    # joint2
+      - 180.0     # joint3
       - 0.0    # joint4
-      - 0.0   # joint5
-      - 0.0     # joint6
+      - -90.0   # joint5
+      - -90.0     # joint6
     
     # Joint scale factors (use -1.0 to invert direction)
     joint_scale_factors:
