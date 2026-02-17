@@ -48,7 +48,7 @@
   </joint>
 
   <!-- Fill in origins/axes to match your CAD frames -->
-  <joint name="joint_1_2" type="revolute">
+  <joint name="sholder_pan_joint" type="revolute">
     <parent link="link_1"/>
     <child link="link_2"/>
     <origin xyz="0 0 0.156875" rpy="0 0 0"/>
@@ -56,7 +56,7 @@
     <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
   </joint>
 
-  <joint name="joint_2_3" type="revolute">
+  <joint name="shoulder_lift_joint" type="revolute">
     <parent link="link_2"/>
     <child link="link_3"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -64,7 +64,7 @@
     <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
   </joint>
 
-  <joint name="joint_3_4" type="revolute">
+  <joint name="elbow_joint" type="revolute">
     <parent link="link_3"/>
     <child link="link_4"/>
     <origin xyz="0 0 0.249" rpy="0 0 0"/>
@@ -72,7 +72,7 @@
     <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
   </joint>
 
-  <joint name="joint_4_5" type="revolute">
+  <joint name="wrist_1_joint" type="revolute">
     <parent link="link_4"/>
     <child link="link_5"/>
     <origin xyz="0 -0.227 0" rpy="0 0 0"/>
@@ -80,7 +80,7 @@
     <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
   </joint>
 
-  <joint name="joint_5_6" type="revolute">
+  <joint name="wrist_2_joint" type="revolute">
     <parent link="link_5"/>
     <child link="link_6"/>
     <origin xyz="-0.038375 0 0" rpy="0 0 0"/>
@@ -88,7 +88,7 @@
     <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
   </joint>
 
-  <joint name="joint_6_7" type="revolute">
+  <joint name="wrist_3_joint" type="revolute">
     <parent link="link_6"/>
     <child link="link_7"/>
     <origin xyz="0 0 0.038375" rpy="0 0 0"/>
@@ -96,7 +96,7 @@
     <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
   </joint>
 
-  <joint name="joint_7_8" type="revolute">
+  <joint name="dummy_joint" type="fixed">
     <parent link="link_7"/>
     <child link="link_8"/>
     <origin xyz="0 -0.119075 0.00193171" rpy="0 0 0"/>

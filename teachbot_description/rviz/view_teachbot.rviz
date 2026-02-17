@@ -5,8 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /RobotModel1
       Splitter Ratio: 0.5
     Tree Height: 542
   - Class: rviz_common/Selection
@@ -34,7 +32,7 @@ Visualization Manager:
       Cell Size: 1
       Class: rviz_default_plugins/Grid
       Color: 160; 160; 164
-      Enabled: true
+      Enabled: false
       Line Style:
         Line Width: 0.029999999329447746
         Value: Lines
@@ -47,7 +45,7 @@ Visualization Manager:
       Plane: XY
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
-      Value: true
+      Value: false
     - Alpha: 1
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
@@ -120,7 +118,7 @@ Visualization Manager:
       Visual Enabled: true
   Enabled: true
   Global Options:
-    Background Color: 48; 48; 48
+    Background Color: 205; 171; 143
     Fixed Frame: world
     Frame Rate: 30
   Name: root
@@ -164,7 +162,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 1.5717511177062988
+      Distance: 1.3051766157150269
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -179,10 +177,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6403981447219849
+      Pitch: 0.5303983688354492
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.478577613830566
+      Yaw: 5.228597640991211
     Saved: ~
 Window Geometry:
   Displays:
@@ -200,5 +198,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 2385
-  Y: 153
+  X: 2271
+  Y: 114
