@@ -4,22 +4,40 @@ TeachbotState Publisher GUI
 Simple GUI for publishing TeachbotState messages with potentiometer and button controls.
 """
 
-import sys
 import tkinter as tk
-from tkinter import ttk
 import threading
+import math
 import rclpy
 from rclpy.node import Node
 from teachbot_interfaces.msg import TeachbotState
 from std_msgs.msg import Header
+from sensor_msgs.msg import JointState
 
 
 class TeachbotStatePublisherGUI(Node):
     def __init__(self):
         super().__init__('teachbot_state_publisher_gui')
+
+        self.joint_names = [
+            'shoulder_pan_joint',
+            'shoulder_lift_joint',
+            'elbow_joint',
+            'wrist_1_joint',
+            'wrist_2_joint',
+            'wrist_3_joint',
+        ]
+        self.joint_angles_deg = [0.0] * len(self.joint_names)
         
         # Create publisher
         self.publisher_ = self.create_publisher(TeachbotState, 'teachbot/state', 10)
+
+        # Subscribe to robot joint states
+        self.joint_state_sub = self.create_subscription(
+            JointState,
+            '/teachbot/joint_states',
+            self.on_joint_state,
+            10,
+        )
         
         # Create timer for publishing at 10 Hz
         self.timer = self.create_timer(0.1, self.publish_state)
@@ -33,6 +51,17 @@ class TeachbotStatePublisherGUI(Node):
         self.create_gui()
         
         self.get_logger().info('TeachbotState Publisher GUI started')
+        self.get_logger().info('Subscribing to /teachbot/joint_states for joint angle forwarding')
+
+    def on_joint_state(self, msg: JointState):
+        """Update joint angles from /teachbot/joint_states (radians -> degrees)."""
+        name_to_position = {
+            name.split('/')[-1]: pos for name, pos in zip(msg.name, msg.position)
+        }
+
+        for index, joint_name in enumerate(self.joint_names):
+            if joint_name in name_to_position:
+                self.joint_angles_deg[index] = round(math.degrees(name_to_position[joint_name]), 1)
     
     def create_gui(self):
         """Create the GUI interface"""
@@ -132,8 +161,10 @@ class TeachbotStatePublisherGUI(Node):
         msg.pistol.btn1 = self.btn1_state
         msg.pistol.btn2 = self.btn2_state
         
+        # Joint angles from /teachbot/joint_states
+        msg.joint_angles_deg = self.joint_angles_deg.copy()
+
         # Initialize other fields with default values
-        msg.joint_angles_deg = [0.0] * 6
         msg.tcp_x = 0.0
         msg.tcp_y = 0.0
         msg.tcp_z = 0.0
