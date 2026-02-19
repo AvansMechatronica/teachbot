@@ -7,6 +7,7 @@ Displays real-time graphical status of:
   - Potentiometer percentage (0-100) with slider and numeric display
   - Button 1 state with visual indicator
   - Button 2 state with visual indicator
+    - Joint angles (degrees, precision 0.1) for 6 robot joints
 
 Usage:
     ros2 run teachbot_ros teachbot_monitor_gui
@@ -31,10 +32,19 @@ class TeachbotMonitorGUI(Node):
 
     def __init__(self, root):
         super().__init__('teachbot_monitor_gui')
+
+        self.joint_names = [
+            'shoulder pan',
+            'shoulder lift',
+            'elbow',
+            'wrist 1',
+            'wrist 2',
+            'wrist 3'
+        ]
         
         self.root = root
         self.root.title("Teachbot Control Monitor")
-        self.root.geometry("500x500")
+        self.root.geometry("475x740")
         self.root.resizable(False, False)
         
         # Configure style
@@ -173,6 +183,29 @@ class TeachbotMonitorGUI(Node):
             font=('Arial', 10, 'bold')
         )
         self.btn2_text_label.grid(row=1, column=0, pady=(5, 0))
+
+        # --- Joint Angles Section ---
+        joints_frame = ttk.LabelFrame(main_frame, text="Joint Angles(deg)", padding="15")
+        joints_frame.grid(row=4, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(5, 0))
+
+        self.joint_angle_labels = {}
+        for row_index, joint_name in enumerate(self.joint_names):
+            ttk.Label(joints_frame, text=joint_name, font=('Arial', 10)).grid(
+                row=row_index,
+                column=0,
+                sticky=tk.W,
+                padx=(0, 15),
+                pady=1
+            )
+
+            value_label = ttk.Label(
+                joints_frame,
+                text="0.0°",
+                font=('Arial', 10, 'bold'),
+                foreground='#2196F3'
+            )
+            value_label.grid(row=row_index, column=1, sticky=tk.E, pady=1)
+            self.joint_angle_labels[joint_name] = value_label
         
     def state_callback(self, msg: TeachbotState):
         """Callback for teachbot state messages."""
@@ -209,6 +242,14 @@ class TeachbotMonitorGUI(Node):
         else:
             self.btn2_canvas.itemconfig(self.btn2_indicator, fill='#e0e0e0', outline='#999')
             self.btn2_text_label.config(text="Released", foreground='#666')
+
+        # Update Joint Angles (0.1 degree precision)
+        for index, joint_name in enumerate(self.joint_names):
+            if index < len(msg.joint_angles_deg):
+                angle_deg = round(float(msg.joint_angles_deg[index]), 1)
+            else:
+                angle_deg = 0.0
+            self.joint_angle_labels[joint_name].config(text=f"{angle_deg:.1f}°")
 
 
 def spin_ros(node):
