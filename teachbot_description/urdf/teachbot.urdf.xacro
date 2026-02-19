@@ -3,6 +3,18 @@
 
   <!-- ====== Global settings ====== -->
   <xacro:property name="S" value="1.0"/> <!-- mm->m; set to 1.0 if meters -->
+  <xacro:arg name="base_link" default="world"/>
+  <xacro:arg name="joint_prefix" default="teachbot/"/>
+  <xacro:property name="base_link_name" value="$(arg base_link)"/>
+  <xacro:property name="joint_prefix_value" value="$(arg joint_prefix)"/>
+
+  <!-- ====== Initial joint positions (in radians) ====== -->
+  <xacro:property name="shoulder_pan_init" value="1.5708"/> <!-- 1/2 pi -->
+  <xacro:property name="shoulder_lift_init" value="-1.5708"/> <!-- -1/2 pi -->
+  <xacro:property name="elbow_init" value="4.7124"/> <!-- 1.5 pi -->
+  <xacro:property name="wrist_1_init" value="0.0"/>
+  <xacro:property name="wrist_2_init" value="4.7124"/> <!-- 1.5 pi -->
+  <xacro:property name="wrist_3_init" value="4.7124"/> <!-- 1.5 pi -->
 
   <!-- ====== A simple macro: one visual mesh link ====== -->
   <xacro:macro name="mesh_link" params="name">
@@ -42,13 +54,13 @@
 
   <!-- ====== Joints ====== -->
   <joint name="world_to_link_1" type="fixed">
-    <parent link="world"/>
+    <parent link="${base_link_name}"/>
     <child link="link_1"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
   <!-- Fill in origins/axes to match your CAD frames -->
-  <joint name="sholder_pan_joint" type="revolute">
+  <joint name="${joint_prefix_value}shoulder_pan_joint" type="revolute">
     <parent link="link_1"/>
     <child link="link_2"/>
     <origin xyz="0 0 0.156875" rpy="0 0 0"/>
@@ -56,42 +68,42 @@
     <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
   </joint>
 
-  <joint name="shoulder_lift_joint" type="revolute">
+  <joint name="${joint_prefix_value}shoulder_lift_joint" type="revolute">
     <parent link="link_2"/>
     <child link="link_3"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin xyz="0 0 0" rpy="-1.5708 0 0"/>
     <axis xyz="-1 0 0"/>
     <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
   </joint>
 
-  <joint name="elbow_joint" type="revolute">
+  <joint name="${joint_prefix_value}elbow_joint" type="revolute">
     <parent link="link_3"/>
     <child link="link_4"/>
-    <origin xyz="0 0 0.249" rpy="0 0 0"/>
+    <origin xyz="0 0 0.249" rpy="4.7124 0 0"/>
     <axis xyz="-1 0 0"/>
     <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
   </joint>
 
-  <joint name="wrist_1_joint" type="revolute">
+  <joint name="${joint_prefix_value}wrist_1_joint" type="revolute">
     <parent link="link_4"/>
     <child link="link_5"/>
-    <origin xyz="0 -0.227 0" rpy="0 0 0"/>
+    <origin xyz="0 -0.227 0" rpy="3.1416 0 0"/>
     <axis xyz="-1 0 0"/>
     <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
   </joint>
 
-  <joint name="wrist_2_joint" type="revolute">
+  <joint name="${joint_prefix_value}wrist_2_joint" type="revolute">
     <parent link="link_5"/>
     <child link="link_6"/>
-    <origin xyz="-0.038375 0 0" rpy="0 0 0"/>
+    <origin xyz="-0.038375 0 0" rpy="0 0 1.5708"/>
     <axis xyz="0 0 1"/>
     <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
   </joint>
 
-  <joint name="wrist_3_joint" type="revolute">
+  <joint name="${joint_prefix_value}wrist_3_joint" type="revolute">
     <parent link="link_6"/>
     <child link="link_7"/>
-    <origin xyz="0 0 0.038375" rpy="0 0 0"/>
+    <origin xyz="0 0 0.038375" rpy="0 -1.5708 0"/>
     <axis xyz="0 -1 0"/>
     <limit lower="-3.1416" upper="3.1416" effort="10" velocity="1.0"/>
   </joint>
