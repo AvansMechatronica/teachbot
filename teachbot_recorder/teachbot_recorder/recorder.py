@@ -154,6 +154,7 @@ class RecordingNode(Node):
         self.pistol_state = {}
         self.current_joint_state = None
         self.recording_mode = 'button'  # 'button' or 'topic'
+        self.playback_mode = 'step'  # 'step' (mode 1) or 'trajectory' (mode 2)
         self.recording_stopped_externally = False  # Track if stopped by enable_topic
         self.last_record_time = None  # Throttle sampling to recording_rate
         self.current_point_index = 0  # Track current point for navigation
@@ -388,8 +389,11 @@ class RecordingNode(Node):
         self.is_moving = True
         self.playback_start_time = time.time()  # Track when playback started
 
-        # Execute each datapoint individually
-        playback_thread = threading.Thread(target=self._playback_points_thread, daemon=True)
+        # Execute based on playback mode
+        if self.playback_mode == 'trajectory':
+            playback_thread = threading.Thread(target=self._playback_trajectory_thread, daemon=True)
+        else:
+            playback_thread = threading.Thread(target=self._playback_points_thread, daemon=True)
         playback_thread.start()
         return True
 
@@ -476,6 +480,108 @@ class RecordingNode(Node):
         # Reset pistol state to zero at end of playback
         self._reset_pistol_state()
 
+    def _playback_trajectory_thread(self):
+        """Playback by sending the full recorded trajectory as a single goal"""
+        action_server = f'{self.controller_name_sim if self.use_sim else self.controller_name}/follow_joint_trajectory'
+        self.get_logger().info(f'Checking action server availability: {action_server}')
+
+        if not self.action_client.wait_for_server(timeout_sec=2.0):
+            self.get_logger().error(f'Action server not reachable: {action_server}')
+            self.get_logger().info('Available action servers can be listed with: ros2 action list')
+            self.is_playing = False
+            self.is_moving = False
+            return
+
+        trajectory = JointTrajectory()
+        trajectory.joint_names = self.robot_joint_names
+
+        last_time = None
+        cumulative_time = 0.0
+        for i, data_point in enumerate(self.recorded_data):
+            if not self.is_playing:
+                break
+
+            # Update current point index for GUI display
+            self.current_point_index = i
+
+            # Compute time_from_start based on recorded timestamps
+            if last_time is None:
+                dt = max(0.0, data_point.get('time', 0.0))
+            else:
+                raw_dt = data_point.get('time', last_time) - last_time
+                dt = max(0.01, raw_dt)
+            cumulative_time += dt
+            last_time = data_point.get('time', last_time if last_time is not None else 0.0)
+
+            point = JointTrajectoryPoint()
+            point.positions = data_point['positions']
+            point.velocities = [0.0] * len(self.robot_joint_names)
+            point.effort = []
+            point.time_from_start.sec = int(cumulative_time)
+            point.time_from_start.nanosec = int((cumulative_time % 1.0) * 1e9)
+            trajectory.points.append(point)
+
+        if not self.is_playing:
+            self.is_playing = False
+            self.is_moving = False
+            return
+
+        if not self._send_trajectory_goal(trajectory):
+            self.is_playing = False
+            self.is_moving = False
+            self._reset_pistol_state()
+            return
+
+        self.is_playing = False
+        self.is_moving = False
+        self._reset_pistol_state()
+
+    def _send_trajectory_goal(self, trajectory):
+        """Send a multi-point trajectory goal and wait for result"""
+        goal = FollowJointTrajectory.Goal()
+        goal.trajectory = trajectory
+
+        goal.path_tolerance = [
+            JointTolerance(name=joint, position=6.0, velocity=10.0)
+            for joint in self.robot_joint_names
+        ]
+        goal.goal_tolerance = [
+            JointTolerance(name=joint, position=0.1, velocity=0.5, time_from_start=rclpy.time.Duration(seconds=2))
+            for joint in self.robot_joint_names
+        ]
+
+        done_event = threading.Event()
+        goal_handle_container = {}
+
+        def _goal_done(future):
+            goal_handle_container['handle'] = future.result()
+            done_event.set()
+
+        future = self.action_client.send_goal_async(goal)
+        future.add_done_callback(_goal_done)
+        if not done_event.wait(timeout=5.0):
+            self.get_logger().error('Trajectory: goal request timed out')
+            return False
+
+        goal_handle = goal_handle_container.get('handle')
+        if goal_handle is None or not goal_handle.accepted:
+            self.get_logger().error('Trajectory: goal rejected')
+            return False
+
+        result_event = threading.Event()
+        result_container = {}
+
+        def _result_done(result_future):
+            result_container['result'] = result_future.result()
+            result_event.set()
+
+        goal_handle.get_result_async().add_done_callback(_result_done)
+        if not result_event.wait(timeout=60.0):
+            self.get_logger().error('Trajectory: result timed out')
+            return False
+
+        return True
+
     def _send_single_point_goal(self, trajectory, index):
         """Send a single-point trajectory goal and wait for result"""
         goal = FollowJointTrajectory.Goal()
@@ -541,11 +647,17 @@ class RecordingNode(Node):
 
     def pause_playback(self):
         """Pause playback"""
+        if self.playback_mode == 'trajectory':
+            self.get_logger().warn('Pause not supported in trajectory mode')
+            return
         self.is_paused = True
         self.get_logger().info('Playback paused')
 
     def resume_playback(self):
         """Resume playback"""
+        if self.playback_mode == 'trajectory':
+            self.get_logger().warn('Resume not supported in trajectory mode')
+            return
         self.is_paused = False
         self.get_logger().info('Playback resumed')
 
@@ -742,6 +854,14 @@ class RecordingGUI:
         self.next_button = ttk.Button(playback_frame, text='Next >', command=self.go_to_next_point, state=tk.DISABLED)
         self.next_button.pack(side=tk.LEFT, padx=5)
 
+        # Playback mode selection
+        playback_mode_frame = ttk.LabelFrame(main_frame, text='Playback Mode', padding='10')
+        playback_mode_frame.pack(fill=tk.X, pady=10)
+
+        self.playback_mode_var = tk.StringVar(value='step')
+        ttk.Radiobutton(playback_mode_frame, text='Mode 1: Step-by-step', variable=self.playback_mode_var, value='step', command=self.on_playback_mode_changed).pack(anchor=tk.W)
+        ttk.Radiobutton(playback_mode_frame, text='Mode 2: Single Trajectory', variable=self.playback_mode_var, value='trajectory', command=self.on_playback_mode_changed).pack(anchor=tk.W)
+
         # Jump navigation section
         jump_frame = ttk.LabelFrame(main_frame, text='Jump Navigation', padding='10')
         jump_frame.pack(fill=tk.X, pady=10)
@@ -836,6 +956,15 @@ class RecordingGUI:
             self.logger.info(f'Recording mode changed to: GUI BUTTON')
         self.node.get_logger().info(f'Recording mode changed to: {self.node.recording_mode}')
 
+    def on_playback_mode_changed(self):
+        """Handle playback mode change"""
+        self.node.playback_mode = self.playback_mode_var.get()
+        if self.node.playback_mode == 'trajectory':
+            self.logger.info('Playback mode changed to: MODE 2 (single trajectory)')
+        else:
+            self.logger.info('Playback mode changed to: MODE 1 (step-by-step)')
+        self.node.get_logger().info(f'Playback mode changed to: {self.node.playback_mode}')
+
     def start_recording(self):
         """Start recording"""
         if self.node.recording_mode == 'button':
@@ -915,7 +1044,10 @@ class RecordingGUI:
         if self.node.start_playback():
             self.logger.info('Playback started successfully')
             self.play_button.config(state=tk.DISABLED)
-            self.pause_play_button.config(state=tk.NORMAL)
+            if self.node.playback_mode == 'trajectory':
+                self.pause_play_button.config(state=tk.DISABLED)
+            else:
+                self.pause_play_button.config(state=tk.NORMAL)
             self.stop_play_button.config(state=tk.NORMAL)
             self.load_button.config(state=tk.DISABLED)
         else:
