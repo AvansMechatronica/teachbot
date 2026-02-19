@@ -56,7 +56,7 @@ def launch_setup(context, *args, **kwargs):
             {'robot_description': robot_description}
         ],
         remappings=[
-            ('/joint_states', '/teachbot/joint_states_sim'),
+            ('/joint_states', '/teachbot/joint_states'),
             ('/robot_description', '/teachbot/robot_description')
         ]
     )
@@ -71,7 +71,7 @@ def launch_setup(context, *args, **kwargs):
             'publish_frequency': 250.0,
         }],
         remappings=[
-            ('/joint_states', '/teachbot/joint_states_sim'),
+            ('/joint_states', '/teachbot/joint_states'),
             ('/robot_description', '/teachbot/robot_description')
         ]
     )
@@ -102,21 +102,12 @@ def launch_setup(context, *args, **kwargs):
         output='screen'
     )
 
-    # TeachbotState Publisher GUI
-    teachbot_sim_jointstate_publishers_node = Node(
-        package='teachbot_ros',
-        executable='teachbot_sim_jointstate_publishers',
-        name='sim_jointstate_publisher',
-        output='screen',
-        parameters=[os.path.join(pkg_share, 'config', 'sim_parameters.yaml')]
-    )
     
     return [
         joint_state_publisher_gui_node,
         robot_state_publisher_node,
         rviz_node,
         teachbot_state_publisher_gui_node,
-        teachbot_sim_jointstate_publishers_node,
         monitor_gui_node,
     ]
     

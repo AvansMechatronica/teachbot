@@ -36,12 +36,12 @@ teachbot_publisher:
     
     # Degree offsets applied after count->angle conversion
     degree_offsets:
-      - 0.0     # shoulder_pan
-      - 0.0     # shoulder_lift
-      - 0.0     # elbow
-      - 180.0     # wrist_1
-      - 180.0     # wrist_2
-      - 0.0     # wrist_3
+      - -90.0     # shoulder_pan
+      - 90.0     # shoulder_lift
+      - 90.0     # elbow
+      - 0.0     # wrist_1
+      - -90.0     # wrist_2
+      - 90.0     # wrist_3
     
     # Joint scale factors (use -1.0 to invert direction)
     joint_scale_factors:
