@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="nl" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TOS Teachbot ROS2 Node &mdash; TOS Teachbot ROS Documentatie 0.1 documentatie</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=a57088fb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/translations.js?v=e4d38c6a"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Zoeken" href="../search.html" />
+    <link rel="next" title="Follower" href="follower.html" />
+    <link rel="prev" title="Installation of the TOS-Teachbot Software" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            TOS Teachbot ROS Documentatie
+              <img src="../_static/Logo_TOS_blauw.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Zoek in documentatie" aria-label="Zoek in documentatie" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigatiemenu">
+              <p class="caption" role="heading"><span class="caption-text">Inhoudsopgave:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation of the TOS-Teachbot Software</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">TOS Teachbot ROS2 Node</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start-with-rviz-visualization">Quick Start with RViz Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simulation-mode">Simulation Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#published-topics">Published Topics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#quick-install">Quick Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manual-install">Manual Install</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#run-the-node-headless">Run the Node (Headless)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-with-rviz-visualization">Run with RViz Visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#monitor-topics">Monitor Topics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#with-custom-configuration">With Custom Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#disable-monitor-gui">Disable Monitor GUI</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#main-configuration-teachbot-params-yaml">Main Configuration (<span class="xref myst">teachbot_params.yaml</span>)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#target-robot-configuration-e-g-ur-yaml">Target Robot Configuration (e.g., <span class="xref myst">ur.yaml</span>)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-message-teachbotstate">Custom Message: TeachbotState</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#network-setup">Network Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#no-data-received">No data received</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wrong-joint-directions">Wrong joint directions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#joint-zero-offset-wrong">Joint zero offset wrong</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rviz-shows-robot-in-wrong-pose">RViz shows robot in wrong pose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connection-keeps-retrying">Connection keeps retrying</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#monitor-gui-not-appearing">Monitor GUI not appearing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#file-structure">File Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#launch-files">Launch Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utility-programs">Utility Programs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#teachbot-monitor-gui">Teachbot Monitor GUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#standalone-teachbot-viewer">Standalone Teachbot Viewer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="follower.html">Follower</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recorder.html">Recorder</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Navigatiemenu voor mobiel" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">TOS Teachbot ROS Documentatie</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Paginanavigatie">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">TOS Teachbot ROS2 Node</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/documentation/overview.md.txt" rel="nofollow"> Bekijk paginabron</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="tos-teachbot-ros2-node">
+<h1>TOS Teachbot ROS2 Node<a class="headerlink" href="#tos-teachbot-ros2-node" title="Link to this heading"></a></h1>
+<p>ROS2 Humble node for publishing TOS Teachbot joint states over ROS topics.</p>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Terminal 1: Launch the teachbot node</span>
+<span class="nb">source</span><span class="w"> </span>~/teachbot_ws/install/setup.bash
+ros2<span class="w"> </span>launch<span class="w"> </span>teachbot_ros<span class="w"> </span>teachbot.launch.py
+
+<span class="c1"># Terminal 2: Monitor joint states (radians)</span>
+ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/teachbot/joint_states
+
+<span class="c1"># Terminal 3: Monitor full state (degrees, FK, buttons, pot)</span>
+ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/teachbot/state
+
+<span class="c1"># Check publishing rate (should be ~250 Hz)</span>
+ros2<span class="w"> </span>topic<span class="w"> </span>hz<span class="w"> </span>/teachbot/joint_states
+</pre></div>
+</div>
+</section>
+<section id="quick-start-with-rviz-visualization">
+<h2>Quick Start with RViz Visualization<a class="headerlink" href="#quick-start-with-rviz-visualization" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>~/teachbot_ws/install/setup.bash
+ros2<span class="w"> </span>launch<span class="w"> </span>teachbot_ros<span class="w"> </span>teachbot_rviz.launch.py
+</pre></div>
+</div>
+<p>This launches the teachbot publisher with the official UR5e robot model in RViz, plus a GUI monitor for control inputs.</p>
+</section>
+<section id="simulation-mode">
+<h2>Simulation Mode<a class="headerlink" href="#simulation-mode" title="Link to this heading"></a></h2>
+<p>For testing without hardware:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>~/teachbot_ws/install/setup.bash
+ros2<span class="w"> </span>launch<span class="w"> </span>teachbot_ros<span class="w"> </span>sim_teachbot_rviz.launch.py
+</pre></div>
+</div>
+<p>This uses <code class="docutils literal notranslate"><span class="pre">joint_state_publisher_gui</span></code> to simulate joint movements.</p>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>This package provides a ROS2 node that:</p>
+<ul class="simple">
+<li><p>Connects to 6 joint encoders via TCP (AksIM-2 17-bit encoders on ports 5004-5009)</p></li>
+<li><p>Connects to trigger potentiometer and buttons via TCP (RS-485 interface on port 5011)</p></li>
+<li><p>Computes forward kinematics for TCP position</p></li>
+<li><p>Publishes data at 250 Hz</p></li>
+<li><p>Supports multiple target robot configurations</p></li>
+</ul>
+<p><strong>Note:</strong> The teachbot should be configured in TCP Server mode. This ROS node acts as a TCP client connecting to the teachbot’s IP address.</p>
+</section>
+<section id="published-topics">
+<h2>Published Topics<a class="headerlink" href="#published-topics" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Topic</p></th>
+<th class="head"><p>Message Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/teachbot/joint_states</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sensor_msgs/JointState</span></code></p></td>
+<td><p>Teachbot joint states (radians)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/teachbot/{target_robot}/joint_states</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sensor_msgs/JointState</span></code></p></td>
+<td><p>Target robot joint states (radians, with offsets)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/teachbot/state</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">teachbot_interfaces/TeachbotState</span></code></p></td>
+<td><p>Full state with FK, controls</p></td>
+</tr>
+</tbody>
+</table>
+<p>The target robot topic name is determined by the <code class="docutils literal notranslate"><span class="pre">target_robot_name</span></code> parameter from the target configuration file.</p>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Ubuntu 22.04</p></li>
+<li><p>ROS2 Humble</p></li>
+<li><p>Python 3.10+</p></li>
+<li><p>NumPy</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<section id="quick-install">
+<h3>Quick Install<a class="headerlink" href="#quick-install" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/teachbot_ws/src/teachbot_ros
+chmod<span class="w"> </span>+x<span class="w"> </span>install_teachbot_ros.sh
+./install_teachbot_ros.sh
+</pre></div>
+</div>
+</section>
+<section id="manual-install">
+<h3>Manual Install<a class="headerlink" href="#manual-install" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install ROS2 Humble (if not already installed)</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>ros-humble-desktop<span class="w"> </span>python3-colcon-common-extensions
+
+<span class="c1"># Create workspace</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span>~/teachbot_ws/src
+<span class="nb">cd</span><span class="w"> </span>~/teachbot_ws/src
+
+<span class="c1"># Clone or copy the packages</span>
+<span class="c1"># (teachbot_interfaces and teachbot_ros)</span>
+
+<span class="c1"># Build</span>
+<span class="nb">cd</span><span class="w"> </span>~/teachbot_ws
+<span class="nb">source</span><span class="w"> </span>/opt/ros/humble/setup.bash
+colcon<span class="w"> </span>build<span class="w"> </span>--symlink-install
+<span class="nb">source</span><span class="w"> </span>install/setup.bash
+</pre></div>
+</div>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<section id="run-the-node-headless">
+<h3>Run the Node (Headless)<a class="headerlink" href="#run-the-node-headless" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Source workspace (add to ~/.bashrc for convenience)</span>
+<span class="nb">source</span><span class="w"> </span>~/teachbot_ws/install/setup.bash
+
+<span class="c1"># Option 1: Use launch file (recommended)</span>
+ros2<span class="w"> </span>launch<span class="w"> </span>teachbot_ros<span class="w"> </span>teachbot.launch.py
+
+<span class="c1"># Option 2: Run directly</span>
+ros2<span class="w"> </span>run<span class="w"> </span>teachbot_ros<span class="w"> </span>teachbot_publisher
+</pre></div>
+</div>
+</section>
+<section id="run-with-rviz-visualization">
+<h3>Run with RViz Visualization<a class="headerlink" href="#run-with-rviz-visualization" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>~/teachbot_ws/install/setup.bash
+ros2<span class="w"> </span>launch<span class="w"> </span>teachbot_ros<span class="w"> </span>teachbot_rviz.launch.py
+</pre></div>
+</div>
+<p>This launches:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">teachbot_publisher</span></code>: Connects to encoders via TCP and publishes joint states</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">robot_state_publisher</span></code>: Publishes TF transforms from the official UR5e URDF</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rviz2</span></code>: 3D visualization with the UR5e robot model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">teachbot_monitor_gui</span></code>: GUI for monitoring potentiometer and button states (optional)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">static_transform_publisher</span></code>: Publishes world → teachbot/base_link transform</p></li>
+</ul>
+<p><strong>Note:</strong> Requires <code class="docutils literal notranslate"><span class="pre">ros-humble-ur-description</span></code> package (installed via <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">ros-humble-ur-description</span></code>).</p>
+</section>
+<section id="monitor-topics">
+<h3>Monitor Topics<a class="headerlink" href="#monitor-topics" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># List available topics</span>
+ros2<span class="w"> </span>topic<span class="w"> </span>list
+
+<span class="c1"># View teachbot joint states (standard ROS format, radians)</span>
+ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/teachbot/joint_states
+
+<span class="c1"># View target robot joint states (e.g., for UR)</span>
+ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/teachbot/ur/joint_states
+
+<span class="c1"># View full state (degrees, FK, buttons, pot)</span>
+ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/teachbot/state
+
+<span class="c1"># Check publishing rate</span>
+ros2<span class="w"> </span>topic<span class="w"> </span>hz<span class="w"> </span>/teachbot/joint_states
+
+<span class="c1"># View topic info</span>
+ros2<span class="w"> </span>topic<span class="w"> </span>info<span class="w"> </span>/teachbot/joint_states
+ros2<span class="w"> </span>topic<span class="w"> </span>info<span class="w"> </span>/teachbot/state
+</pre></div>
+</div>
+</section>
+<section id="with-custom-configuration">
+<h3>With Custom Configuration<a class="headerlink" href="#with-custom-configuration" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copy and edit the config files</span>
+cp<span class="w"> </span>~/teachbot_ws/install/teachbot_ros/share/teachbot_ros/config/teachbot_params.yaml<span class="w"> </span>~/my_config.yaml
+cp<span class="w"> </span>~/teachbot_ws/install/teachbot_ros/share/teachbot_ros/config/target_robots/ur.yaml<span class="w"> </span>~/my_target.yaml
+<span class="c1"># Edit files with your settings</span>
+
+<span class="c1"># Launch with custom config</span>
+ros2<span class="w"> </span>launch<span class="w"> </span>teachbot_ros<span class="w"> </span>teachbot.launch.py<span class="w"> </span>config_file:<span class="o">=</span>~/my_config.yaml<span class="w"> </span>target_config_file:<span class="o">=</span>~/my_target.yaml
+
+<span class="c1"># Or with RViz</span>
+ros2<span class="w"> </span>launch<span class="w"> </span>teachbot_ros<span class="w"> </span>teachbot_rviz.launch.py<span class="w"> </span>config_file:<span class="o">=</span>~/my_config.yaml<span class="w"> </span>target_config_file:<span class="o">=</span>~/my_target.yaml
+</pre></div>
+</div>
+</section>
+<section id="disable-monitor-gui">
+<h3>Disable Monitor GUI<a class="headerlink" href="#disable-monitor-gui" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>launch<span class="w"> </span>teachbot_ros<span class="w"> </span>teachbot_rviz.launch.py<span class="w"> </span>use_monitor_gui:<span class="o">=</span><span class="nb">false</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="configuration-parameters">
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<section id="main-configuration-teachbot-params-yaml">
+<h3>Main Configuration (<a class="reference internal" href="#teachbot_ros/teachbot_ros/config/teachbot_params.yaml"><span class="xref myst">teachbot_params.yaml</span></a>)<a class="headerlink" href="#main-configuration-teachbot-params-yaml" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">remote_ip</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">192.168.0.152</span></code></p></td>
+<td><p>IP address of teachbot (TCP server)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">start_port</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5004</span></code></p></td>
+<td><p>First encoder TCP port</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ee_port</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5011</span></code></p></td>
+<td><p>RS-485 trigger/button TCP port</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">robot_model</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Cobot_200_200_mm</span></code></p></td>
+<td><p>FK model name</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">publish_rate</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">250.0</span></code></p></td>
+<td><p>Publishing rate (Hz)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">joint_names</span></code></p></td>
+<td><p>UR joint names</p></td>
+<td><p>Joint names for <code class="docutils literal notranslate"><span class="pre">/teachbot/joint_states</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">position_offsets</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[94465,</span> <span class="pre">...]</span></code></p></td>
+<td><p>Encoder zero offsets</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">degree_offsets</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0]</span></code></p></td>
+<td><p>Angle offsets (deg)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">joint_scale_factors</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">-1,</span> <span class="pre">1,</span> <span class="pre">-1,</span> <span class="pre">-1,</span> <span class="pre">-1]</span></code></p></td>
+<td><p>Direction scaling</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pot_idle</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">846</span></code></p></td>
+<td><p>Pot raw at 0%</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pot_full</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">78</span></code></p></td>
+<td><p>Pot raw at 100%</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="target-robot-configuration-e-g-ur-yaml">
+<h3>Target Robot Configuration (e.g., <a class="reference internal" href="#teachbot_ros/teachbot_ros/config/target_robots/ur.yaml"><span class="xref myst">ur.yaml</span></a>)<a class="headerlink" href="#target-robot-configuration-e-g-ur-yaml" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">target_robot_name</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ur</span></code></p></td>
+<td><p>Name for target robot topic</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">target_joint_names</span></code></p></td>
+<td><p>UR joint names</p></td>
+<td><p>Joint names for target robot</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">target_degree_offsets</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[-90,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0]</span></code></p></td>
+<td><p>Target-specific angle offsets (deg)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Available target configurations:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#teachbot_ros/teachbot_ros/config/target_robots/ur.yaml"><span class="xref myst">ur.yaml</span></a> - Universal Robots (UR5e, etc.)</p></li>
+<li><p><a class="reference internal" href="#teachbot_ros/teachbot_ros/config/target_robots/ufLite6.yaml"><span class="xref myst">ufLite6.yaml</span></a> - uFactory Lite6</p></li>
+</ul>
+</section>
+</section>
+<section id="custom-message-teachbotstate">
+<h2>Custom Message: TeachbotState<a class="headerlink" href="#custom-message-teachbotstate" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std_msgs</span><span class="o">/</span><span class="n">Header</span> <span class="n">header</span>
+<span class="n">float64</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="n">joint_angles_deg</span>     <span class="c1"># Joint angles in degrees</span>
+<span class="n">float64</span> <span class="n">tcp_x</span><span class="p">,</span> <span class="n">tcp_y</span><span class="p">,</span> <span class="n">tcp_z</span>     <span class="c1"># TCP position (mm)</span>
+<span class="n">float64</span> <span class="n">tcp_rx</span><span class="p">,</span> <span class="n">tcp_ry</span><span class="p">,</span> <span class="n">tcp_rz</span>  <span class="c1"># TCP orientation (deg)</span>
+<span class="n">int32</span> <span class="n">pot_raw</span>                   <span class="c1"># Raw potentiometer (0-1023)</span>
+<span class="n">int32</span> <span class="n">pot_percent</span>               <span class="c1"># Mapped percentage (0-100)</span>
+<span class="nb">bool</span> <span class="n">btn1</span><span class="p">,</span> <span class="n">btn2</span>                 <span class="c1"># Button states</span>
+<span class="nb">bool</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="n">encoder_errors</span>          <span class="c1"># Encoder error flags</span>
+<span class="nb">bool</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="n">encoder_warnings</span>        <span class="c1"># Encoder warning flags</span>
+<span class="n">float64</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="n">encoder_frequencies</span>  <span class="c1"># Encoder update rates</span>
+<span class="n">string</span> <span class="n">robot_model</span>              <span class="c1"># Active robot model</span>
+</pre></div>
+</div>
+</section>
+<section id="network-setup">
+<h2>Network Setup<a class="headerlink" href="#network-setup" title="Link to this heading"></a></h2>
+<p>The teachbot operates as a TCP server. This ROS node connects to it as a client:</p>
+<ol class="arabic simple">
+<li><p>Configure the teachbot in TCP Server mode</p></li>
+<li><p>Set the teachbot’s IP address (default: <code class="docutils literal notranslate"><span class="pre">192.168.0.152</span></code>)</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">remote_ip</span></code> in your config file to match the teachbot’s IP</p></li>
+<li><p>Ensure your PC can reach the teachbot (e.g., same subnet <code class="docutils literal notranslate"><span class="pre">192.168.0.x</span></code>)</p></li>
+<li><p>Encoders stream on TCP ports 5004-5009</p></li>
+<li><p>RS-485 interface streams on TCP port 5011</p></li>
+</ol>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="no-data-received">
+<h3>No data received<a class="headerlink" href="#no-data-received" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Check network configuration (<code class="docutils literal notranslate"><span class="pre">ip</span> <span class="pre">addr</span></code>)</p></li>
+<li><p>Verify teachbot is powered on and in TCP Server mode</p></li>
+<li><p>Verify teachbot IP matches <code class="docutils literal notranslate"><span class="pre">remote_ip</span></code> in config</p></li>
+<li><p>Test connectivity: <code class="docutils literal notranslate"><span class="pre">ping</span> <span class="pre">192.168.0.152</span></code></p></li>
+<li><p>Check if TCP ports are open: <code class="docutils literal notranslate"><span class="pre">nc</span> <span class="pre">-zv</span> <span class="pre">192.168.0.152</span> <span class="pre">5004</span></code></p></li>
+</ul>
+</section>
+<section id="wrong-joint-directions">
+<h3>Wrong joint directions<a class="headerlink" href="#wrong-joint-directions" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Adjust <code class="docutils literal notranslate"><span class="pre">joint_scale_factors</span></code> in config (use -1.0 to invert)</p></li>
+</ul>
+</section>
+<section id="joint-zero-offset-wrong">
+<h3>Joint zero offset wrong<a class="headerlink" href="#joint-zero-offset-wrong" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Calibrate <code class="docutils literal notranslate"><span class="pre">position_offsets</span></code> with teachbot at zero position</p></li>
+</ul>
+</section>
+<section id="rviz-shows-robot-in-wrong-pose">
+<h3>RViz shows robot in wrong pose<a class="headerlink" href="#rviz-shows-robot-in-wrong-pose" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Check encoder calibration offsets in <a class="reference internal" href="#teachbot_ros/teachbot_ros/config/teachbot_params.yaml"><span class="xref myst">teachbot_params.yaml</span></a></p></li>
+<li><p>Adjust <code class="docutils literal notranslate"><span class="pre">joint_scale_factors</span></code> for correct joint directions</p></li>
+<li><p>Verify <code class="docutils literal notranslate"><span class="pre">target_degree_offsets</span></code> in target robot config</p></li>
+</ul>
+</section>
+<section id="connection-keeps-retrying">
+<h3>Connection keeps retrying<a class="headerlink" href="#connection-keeps-retrying" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The TCP client automatically reconnects if connection is lost</p></li>
+<li><p>Check teachbot power and network connection</p></li>
+</ul>
+</section>
+<section id="monitor-gui-not-appearing">
+<h3>Monitor GUI not appearing<a class="headerlink" href="#monitor-gui-not-appearing" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Check <code class="docutils literal notranslate"><span class="pre">use_monitor_gui</span></code> launch argument is set to <code class="docutils literal notranslate"><span class="pre">true</span></code> (default)</p></li>
+<li><p>Verify tkinter is installed: <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">tkinter&quot;</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="file-structure">
+<h2>File Structure<a class="headerlink" href="#file-structure" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>teachbot_ros/
+├── teachbot_ros/
+│   ├── __init__.py
+│   ├── teachbot_publisher.py   # Main ROS node
+│   ├── listeners.py            # TCP listener threads
+│   ├── kinematics.py           # Forward kinematics
+│   └── utils/
+│       ├── teachbot_viewer.py  # Standalone TCP viewer GUI
+│       └── teachbot_monitor_gui.py  # ROS monitor GUI
+├── config/
+│   ├── teachbot_params.yaml    # Main configuration
+│   ├── sim_initial_positions.yaml  # Simulation initial pose
+│   └── target_robots/          # Target robot configs
+│       ├── ur.yaml
+│       └── ufLite6.yaml
+├── launch/
+│   ├── teachbot.launch.py      # Headless launch (no RViz)
+│   ├── teachbot_rviz.launch.py # Launch with UR5e visualization
+│   └── sim_teachbot_rviz.launch.py  # Simulation mode
+├── rviz/
+│   └── teachbot.rviz           # RViz configuration
+├── package.xml
+├── setup.py
+├── install_teachbot_ros.sh     # Installation script
+└── README.md
+</pre></div>
+</div>
+</section>
+<section id="launch-files">
+<h2>Launch Files<a class="headerlink" href="#launch-files" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>File</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#teachbot_ros/teachbot_ros/launch/teachbot.launch.py"><span class="xref myst">teachbot.launch.py</span></a></p></td>
+<td><p>Headless mode - publishes topics only</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#teachbot_ros/teachbot_ros/launch/teachbot_rviz.launch.py"><span class="xref myst">teachbot_rviz.launch.py</span></a></p></td>
+<td><p>Full visualization with RViz and monitor GUI</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#teachbot_ros/teachbot_ros/launch/sim_teachbot_rviz.launch.py"><span class="xref myst">sim_teachbot_rviz.launch.py</span></a></p></td>
+<td><p>Simulation mode with <code class="docutils literal notranslate"><span class="pre">joint_state_publisher_gui</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="utility-programs">
+<h2>Utility Programs<a class="headerlink" href="#utility-programs" title="Link to this heading"></a></h2>
+<section id="teachbot-monitor-gui">
+<h3>Teachbot Monitor GUI<a class="headerlink" href="#teachbot-monitor-gui" title="Link to this heading"></a></h3>
+<p>Monitor potentiometer and button states with a graphical interface:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>run<span class="w"> </span>teachbot_ros<span class="w"> </span>teachbot_monitor_gui
+</pre></div>
+</div>
+</section>
+<section id="standalone-teachbot-viewer">
+<h3>Standalone Teachbot Viewer<a class="headerlink" href="#standalone-teachbot-viewer" title="Link to this heading"></a></h3>
+<p>Direct TCP connection viewer (no ROS required):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>~/teachbot_ws/src/teachbot_ros/teachbot_ros/teachbot_ros/utils/teachbot_viewer.py
+</pre></div>
+</div>
+<p>Edit <code class="docutils literal notranslate"><span class="pre">TEACHBOT_IP</span></code> in the script to match your teachbot’s IP address.</p>
+</section>
+</section>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>ROS2 Humble</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ros-humble-ur-description</span></code> - Official UR robot URDF models</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">joint_state_publisher_gui</span></code> - For simulation mode</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>ros-humble-ur-description<span class="w"> </span>ros-humble-joint-state-publisher-gui
+</pre></div>
+</div>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<p>MIT License</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Voettekst">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation of the TOS-Teachbot Software" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Vorige</a>
+        <a href="follower.html" class="btn btn-neutral float-right" title="Follower" accesskey="n" rel="next">Volgende <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright TOS Teachbot Project, 2024.</p>
+  </div>
+
+  Gebouwd met <a href="https://www.sphinx-doc.org/">Sphinx</a> met een
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thema</a>
+    geleverd door <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
