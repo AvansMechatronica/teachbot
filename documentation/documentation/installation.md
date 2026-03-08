@@ -1,5 +1,6 @@
 # Installation of the TOS-Teachbot Software
 
+![image](../images/teachbot.png)
 
 Before you begin, you need to make a clone of the `teachbot` repository.
 
