@@ -26,8 +26,8 @@ teachbot_follower:
       - "joint1"
       - "joint2"
       - "joint3"
+      - "joint5" # Note: Order of joints in target robot may differ from teachbot
       - "joint4"
-      - "joint5"
       - "joint6"
 
     target_degree_offsets:
@@ -41,8 +41,8 @@ teachbot_follower:
     # Joint scale factors (use -1.0 to invert direction)
     joint_scale_factors:
       - 1.0     # joint1
-      - 1.0     # joint2
+      - -1.0     # joint2
       - 1.0     # joint3
-      - 1.0     # joint4
+      - -1.0     # joint4
       - 1.0     # joint5
       - 1.0     # joint6
