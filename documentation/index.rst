@@ -23,7 +23,6 @@ Welcome to the TOS Teachbot documentation
    documentation/lerobo_integration.md   
 
 
-
 License
 -------
 `License CC BY-NC-SA 4.0 <https://creativecommons.org/licenses/by-nc-sa/4.0/>`_
