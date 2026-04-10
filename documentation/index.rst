@@ -20,6 +20,7 @@ Welcome to the TOS Teachbot documentation
    documentation/overview.md
    documentation/follower.md
    documentation/recorder.md
+   documentation/lerobo_integration.md   
 
 
 
